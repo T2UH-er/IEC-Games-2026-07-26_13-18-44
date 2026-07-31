@@ -89,15 +89,28 @@ public class GridManager : MonoBehaviour
             cellItems[cell.x, cell.y] = itemPerCell[i];
 
             GameObject icon = Instantiate(iconPrefab, CellToWorld(cell.x, cell.y), Quaternion.identity, transform);
-            var sr = icon.GetComponentInChildren<SpriteRenderer>();
-            if (sr != null && itemPerCell[i].icon != null) sr.sprite = itemPerCell[i].icon;
+
+            SpriteRenderer[] srs = icon.GetComponentsInChildren<SpriteRenderer>();
+            for (int j = 0; j < srs.Length; j++)
+            {
+                srs[j].sortingOrder += 10;
+            }
+
+            if (srs.Length > 0 && itemPerCell != null && i < itemPerCell.Length && itemPerCell[i] != null)
+            {
+                SpriteRenderer targetSr = srs.Length > 1 ? srs[srs.Length - 1] : srs[0];
+                if (targetSr != null && itemPerCell[i].icon != null)
+                {
+                    targetSr.sprite = itemPerCell[i].icon;
+                }
+            }
+
             cellVisuals[cell.x, cell.y] = icon;
             PlacedBlockInfo info = icon.AddComponent<PlacedBlockInfo>();
             info.shapeData = shape;
             info.originCell = originCell;
             info.itemPerCell = itemPerCell;
         }
-        
     }
     public void RemovePlacedBlock(BlockShapeData shape, Vector2Int originCell)
     {

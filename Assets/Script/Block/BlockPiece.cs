@@ -42,8 +42,14 @@ public class BlockPiece : MonoBehaviour
             {
                 srs[j].sortingOrder += 20; 
             }
-            var sr = icon.GetComponentInChildren<SpriteRenderer>();
-            if (sr != null) sr.sprite = itemPerCell[i].icon;
+            if (srs.Length > 0 && itemPerCell != null && i < itemPerCell.Length && itemPerCell[i] != null)
+            {
+                SpriteRenderer targetSr = srs.Length > 1 ? srs[srs.Length - 1] : srs[0];
+                if (targetSr != null && itemPerCell[i].icon != null)
+                {
+                    targetSr.sprite = itemPerCell[i].icon;
+                }
+            }
         }
     }
 
