@@ -19,6 +19,8 @@ public class Customer : MonoBehaviour
 {
     private GridManager gridManager;
     public float offsetFromGrid = 8.0f;
+    public bool isRequirementMatched = false;
+
     [SerializeField] private CustomerDirection direction;
     // Affectedzone: a list of grid cells' position that are affected by the customer, in grid coordinates
     List<Vector2Int> affectedZone = new List<Vector2Int>();
@@ -41,7 +43,7 @@ public class Customer : MonoBehaviour
         // Update is called once per frame
     void Update()
     {
-        IsMatchRequirement();
+        isRequirementMatched = IsMatchRequirement();
     }
 
     public void ConfigurePosition()
@@ -279,7 +281,7 @@ public class Customer : MonoBehaviour
             orangeCount >= requirement.numberOfOranges &&
             riceBowlCount >= requirement.numberOfRiceBowl)
         {
-            Debug.Log("Customer requirement is matched.");
+            //Debug.Log("Customer requirement is matched.");
             return true;
         }
 
