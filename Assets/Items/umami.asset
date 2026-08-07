@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ca400fecc3a7b8c428dd330136f46798, type: 3}
-  m_Name: rice
+  m_Name: umami
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   itemId: 5
   displayName: rice
-  icon: {fileID: 21300000, guid: 4dc861e238721fc46a66322bb4096b52, type: 3}
+  icon: {fileID: 4880994731034860005, guid: 6e3598eb8783e5848931643239a6341b, type: 3}

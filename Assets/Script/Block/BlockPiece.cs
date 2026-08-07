@@ -31,11 +31,24 @@ public class BlockPiece : MonoBehaviour
 
     void BuildVisual()
     {
+        float cs = (GridManager.Instance != null) ? GridManager.Instance.cellSize : 1f;
+
+        if (shapeData != null && shapeData.dishSprite != null)
+        {
+            GameObject dishObj = new GameObject("DishBackground");
+            dishObj.transform.SetParent(transform, false);
+            Vector2 center = shapeData.GetCenterOffset();
+            dishObj.transform.localPosition = new Vector3(center.x * cs*5f, center.y * cs*5f, 0f) + shapeData.dishOffset;
+
+            SpriteRenderer dishSr = dishObj.AddComponent<SpriteRenderer>();
+            dishSr.sprite = shapeData.dishSprite;
+            dishSr.sortingOrder = 5;
+        }
+
         for (int i = 0; i < shapeData.cells.Length; i++)
         {
             Vector2Int offset = shapeData.cells[i];
             GameObject icon = Instantiate(cellIconPrefab, transform);
-            float cs = (GridManager.Instance != null) ? GridManager.Instance.cellSize : 1f;
             icon.transform.localPosition = new Vector3(offset.x * cs, offset.y * cs, 0f);
             SpriteRenderer[] srs = icon.GetComponentsInChildren<SpriteRenderer>();
             for (int j = 0; j < srs.Length; j++)

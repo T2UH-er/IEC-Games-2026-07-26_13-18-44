@@ -36,7 +36,7 @@ public class InputManager : MonoBehaviour
                     startPosition = piece.transform.position;
                     dragOffset = piece.transform.position - worldPos;
                     isFromGrid = false;
-                    selectedPiece.transform.localScale *= 1.1f;
+                    selectedPiece.transform.localScale = Vector3.one * 1.1f;
                     return;
                 }
 
@@ -56,7 +56,7 @@ public class InputManager : MonoBehaviour
                     startPosition = GridManager.Instance.CellToWorld(originalOriginCell.x, originalOriginCell.y);
                     dragOffset = selectedPiece.transform.position - worldPos;
                     isFromGrid = true;
-                    selectedPiece.transform.localScale *= 1.1f;
+                    selectedPiece.transform.localScale = Vector3.one * 1.1f;
                 }
             }
         }
@@ -68,8 +68,6 @@ public class InputManager : MonoBehaviour
         }
         if (selectedPiece != null && Input.GetMouseButtonUp(0))
         {
-            selectedPiece.transform.localScale /= 1.1f;
-
             bool placed = selectedPiece.TryPlace();
             if (!placed)
             {
@@ -92,6 +90,7 @@ public class InputManager : MonoBehaviour
                 else
                 {
                     selectedPiece.transform.position = startPosition;
+                    selectedPiece.transform.localScale = (BlockSpawner.Instance != null) ? BlockSpawner.Instance.trayBlockScale : new Vector3(0.6f, 0.6f, 0.6f);
                 }
             }
 

@@ -12,6 +12,7 @@ public class BlockSpawner : MonoBehaviour
     public List<Transform> spawnSlots = new List<Transform> ();        
 
     public Transform trayContainer;     
+    public Vector3 trayBlockScale = new Vector3(0.6f, 0.6f, 0.6f);
     public int totalBlocksCount = 10;      
     public float slotSpacing = 10f; 
     private BlockPiece[] currentPieces;
@@ -55,7 +56,7 @@ public class BlockSpawner : MonoBehaviour
         slotPositions[slotIndex] = localSpawnPos;
         GameObject pieceObj = Instantiate(blockPiecePrefab, trayContainer);
         pieceObj.transform.localPosition = localSpawnPos;
-        pieceObj.transform.localScale = new Vector3(1f, 1f, 1f);
+        pieceObj.transform.localScale = trayBlockScale;
         BlockPiece piece = pieceObj.GetComponent<BlockPiece>();
         piece.Initialize(shape, itemDatabase, slotIndex);
         currentPieces[slotIndex] = piece;
@@ -98,8 +99,9 @@ public class BlockSpawner : MonoBehaviour
 
         if (emptySlot != -1)
         {
-             piece.transform.SetParent(trayContainer);
+            piece.transform.SetParent(trayContainer);
             piece.transform.localPosition = slotPositions[emptySlot];
+            piece.transform.localScale = trayBlockScale;
             piece.slotIndex = emptySlot;
             currentPieces[emptySlot] = piece;
             return true;

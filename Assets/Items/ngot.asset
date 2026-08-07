@@ -9,11 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4ce459485c33d0d47a93ada2b50ca7ce, type: 3}
-  m_Name: two
-  m_EditorClassIdentifier: Assembly-CSharp::BlockShapeData
-  cells:
-  - {x: 0, y: 0}
-  - {x: 0, y: 1}
-  dishSprite: {fileID: 0}
-  dishOffset: {x: 0, y: 0, z: 0}
+  m_Script: {fileID: 11500000, guid: ca400fecc3a7b8c428dd330136f46798, type: 3}
+  m_Name: ngot
+  m_EditorClassIdentifier: Assembly-CSharp::ItemData
+  itemId: 5
+  displayName: rice
+  icon: {fileID: 1609108009255328547, guid: 6e3598eb8783e5848931643239a6341b, type: 3}

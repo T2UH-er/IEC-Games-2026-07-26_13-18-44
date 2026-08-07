@@ -1,0 +1,436 @@
+fileFormatVersion: 2
+guid: 5749e2df2cdd443478c82ee3bce4c720
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -2747727167743338486
+    second: ChatGPT Image Aug 7, 2026, 09_15_04 AM-Photoroom_0
+  - first:
+      213: -3260140655437180555
+    second: ChatGPT Image Aug 7, 2026, 09_15_04 AM-Photoroom_1
+  - first:
+      213: -5056727603580701390
+    second: ChatGPT Image Aug 7, 2026, 09_15_04 AM-Photoroom_2
+  - first:
+      213: -4493477103017256802
+    second: ChatGPT Image Aug 7, 2026, 09_15_04 AM-Photoroom_3
+  - first:
+      213: -4769022535597225496
+    second: ChatGPT Image Aug 7, 2026, 09_15_04 AM-Photoroom_4
+  - first:
+      213: -7017629915422150552
+    second: ChatGPT Image Aug 7, 2026, 09_15_04 AM-Photoroom_5
+  - first:
+      213: -7696522593037076674
+    second: ChatGPT Image Aug 7, 2026, 09_15_04 AM-Photoroom_6
+  - first:
+      213: -8969848747263590333
+    second: ChatGPT Image Aug 7, 2026, 09_15_04 AM-Photoroom_7
+  - first:
+      213: -7987084135696951237
+    second: ChatGPT Image Aug 7, 2026, 09_15_04 AM-Photoroom_8
+  - first:
+      213: -772172932039416337
+    second: ChatGPT Image Aug 7, 2026, 09_15_04 AM-Photoroom_9
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Food_0
+      rect:
+        serializedVersion: 2
+        x: 59
+        y: 578
+        width: 279
+        height: 184
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f7fa1131c54c37f4aa1dffbe6c2fd6d7
+      internalID: -1342168973
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Food_1
+      rect:
+        serializedVersion: 2
+        x: 363
+        y: 567
+        width: 239
+        height: 203
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4a59d7fec916cbf4daa22c9a4c9e6a68
+      internalID: 1347786117
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Food_2
+      rect:
+        serializedVersion: 2
+        x: 645
+        y: 575
+        width: 239
+        height: 203
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e24a7808b0fbee243befd950bd25a490
+      internalID: 1136655065
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Food_3
+      rect:
+        serializedVersion: 2
+        x: 915
+        y: 576
+        width: 270
+        height: 196
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b7317500b7c149745b4b71b2c887e7d9
+      internalID: 1543138369
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Food_4
+      rect:
+        serializedVersion: 2
+        x: 1199
+        y: 574
+        width: 277
+        height: 197
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4654f8bd97a1f6e4d82052d9fb821e74
+      internalID: 1290736907
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Food_5
+      rect:
+        serializedVersion: 2
+        x: 54
+        y: 269
+        width: 273
+        height: 206
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bd3b7a1c35bcf534aaf33d2ce47a2ca7
+      internalID: 1432976432
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Food_6
+      rect:
+        serializedVersion: 2
+        x: 343
+        y: 268
+        width: 273
+        height: 206
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3690dfb43a2b462469333a4b08dc0565
+      internalID: 1811536858
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Food_7
+      rect:
+        serializedVersion: 2
+        x: 629
+        y: 266
+        width: 273
+        height: 206
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2137de9d9624643438afa0b3df279339
+      internalID: 1421556137
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Food_8
+      rect:
+        serializedVersion: 2
+        x: 917
+        y: 266
+        width: 273
+        height: 206
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bf2a2abf4afa55e44b7a9375f95ba70d
+      internalID: -157510928
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Food_9
+      rect:
+        serializedVersion: 2
+        x: 1211
+        y: 257
+        width: 273
+        height: 206
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8d67a5b4e14150d478fd1e824e14d9ea
+      internalID: -1039095951
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Food_10
+      rect:
+        serializedVersion: 2
+        x: 1208
+        y: 257
+        width: 273
+        height: 206
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4fe78d016ea0a8e4388a16005c9f5c17
+      internalID: -932629504
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      ChatGPT Image Aug 7, 2026, 09_15_04 AM-Photoroom_0: -2747727167743338486
+      ChatGPT Image Aug 7, 2026, 09_15_04 AM-Photoroom_1: -3260140655437180555
+      ChatGPT Image Aug 7, 2026, 09_15_04 AM-Photoroom_2: -5056727603580701390
+      ChatGPT Image Aug 7, 2026, 09_15_04 AM-Photoroom_3: -4493477103017256802
+      ChatGPT Image Aug 7, 2026, 09_15_04 AM-Photoroom_4: -4769022535597225496
+      ChatGPT Image Aug 7, 2026, 09_15_04 AM-Photoroom_5: -7017629915422150552
+      ChatGPT Image Aug 7, 2026, 09_15_04 AM-Photoroom_6: -7696522593037076674
+      ChatGPT Image Aug 7, 2026, 09_15_04 AM-Photoroom_7: -8969848747263590333
+      ChatGPT Image Aug 7, 2026, 09_15_04 AM-Photoroom_8: -7987084135696951237
+      ChatGPT Image Aug 7, 2026, 09_15_04 AM-Photoroom_9: -772172932039416337
+      Food_0: -1342168973
+      Food_1: 1347786117
+      Food_10: -932629504
+      Food_2: 1136655065
+      Food_3: 1543138369
+      Food_4: 1290736907
+      Food_5: 1432976432
+      Food_6: 1811536858
+      Food_7: 1421556137
+      Food_8: -157510928
+      Food_9: -1039095951
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
