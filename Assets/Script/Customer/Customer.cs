@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using TMPro;
+using System.Collections;
 
 enum CustomerDirection
 {
@@ -10,35 +12,49 @@ enum CustomerDirection
 [System.Serializable]
 public struct CustomerRequirement
 {
-    public int numberOfApples;
-    public int numberOfChilies;
-    public int numberOfOranges;
-    public int numberOfRiceBowl;
+    public int numberOfSours;
+    public int numberOfSpicies;
+    public int numberOfSalties;
+    public int numberOfSweets;
+    public int numberOfBitters;
+    public int numberOfUmamis;
+    public int numberOfButteries;
+
+    CustomerRequirement(int numberOfSours = 0, int numberOfSpicies = 0, int numberOfSalties = 0, 
+        int numberOfSweets = 0, int numberOfBitters = 0, int numberOfUmamis = 0, int numberOfButteries = 0)
+    {
+        this.numberOfSours = numberOfSours;
+        this.numberOfSpicies = numberOfSpicies;
+        this.numberOfSalties = numberOfSalties;
+        this.numberOfSweets = numberOfSweets;
+        this.numberOfBitters = numberOfBitters;
+        this.numberOfUmamis = numberOfUmamis;
+        this.numberOfButteries = numberOfButteries;
+    }
 }
 public class Customer : MonoBehaviour
 {
     private GridManager gridManager;
-    public float offsetFromGrid = 8.0f;
+    public float offsetFromGrid = 5.5f;
     public bool isRequirementMatched = false;
+
+    [SerializeField] private TMPro.TextMeshProUGUI requirementText;
 
     [SerializeField] private CustomerDirection direction;
     // Affectedzone: a list of grid cells' position that are affected by the customer, in grid coordinates
-    List<Vector2Int> affectedZone = new List<Vector2Int>();
+    public List<Vector2Int> affectedZone = new List<Vector2Int>();
 
-    public CustomerRequirement requirement = new CustomerRequirement
-    {
-        numberOfApples = 2,
-        numberOfChilies = 1,
-        numberOfOranges = 0,
-        numberOfRiceBowl = 1
-    };
+    public CustomerRequirement requirement = new CustomerRequirement();
+    
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         gridManager = GridManager.Instance;
+        requirementText.text = "";
+
         ConfigurePosition();
-        ConfigureAffectedZone();
+        DefaultConfigureAffectedZone();
     }
         // Update is called once per frame
     void Update()
@@ -110,7 +126,7 @@ public class Customer : MonoBehaviour
     }
 
     // Configure the affected zone of the customer based on the direction and the grid size
-    public void ConfigureAffectedZone()
+    public void DefaultConfigureAffectedZone()
     {
         affectedZone.Clear();
         if (direction == CustomerDirection.Horizontal)
@@ -250,36 +266,67 @@ public class Customer : MonoBehaviour
 
     public bool IsMatchRequirement() 
     {
-        int appleCount = 0;
-        int chiliCount = 0;
-        int orangeCount = 0;
-        int riceBowlCount = 0;
+        int sour = 0;
+        int spicy = 0;
+        int salty = 0;
+        int sweet = 0;
+        int bitter = 0;
+        int umami = 0;
+        int buttery = 0;
         // Kiểm tra xem các ô trong affectedZone có chứa các item yêu cầu của customer hay không
         // Nếu có, trả về true.
-        foreach (Vector2Int cell in affectedZone)
+        if (affectedZone != null && affectedZone.Count > 0)
         {
-            ItemData item = gridManager.GetItemAt(cell.x, cell.y);
-            switch(item?.displayName)
+            // Chạy đoạn mã kiểm tra các ô trong affectedZone
+            foreach (Vector2Int cell in affectedZone)
+            {
+                ItemData item = gridManager.GetItemAt(cell.x, cell.y);
+                switch (item?.displayName)
                 {
-                    case "apple":
-                        appleCount++;
+                    case "sour":
+                        sour++;
                         break;
-                    case "chilly":
-                        chiliCount++;
+                    case "spicy":
+                        spicy++;
                         break;
-                    case "Orange":
-                        orangeCount++;
+                    case "salty":
+                        salty++;
                         break;
-                    case "rice":
-                        riceBowlCount++;
+                    case "sweet":
+                        sweet++;
                         break;
+                    case "bitter":
+                        bitter++;
+                        break;
+                    case "umami":
+                        umami++;
+                        break;
+                    case "buttery":
+                        buttery++;
+                        break;
+                }
             }
         }
+        else
+        {
+            // Compare with GridManager.Instance.totalFlavorCounts
+            sour = GridManager.Instance.totalFlavorCounts["sour"];
+            spicy = GridManager.Instance.totalFlavorCounts["spicy"];
+            salty = GridManager.Instance.totalFlavorCounts["salty"];
+            sweet = GridManager.Instance.totalFlavorCounts["sweet"];
+            bitter = GridManager.Instance.totalFlavorCounts["bitter"];
+            umami = GridManager.Instance.totalFlavorCounts["umami"];
+            buttery = GridManager.Instance.totalFlavorCounts["buttery"];
 
-        if (appleCount >= requirement.numberOfApples &&
-            chiliCount >= requirement.numberOfChilies &&
-            orangeCount >= requirement.numberOfOranges &&
-            riceBowlCount >= requirement.numberOfRiceBowl)
+        }
+
+        if (sour >= requirement.numberOfSours &&
+            spicy >= requirement.numberOfSpicies &&
+            salty >= requirement.numberOfSalties &&
+            sweet >= requirement.numberOfSweets &&
+            bitter >= requirement.numberOfBitters &&
+            umami >= requirement.numberOfUmamis &&
+            buttery >= requirement.numberOfButteries)
         {
             //Debug.Log("Customer requirement is matched.");
             return true;
@@ -293,19 +340,36 @@ public class Customer : MonoBehaviour
     private void OnMouseDown()
     {
         // Khi người chơi nhấn nút, hiển thị thông tin yêu cầu của khách hàng và các item trong affectedZone.
-        Debug.Log("Customer Requirement: " + requirement.numberOfApples + " apples, " + requirement.numberOfChilies + " chilies, " + requirement.numberOfOranges + " oranges, " + requirement.numberOfRiceBowl + " rice bowls.");
+        //Debug.Log("Customer Requirement: " + requirement.numberOfSours + " sours, " + requirement.numberOfSpicies + " spicies, " + requirement.numberOfSalties + " salties, " + requirement.numberOfSweets + " sweets, " + requirement.numberOfBitters + " bitters, " + requirement.numberOfUmamis + " umamis, " + requirement.numberOfButteries + " butteries.");
+        requirementText.text = "Customer Requirement: " + requirement.numberOfSours + " sours, " + requirement.numberOfSpicies + " spicies, " + requirement.numberOfSalties + " salties, " + requirement.numberOfSweets + " sweets, " + requirement.numberOfBitters + " bitters, " + requirement.numberOfUmamis + " umamis, " + requirement.numberOfButteries + " butteries.";
+        StartCoroutine(DisplayRequirement());
         Debug.Log("Affected Zone: ");
-        foreach (Vector2Int cell in affectedZone)
+        if (affectedZone.Count == 0)
         {
-            ItemData item = gridManager.GetItemAt(cell.x, cell.y);
-            if (item != null)
+            Debug.Log("Affected zone is empty.");
+            return;
+        }
+        else
+        {
+            foreach (Vector2Int cell in affectedZone)
             {
-                Debug.Log("Cell (" + cell.x + ", " + cell.y + "): " + item.displayName);
-            }
-            else
-            {
-                Debug.Log("Cell (" + cell.x + ", " + cell.y + "): empty");
+                ItemData item = gridManager.GetItemAt(cell.x, cell.y);
+                if (item != null)
+                {
+                    Debug.Log("Cell (" + cell.x + ", " + cell.y + "): " + item.displayName);
+                }
+                else
+                {
+                    Debug.Log("Cell (" + cell.x + ", " + cell.y + "): empty");
+                }
             }
         }
+    }
+
+    IEnumerator DisplayRequirement()
+    {
+        requirementText.gameObject.SetActive(true);
+        yield return new WaitForSeconds(3.0f);
+        requirementText.gameObject.SetActive(false);
     }
 }

@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca400fecc3a7b8c428dd330136f46798, type: 3}
   m_Name: man
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
-  itemId: 4
-  displayName: chilly
+  itemId: 3
+  displayName: salty
   icon: {fileID: -3461008612195741229, guid: 6e3598eb8783e5848931643239a6341b, type: 3}

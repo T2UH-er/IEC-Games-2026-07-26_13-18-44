@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca400fecc3a7b8c428dd330136f46798, type: 3}
   m_Name: cay
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
-  itemId: 3
-  displayName: Orange
+  itemId: 2
+  displayName: spicy
   icon: {fileID: -6260345905108128614, guid: 6e3598eb8783e5848931643239a6341b, type: 3}

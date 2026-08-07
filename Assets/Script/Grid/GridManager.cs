@@ -1,6 +1,19 @@
+﻿using System.Collections.Generic;
 using UnityEngine;
 public class GridManager : MonoBehaviour
 {
+    // Dùng Dictionary để lưu số lượng từng loại vị hiện có trên toàn bàn chơi
+    public Dictionary<string, int> totalFlavorCounts = new Dictionary<string, int>()
+    {
+        { "sour", 0 },
+        { "spicy", 0 },
+        { "salty", 0 },
+        { "sweet", 0 },
+        { "bitter", 0 },
+        { "umami", 0 },
+        { "buttery", 0 }
+    };
+
     public static GridManager Instance {get;private set;}
     public int width = 8;
     public int height = 8;
@@ -87,6 +100,7 @@ public class GridManager : MonoBehaviour
         {
             Vector2Int cell = originCell + shape.cells[i];
             cellItems[cell.x, cell.y] = itemPerCell[i];
+            totalFlavorCounts[itemPerCell[i].displayName]++;
 
             GameObject icon = Instantiate(iconPrefab, CellToWorld(cell.x, cell.y), Quaternion.identity, transform);
 
@@ -111,12 +125,17 @@ public class GridManager : MonoBehaviour
             info.originCell = originCell;
             info.itemPerCell = itemPerCell;
         }
+        ScoringSystem.Instance.availableMoves--;
     }
     public void RemovePlacedBlock(BlockShapeData shape, Vector2Int originCell)
     {
         for (int i = 0; i < shape.cells.Length; i++)
         {
             Vector2Int cell = originCell + shape.cells[i];
+            if (cellItems[cell.x, cell.y] != null)
+            {
+                totalFlavorCounts[cellItems[cell.x, cell.y].displayName]--;
+            }
             ClearCell(cell.x, cell.y);
         }
     }
