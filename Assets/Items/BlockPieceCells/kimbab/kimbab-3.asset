@@ -14,14 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ItemData1
   itemId: kimbab
   displayName: kimbab-3
-  icon: {fileID: 8818409582610604387, guid: 284d24fe08154744eba566fa8a03cc41, type: 3}
+  icon: {fileID: 21300000, guid: 284d24fe08154744eba566fa8a03cc41, type: 3}
   flavorCounts:
   - flavorName: sour
     count: 0
   - flavorName: spicy
-    count: 0
+    count: 1
   - flavorName: salty
-    count: 0
+    count: 1
   - flavorName: sweet
     count: 0
   - flavorName: bitter
