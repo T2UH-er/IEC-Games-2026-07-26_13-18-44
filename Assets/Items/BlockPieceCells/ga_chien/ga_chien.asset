@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ba1e65e3bbc5104e8204f808c34e0a7, type: 3}
+  m_Name: ga_chien
+  m_EditorClassIdentifier: Assembly-CSharp::BlockConfig
+  shapeData: {fileID: 11400000, guid: 1c83a22789e4c0c4fb0fc9dae02efc5d, type: 2}
+  itemPerCell:
+  - {fileID: 11400000, guid: c0636a716da027a438069ce350c64e0a, type: 2}
+  - {fileID: 11400000, guid: 3e684bfabd3573d458a9823b69e51782, type: 2}
+  - {fileID: 11400000, guid: 26ef7383f1381894e8b5d1bbb69e3acc, type: 2}
+  - {fileID: 11400000, guid: 6fbcd6aa360f03245891e414996cb3ec, type: 2}

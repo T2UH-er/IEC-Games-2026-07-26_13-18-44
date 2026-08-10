@@ -1,22 +1,22 @@
 using UnityEngine;
-public class BlockPiece : MonoBehaviour
+public class BlockPiece1 : MonoBehaviour
 {
     public BlockShapeData shapeData;
-    public ItemData[] itemPerCell;       
+    public ItemData1[] itemPerCell;       
     public GameObject cellIconPrefab;     
     public int slotIndex;
 
 
     private Camera cam;
-     public void Initialize(BlockShapeData shape, ItemDatabase itemDb, int slot)
+     public void Initialize(BlockShapeData shape, ItemDatabase1 itemDb, int slot)
     {
         shapeData = shape;
         slotIndex = slot;
         cam = Camera.main;
 
         
-        itemPerCell = new ItemData[shape.CellCount];
-        ItemData randomItem = itemDb.GetRandomItem();
+        itemPerCell = new ItemData1[shape.CellCount];
+        ItemData1 randomItem = itemDb.GetRandomItem();
         for (int i = 0; i < shape.CellCount; i++)
         {
             itemPerCell[i] = randomItem;
@@ -24,7 +24,7 @@ public class BlockPiece : MonoBehaviour
         BuildVisual();
     }
     
-    public void InitializeCustom(BlockShapeData shape, ItemData[] items, int slot)
+    public void InitializeCustom(BlockShapeData shape, ItemData1[] items, int slot)
     {
         shapeData = shape;
         slotIndex = slot;
@@ -35,7 +35,7 @@ public class BlockPiece : MonoBehaviour
 
     void BuildVisual()
     {
-        float cs = (GridManager.Instance != null) ? GridManager.Instance.cellSize : 1f;
+        float cs = (GridManager1.Instance != null) ? GridManager1.Instance.cellSize : 1f;
 
         if (shapeData != null && shapeData.dishSprite != null)
         {
@@ -79,12 +79,12 @@ public class BlockPiece : MonoBehaviour
 
     public bool TryPlace()
     {
-        Vector2Int originCell = GridManager.Instance.WorldToCell(transform.position);
+        Vector2Int originCell = GridManager1.Instance.WorldToCell(transform.position);
 
-        if (GridManager.Instance.CanPlace(shapeData, originCell))
+        if (GridManager1.Instance.CanPlace(shapeData, originCell))
         {
-            GridManager.Instance.PlaceBlock(shapeData, originCell, itemPerCell, cellIconPrefab);
-            if (BlockSpawner.Instance != null&&slotIndex>=0) BlockSpawner.Instance.OnPiecePlaced(slotIndex);
+            GridManager1.Instance.PlaceBlock(shapeData, originCell, itemPerCell, cellIconPrefab);
+            if (BlockSpawner1.Instance != null&&slotIndex>=0) BlockSpawner1.Instance.OnPiecePlaced(slotIndex);
             Destroy(gameObject);
             return true;
         }

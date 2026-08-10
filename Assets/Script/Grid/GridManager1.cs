@@ -1,15 +1,28 @@
+﻿using System.Collections.Generic;
 using UnityEngine;
 public class GridManager1 : MonoBehaviour
 {
+    // Dùng Dictionary để lưu số lượng từng loại vị hiện có trên toàn bàn chơi
+    public Dictionary<string, int> totalFlavorCounts = new Dictionary<string, int>()
+    {
+        { "sour", 0 },
+        { "spicy", 0 },
+        { "salty", 0 },
+        { "sweet", 0 },
+        { "bitter", 0 },
+        { "umami", 0 },
+        { "buttery", 0 }
+    };
+
     public static GridManager1 Instance {get;private set;}
     public int width = 8;
     public int height = 8;
-    public float cellSize;
+    public float cellSize = 1f;
     public Transform gridOrigin;          
 
     public GameObject cellSlotPrefab;    
 
-    private ItemData[,] cellItems;       
+    private ItemData1[,] cellItems;       
     private GameObject[,] cellVisuals; 
     void Awake()
     {
@@ -22,13 +35,12 @@ public class GridManager1 : MonoBehaviour
         {
             Destroy(gameObject); 
         }
-        cellItems = new ItemData[width, height];
+        cellItems = new ItemData1[width, height];
         cellVisuals = new GameObject[width, height];
     }
     void Start()
     {
         BuildVisualGrid();
-        //BuildBoarder();
     }
     void BuildVisualGrid()
     {
@@ -37,24 +49,6 @@ public class GridManager1 : MonoBehaviour
             for (int y = 0; y < height; y++) {
                 Instantiate(cellSlotPrefab, CellToWorld(x, y), Quaternion.identity, transform);
             }
-    }
-
-    // Build the boarder of grid
-    void BuildBoarder()
-    {
-        // From the gridOrigin, backward 1 block horizontally, build the boarder of grid
-        // Left and Right boarder
-        for (int y = -1; y <= height; y++)
-        {
-            Instantiate(cellSlotPrefab, CellToWorld(-1, y), Quaternion.identity, transform);
-            Instantiate(cellSlotPrefab, CellToWorld(width, y), Quaternion.identity, transform);
-        }
-        // Top and Bottom boarder
-        for (int x = -1; x <= width; x++)
-        {
-            Instantiate(cellSlotPrefab, CellToWorld(x, -1), Quaternion.identity, transform);
-            Instantiate(cellSlotPrefab, CellToWorld(x, height), Quaternion.identity, transform);
-        }
     }
     public Vector3 CellToWorld(int x,int y)
     {
@@ -100,12 +94,23 @@ public class GridManager1 : MonoBehaviour
             if (!IsCellEmpty(originCell + offset)) return false;
         return true;
     }
-    public void PlaceBlock(BlockShapeData shape, Vector2Int originCell, ItemData[] itemPerCell, GameObject iconPrefab)
+    public void PlaceBlock(BlockShapeData shape, Vector2Int originCell, ItemData1[] itemPerCell, GameObject iconPrefab)
     {
         for (int i = 0; i < shape.cells.Length; i++)
         {
             Vector2Int cell = originCell + shape.cells[i];
             cellItems[cell.x, cell.y] = itemPerCell[i];
+            foreach (var flavor in itemPerCell[i].flavorCounts)
+            {
+                if (totalFlavorCounts.ContainsKey(flavor.flavorName))
+                {
+                    totalFlavorCounts[flavor.flavorName] += flavor.count;
+                }
+                else
+                {
+                    totalFlavorCounts[flavor.flavorName] = flavor.count;
+                }
+            }
 
             GameObject icon = Instantiate(iconPrefab, CellToWorld(cell.x, cell.y), Quaternion.identity, transform);
 
@@ -125,22 +130,27 @@ public class GridManager1 : MonoBehaviour
             }
 
             cellVisuals[cell.x, cell.y] = icon;
-            PlacedBlockInfo info = icon.AddComponent<PlacedBlockInfo>();
+            PlacedBlockInfo1 info = icon.AddComponent<PlacedBlockInfo1>();
             info.shapeData = shape;
             info.originCell = originCell;
             info.itemPerCell = itemPerCell;
         }
+        ScoringSystem.Instance.availableMoves--;
     }
     public void RemovePlacedBlock(BlockShapeData shape, Vector2Int originCell)
     {
         for (int i = 0; i < shape.cells.Length; i++)
         {
             Vector2Int cell = originCell + shape.cells[i];
+            if (cellItems[cell.x, cell.y] != null)
+            {
+                totalFlavorCounts[cellItems[cell.x, cell.y].displayName]--;
+            }
             ClearCell(cell.x, cell.y);
         }
     }
 
-    public ItemData GetItemAt(int x, int y)
+    public ItemData1 GetItemAt(int x, int y)
     {
         return cellItems[x,y];
     }

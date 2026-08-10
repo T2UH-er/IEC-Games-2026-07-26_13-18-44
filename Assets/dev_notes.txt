@@ -1,0 +1,26 @@
+﻿Ngày 10-08
+- Để đảm bảo không ảnh hưởng đến mã nguồn cũ, phần lớn các file code được tạo mới với tên class thêm số '1' ở cuối.
+Ví dụ : class GridManager -> class GridManager1
+- File ItemData.cs được tạo mới, tên là ItemData1.cs, kế thừa những gì đã có của ItemData.cs, nhưng bổ sung thêm thuộc tính mới:
+	public List<FlavorData> flavorCounts = new List<FlavorData>()
+    {
+        new FlavorData { flavorName = "sour", count = 0 },
+        new FlavorData { flavorName = "spicy", count = 0 },
+        new FlavorData { flavorName = "salty", count = 0 },
+        new FlavorData { flavorName = "sweet", count = 0 },
+        new FlavorData { flavorName = "bitter", count = 0 },
+        new FlavorData { flavorName = "umami", count = 0 },
+        new FlavorData { flavorName = "buttery", count = 0 }
+    };
+để lưu trữ vị món ăn
+- Một số file mới (chủ yếu là ScriptableObject)
+	+ BlockConfig: Ấn định các thuộc tính của block (món ăn): hình dáng và các ItemData (đã bao hàm sprite)
+	+ LevelConfig: Ấn định các thuộc tính mỗi block (món ăn) của level, bao gồm:
+		int levelNumber: số level
+		blockConfig: một món ăn trong level
+		public List<FlavorData> flavorCounts: Tham số vị của món ăn trong level ấy
+
+- Ý tưởng: 
+    + khi level bắt đầu: BlockSpawner1 đọc CÁC LevelConfig được truyền vào.
+    + với mỗi LevelConfig, BlockSpawner1 dựa vào bộ tham số vị (FlavorCount) để thiết lập vị cho món ăn trong level.
+        Đồng thời, spawn món ăn lên màn hình dựa vào tham số BlockConfig và Hàm BlockPiece1.InitializeCustom(BlockShapeData shape, ItemData1[] items, int slot)

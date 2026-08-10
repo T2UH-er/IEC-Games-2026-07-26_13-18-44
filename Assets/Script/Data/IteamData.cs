@@ -1,4 +1,4 @@
-using	UnityEngine;
+﻿using	UnityEngine;
 [CreateAssetMenu(fileName	=	"NewItemData",	menuName	=	"BlockGame/Item	Data")]
 public	class	ItemData	:	ScriptableObject
 {
