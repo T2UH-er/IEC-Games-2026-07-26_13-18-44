@@ -59,13 +59,15 @@ public class TrayScrollManager1 : MonoBehaviour
         {
             Vector3 delta = Input.mousePosition - lastMousePos;
 
-           
+
             if (Mathf.Abs(delta.x) > Mathf.Abs(delta.y) && Mathf.Abs(delta.x) > 1.5f)
             {
                 float moveX = delta.x * 0.01f * scrollSensitivity;
                 Vector3 newPos = trayContainer.position + new Vector3(moveX, 0, 0);
                 newPos.x = Mathf.Clamp(newPos.x, minX, maxX);
                 trayContainer.position = newPos;
+                // ÉP HỆ THỐNG PHYSICS2D ĐỒNG BỘ COLLIDER THEO POSITION MỚI NGAY LẬP TỨC
+                Physics2D.SyncTransforms();
             }
 
             lastMousePos = Input.mousePosition;

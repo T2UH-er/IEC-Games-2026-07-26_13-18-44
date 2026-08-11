@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using UnityEngine;
 public class GridManager1 : MonoBehaviour
 {
@@ -96,11 +96,10 @@ public class GridManager1 : MonoBehaviour
     }
     public void PlaceBlock(BlockShapeData shape, Vector2Int originCell, ItemData1[] itemPerCell, GameObject iconPrefab)
     {
-        for (int i = 0; i < shape.cells.Length; i++)
+        // Cộng bộ vị của món ăn 1 lần duy nhất cho toàn bộ block
+        if (itemPerCell != null && itemPerCell.Length > 0 && itemPerCell[0] != null && itemPerCell[0].flavorCounts != null)
         {
-            Vector2Int cell = originCell + shape.cells[i];
-            cellItems[cell.x, cell.y] = itemPerCell[i];
-            foreach (var flavor in itemPerCell[i].flavorCounts)
+            foreach (var flavor in itemPerCell[0].flavorCounts)
             {
                 if (totalFlavorCounts.ContainsKey(flavor.flavorName))
                 {
@@ -111,6 +110,23 @@ public class GridManager1 : MonoBehaviour
                     totalFlavorCounts[flavor.flavorName] = flavor.count;
                 }
             }
+        }
+
+        Debug.Log("Total Flavor Counts: ");
+        Debug.Log(
+                totalFlavorCounts["sour"].ToString() + " sours, " +
+                totalFlavorCounts["spicy"].ToString() + " spicies, " +
+                totalFlavorCounts["salty"].ToString() + " salties, " +
+                totalFlavorCounts["sweet"].ToString() + " sweets, " +
+                totalFlavorCounts["bitter"].ToString() + " bitters, " +
+                totalFlavorCounts["umami"].ToString() + " umamis, " +
+                totalFlavorCounts["buttery"].ToString() + " butteries."
+            );
+
+        for (int i = 0; i < shape.cells.Length; i++)
+        {
+            Vector2Int cell = originCell + shape.cells[i];
+            cellItems[cell.x, cell.y] = itemPerCell[i];
 
             GameObject icon = Instantiate(iconPrefab, CellToWorld(cell.x, cell.y), Quaternion.identity, transform);
 
@@ -135,17 +151,41 @@ public class GridManager1 : MonoBehaviour
             info.originCell = originCell;
             info.itemPerCell = itemPerCell;
         }
-        ScoringSystem.Instance.availableMoves--;
+        ScoringSystem1.Instance.availableMoves--;
     }
+
     public void RemovePlacedBlock(BlockShapeData shape, Vector2Int originCell)
     {
+        // Trừ bộ vị của món ăn 1 lần duy nhất cho toàn bộ block
+        ItemData1 firstItem = null;
         for (int i = 0; i < shape.cells.Length; i++)
         {
             Vector2Int cell = originCell + shape.cells[i];
             if (cellItems[cell.x, cell.y] != null)
             {
-                totalFlavorCounts[cellItems[cell.x, cell.y].displayName]--;
+                firstItem = cellItems[cell.x, cell.y];
+                break;
             }
+        }
+
+        if (firstItem != null && firstItem.flavorCounts != null)
+        {
+            foreach (var flavor in firstItem.flavorCounts)
+            {
+                if (totalFlavorCounts.ContainsKey(flavor.flavorName))
+                {
+                    totalFlavorCounts[flavor.flavorName] -= flavor.count;
+                    if (totalFlavorCounts[flavor.flavorName] < 0)
+                    {
+                        totalFlavorCounts[flavor.flavorName] = 0; // Ensure it doesn't go negative
+                    }
+                }
+            }
+        }
+
+        for (int i = 0; i < shape.cells.Length; i++)
+        {
+            Vector2Int cell = originCell + shape.cells[i];
             ClearCell(cell.x, cell.y);
         }
     }

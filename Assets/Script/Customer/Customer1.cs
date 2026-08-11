@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using TMPro;
@@ -16,17 +16,23 @@ public class Customer1 : MonoBehaviour
     // Affectedzone: a list of grid cells' position that are affected by the customer, in grid coordinates
     public List<Vector2Int> affectedZone = new List<Vector2Int>();
 
-    public Dictionary<string, int> requirement = new Dictionary<string, int>()
+    public List<FlavorData> requirement = new List<FlavorData>()
     {
-        { "sour", 0 },
-        { "spicy", 0 },
-        { "salty", 0 },
-        { "sweet", 0 },
-        { "bitter", 0 },
-        { "umami", 0 },
-        { "buttery", 0 }
+        new FlavorData { flavorName = "sour", count = 0 },
+        new FlavorData { flavorName = "spicy", count = 0 },
+        new FlavorData { flavorName = "salty", count = 0 },
+        new FlavorData { flavorName = "sweet", count = 0 },
+        new FlavorData { flavorName = "bitter", count = 0 },
+        new FlavorData { flavorName = "umami", count = 0 },
+        new FlavorData { flavorName = "buttery", count = 0 }
     };
 
+    // Hàm tiện ích để lấy số lượng flavor từ List<FlavorData> requirement
+    public int GetRequirementCount(string flavorName)
+    {
+        int index = requirement.FindIndex(f => f.flavorName == flavorName);
+        return index != -1 ? requirement[index].count : 0;
+    }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -35,9 +41,10 @@ public class Customer1 : MonoBehaviour
         requirementText.text = "";
 
         ConfigurePosition();
-        DefaultConfigureAffectedZone();
+        //DefaultConfigureAffectedZone();
     }
-        // Update is called once per frame
+
+    // Update is called once per frame
     void Update()
     {
         isRequirementMatched = IsMatchRequirement();
@@ -225,7 +232,6 @@ public class Customer1 : MonoBehaviour
                     affectedZone.Add(new Vector2Int(gridManager.width - 1 - 1, cellPosition.y + 1));
                     affectedZone.Add(new Vector2Int(gridManager.width - 1 - 1, cellPosition.y - 1));
                 }
-
                 else if (cellPosition.x < 0)
                 {
                     affectedZone.Add(new Vector2Int(0, cellPosition.y - 1));
@@ -245,7 +251,7 @@ public class Customer1 : MonoBehaviour
         }
     }
 
-    public bool IsMatchRequirement() 
+    public bool IsMatchRequirement()
     {
         int sour = 0;
         int spicy = 0;
@@ -254,17 +260,22 @@ public class Customer1 : MonoBehaviour
         int bitter = 0;
         int umami = 0;
         int buttery = 0;
+
         // Kiểm tra xem các ô trong affectedZone có chứa các item yêu cầu của customer hay không
-        // Nếu có, trả về true.
         if (affectedZone != null && affectedZone.Count > 0)
         {
-            // Chạy đoạn mã kiểm tra các ô trong affectedZone
+            HashSet<string> checkedID = new HashSet<string>();
             foreach (Vector2Int cell in affectedZone)
             {
                 ItemData1 item = gridManager.GetItemAt(cell.x, cell.y);
-                foreach (var flavor in item?.flavorCounts ?? new List<FlavorData>())
+                if (item == null || string.IsNullOrEmpty(item.itemId)) continue;
+                if (checkedID.Contains(item.itemId)) continue;
+                checkedID.Add(item.itemId);
+
+                foreach (var flavor in item.flavorCounts ?? new List<FlavorData>())
                 {
-                    if (requirement.ContainsKey(flavor.flavorName))
+                    // Kiểm tra vị có nằm trong requirement không
+                    if (requirement.Exists(f => f.flavorName == flavor.flavorName))
                     {
                         switch (flavor.flavorName)
                         {
@@ -292,7 +303,6 @@ public class Customer1 : MonoBehaviour
                         }
                     }
                 }
-                
             }
         }
         else
@@ -305,31 +315,35 @@ public class Customer1 : MonoBehaviour
             bitter = GridManager1.Instance.totalFlavorCounts["bitter"];
             umami = GridManager1.Instance.totalFlavorCounts["umami"];
             buttery = GridManager1.Instance.totalFlavorCounts["buttery"];
-
         }
 
-        if (sour >= requirement["sour"] &&
-            spicy >= requirement["spicy"] &&
-            salty >= requirement["salty"] &&
-            sweet >= requirement["sweet"] &&
-            bitter >= requirement["bitter"] &&
-            umami >= requirement["umami"] &&
-            buttery >= requirement["buttery"])
+        // So sánh tổng vị thu được với yêu cầu (dùng hàm GetRequirementCount)
+        if (sour >= ScoringSystem1.Instance.totalFlavorReq["sour"] &&
+            spicy >= ScoringSystem1.Instance.totalFlavorReq["spicy"] &&
+            salty >= ScoringSystem1.Instance.totalFlavorReq["salty"] &&
+            sweet >= ScoringSystem1.Instance.totalFlavorReq["sweet"] &&
+            bitter >= ScoringSystem1.Instance.totalFlavorReq["bitter"] &&
+            umami >= ScoringSystem1.Instance.totalFlavorReq["umami"] &&
+            buttery >= ScoringSystem1.Instance.totalFlavorReq["buttery"])
         {
-            //Debug.Log("Customer requirement is matched.");
             return true;
         }
-
-        // Ngược lại, trả về false.
 
         return false;
     }
 
     private void OnMouseDown()
     {
-        // Khi người chơi nhấn nút, hiển thị thông tin yêu cầu của khách hàng và các item trong affectedZone.
-        //Debug.Log("Customer Requirement: " + requirement.numberOfSours + " sours, " + requirement.numberOfSpicies + " spicies, " + requirement.numberOfSalties + " salties, " + requirement.numberOfSweets + " sweets, " + requirement.numberOfBitters + " bitters, " + requirement.numberOfUmamis + " umamis, " + requirement.numberOfButteries + " butteries.");
-        requirementText.text = "Customer Requirement: " + requirement["sour"] + " sours, " + requirement["spicy"] + " spicies, " + requirement["salty"] + " salties, " + requirement["sweet"] + " sweets, " + requirement["bitter"] + " bitters, " + requirement["umami"] + " umamis, " + requirement["buttery"] + " butteries.";
+        // Hiển thị thông tin yêu cầu của khách hàng
+        requirementText.text = "Customer Requirement: " +
+            GetRequirementCount("sour") + " sours, " +
+            GetRequirementCount("spicy") + " spicies, " +
+            GetRequirementCount("salty") + " salties, " +
+            GetRequirementCount("sweet") + " sweets, " +
+            GetRequirementCount("bitter") + " bitters, " +
+            GetRequirementCount("umami") + " umamis, " +
+            GetRequirementCount("buttery") + " butteries.";
+
         StartCoroutine(DisplayRequirement());
         Debug.Log("Affected Zone: ");
         if (affectedZone.Count == 0)
@@ -344,7 +358,7 @@ public class Customer1 : MonoBehaviour
                 ItemData1 item = gridManager.GetItemAt(cell.x, cell.y);
                 if (item != null)
                 {
-                    Debug.Log("Cell (" + cell.x + ", " + cell.y + "): " );
+                    Debug.Log("Cell (" + cell.x + ", " + cell.y + "): ");
                     Debug.Log("  sour: " + item.GetFlavorCount("sour"));
                     Debug.Log("  spicy: " + item.GetFlavorCount("spicy"));
                     Debug.Log("  salty: " + item.GetFlavorCount("salty"));

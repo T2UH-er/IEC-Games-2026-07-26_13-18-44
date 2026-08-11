@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0724dfe14f2460c4daa9bdfb0c0ac520, type: 3}
+  m_Name: SpriteNumber
+  m_EditorClassIdentifier: Assembly-CSharp::SpriteNumber
+  zero: {fileID: -5283700436443524369, guid: a589556d083e32b4d8109dd29ae324c3, type: 3}
+  one: {fileID: 5200311944232379735, guid: a589556d083e32b4d8109dd29ae324c3, type: 3}
+  two: {fileID: -4869043040814080818, guid: a589556d083e32b4d8109dd29ae324c3, type: 3}
+  three: {fileID: 8381302263927150608, guid: a589556d083e32b4d8109dd29ae324c3, type: 3}
+  four: {fileID: 3909884755667189595, guid: a589556d083e32b4d8109dd29ae324c3, type: 3}
+  five: {fileID: -264331961499241640, guid: a589556d083e32b4d8109dd29ae324c3, type: 3}
+  six: {fileID: -9185438475878822437, guid: a589556d083e32b4d8109dd29ae324c3, type: 3}
+  seven: {fileID: 6220921334453215773, guid: a589556d083e32b4d8109dd29ae324c3, type: 3}
+  eight: {fileID: 2102376950438905163, guid: a589556d083e32b4d8109dd29ae324c3, type: 3}
+  nine: {fileID: -7620171355186139804, guid: a589556d083e32b4d8109dd29ae324c3, type: 3}

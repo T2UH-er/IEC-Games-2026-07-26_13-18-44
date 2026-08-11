@@ -1,11 +1,10 @@
-using UnityEngine;
+﻿using UnityEngine;
 public class BlockPiece1 : MonoBehaviour
 {
     public BlockShapeData shapeData;
     public ItemData1[] itemPerCell;       
     public GameObject cellIconPrefab;     
     public int slotIndex;
-
 
     private Camera cam;
      public void Initialize(BlockShapeData shape, ItemDatabase1 itemDb, int slot)

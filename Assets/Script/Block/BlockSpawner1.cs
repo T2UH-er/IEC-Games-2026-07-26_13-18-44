@@ -1,3 +1,4 @@
+﻿using System;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -6,6 +7,8 @@ public class BlockSpawner1: MonoBehaviour
 {
     public int levelNumber = 0;
 
+    [SerializeField] private SpriteFlavor flavor;
+    [SerializeField] private SpriteNumber number;
     public static BlockSpawner1 Instance { get; private set; }
 
     public GameObject blockPiecePrefab;
@@ -13,25 +16,39 @@ public class BlockSpawner1: MonoBehaviour
 
     public LevelConfig[] levelConfigs;
 
-    public Transform trayContainer;     
+    public Transform trayContainer;
+    private Vector3 initialTrayPosition; // Biến lưu vị trí Y ban đầu của Tray
     public Vector3 trayBlockScale = new Vector3(0.6f, 0.6f, 0.6f);
     public int totalBlocksCount = 10;      
     public float slotSpacing = 10f; 
     [SerializeField] private BlockPiece1[] currentPieces;
-    private Vector3[] slotPositions;  
+    private Vector3[] slotPositions;
 
+    // 2. Khởi tạo mảng slotPositions trong Awake
     private void Awake()
     {
-        if(Instance == null){
-            Instance = this;
-        }
-        else {
-            Destroy(gameObject);
+        if (Instance == null) { Instance = this; }
+        else { Destroy(gameObject); }
+        // 1. Lưu lại vị trí chuẩn của Tray trong Scene (ví dụ: Y = -23)
+        if (trayContainer != null)
+        {
+            initialTrayPosition = trayContainer.localPosition;
         }
         currentPieces = new BlockPiece1[totalBlocksCount];
         slotPositions = new Vector3[totalBlocksCount];
+        for (int i = 0; i < totalBlocksCount; i++)
+        {
+            slotPositions[i] = GetSlotPosition(i);
+        }
     }
 
+
+    // 1. Hàm tính toán vị trí local chuẩn cho bất kỳ slotIndex nào
+    public Vector3 GetSlotPosition(int slotIndex)
+    {
+        float offsetX = (slotIndex - (totalBlocksCount / 2f) + 0.5f) * slotSpacing;
+        return new Vector3(offsetX, 0f, 0f);
+    }
     private void Start()
     {
         ConfigureFlavor();
@@ -51,6 +68,28 @@ public class BlockSpawner1: MonoBehaviour
             Vector3 localSpawnPos = new Vector3((levelConfig.slotIndex - (totalBlocksCount / 2)) * slotSpacing, 0f, 0f);
             slotPositions[levelConfig.slotIndex] = localSpawnPos;
             GameObject pieceObj = Instantiate(blockPiecePrefab, trayContainer);
+            Bubble bubble = pieceObj.GetComponentInChildren<Bubble>();
+            List<Sprite> mySprites = new List<Sprite>();
+            if (bubble != null)
+            {
+                // Add 4 sprites based the flavor:
+                ItemData1 itemdata = levelConfig.blockConfig.itemPerCell[0];
+                int currentFlavorCount = 0;
+                string[] flavorNames = { "sour", "spicy", "salty", "sweet", "bitter", "umami", "buttery" };
+
+                foreach (string flv in flavorNames)
+                {
+                    if(itemdata.GetFlavorCount(flv) > 0)
+                    {
+                        mySprites.Add(number.GetSprite(itemdata.GetFlavorCount(flv)));
+                        mySprites.Add(flavor.GetSprite(flv));
+                        currentFlavorCount++;
+                    }
+                    if (currentFlavorCount == 2) break;
+                }
+            }
+            bubble.SetupBubble(mySprites);
+            bubble.ShowBubble();
             pieceObj.transform.localPosition = localSpawnPos;
             pieceObj.transform.localScale = trayBlockScale;
             BlockPiece1 piece = pieceObj.GetComponent<BlockPiece1>();
@@ -69,11 +108,13 @@ public class BlockSpawner1: MonoBehaviour
         }
 
         // Assign the flavorCounts from the levelConfig to each ItemData1 in the blockConfig's itemData array
-        foreach (var levelConfig in levelConfigs)
+        for (int i = 0; i < levelConfigs.Length; i++)
         {
+            var levelConfig = levelConfigs[i];  
             foreach (ItemData1 itemdata in levelConfig.blockConfig.itemPerCell)
             {
                 itemdata.flavorCounts = levelConfig.flavorCounts;
+                itemdata.itemId = i.ToString();
             }
         }
     }
@@ -84,7 +125,6 @@ public class BlockSpawner1: MonoBehaviour
         {
             currentPieces[slotIndex] = null;
         }
-        Debug.Log("idx"+ slotIndex);
         bool allEmpty = true;
         for (int i = 0; i < currentPieces.Length; i++)
         {
@@ -96,32 +136,36 @@ public class BlockSpawner1: MonoBehaviour
         }
         if (allEmpty)
         {
-            trayContainer.localPosition = new Vector3(0f, -4.5f, 0f);
+            // 2. Trả trayContainer về đúng vị trí ban đầu thay vì gán -4.5f
+            trayContainer.localPosition = initialTrayPosition;
         }
     }
+    // 3. Hàm trả món ăn về Tray
     public bool TryReturnToTray(BlockPiece1 piece)
     {
         int emptySlot = -1;
         for (int i = 0; i < currentPieces.Length; i++)
         {
-            //Debug.Log("idx"+ i + " "+ currentPieces[i]);
             if (currentPieces[i] == null)
             {
                 emptySlot = i;
                 break;
             }
         }
-
         if (emptySlot != -1)
         {
             piece.transform.SetParent(trayContainer);
-            piece.transform.localPosition = slotPositions[emptySlot];
+            // Đặt vị trí local chính xác theo ô trống
+            piece.transform.localPosition = GetSlotPosition(emptySlot);
             piece.transform.localScale = trayBlockScale;
             piece.slotIndex = emptySlot;
             currentPieces[emptySlot] = piece;
+            // Đồng bộ lại Physics2D để Collider di chuyển theo món ăn trên Tray ngay lập tức
+            Physics2D.SyncTransforms();
             return true;
         }
-        Debug.Log("No Place");
+
+        Debug.Log("No Place Left on Tray");
         return false;
     }
 }

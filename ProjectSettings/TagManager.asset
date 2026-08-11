@@ -44,5 +44,8 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: dialougeBox
+    uniqueID: 1993617373
+    locked: 0
   m_RenderingLayers:
   - Default

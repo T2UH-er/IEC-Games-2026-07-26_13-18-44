@@ -24,3 +24,22 @@ Ví dụ : class GridManager -> class GridManager1
     + khi level bắt đầu: BlockSpawner1 đọc CÁC LevelConfig được truyền vào.
     + với mỗi LevelConfig, BlockSpawner1 dựa vào bộ tham số vị (FlavorCount) để thiết lập vị cho món ăn trong level.
         Đồng thời, spawn món ăn lên màn hình dựa vào tham số BlockConfig và Hàm BlockPiece1.InitializeCustom(BlockShapeData shape, ItemData1[] items, int slot)
+
+Ngày 11-08
+- Những việc đã làm: 
+    + món ăn đã có thể kéo thả vào bàn ăn
+    + Có bong bóng hiển thị vị món ăn trên khay
+    + Có cơ chế nhận biết yêu cầu của khách hàng và yêu cầu chung
+    + Prefab: IndieBubble để hiển thị vị món ăn trên bàn
+    + Script: Bubble.cs: dùng cho bong bóng hiển thị vị, trong class có 
+        * List<Sprite> fourSprites cho các sprite số và vị (tên là fourSprites nhưng có thể ít hơn 4 sprite)
+        * Hàm public void SetupBubble(List<Sprite> sprites) để cấu hình List<Sprite> trên.
+    + Thay đổi: prefab BlockPiece1 có thêm một GameObject con là bubble
+    + 2 ScriptableObject mới là SpriteNumber và SpriteFlavor nhằm mapping Sprite cho tiện sử dụng, có hàm GetSprite() trong đó
+
+- Những việc chưa làm: 
+    + Bong bóng hiển thị vị món ăn trên bàn ăn
+    + Bong bóng hiển thị vị theo yêu cầu khác
+    + Thay UI tạm thành UI sẽ được sử dụng
+    + Bàn ăn cần chuyển từ 8x8 thành 4x4
+- Bug tồn đọng: sprite hiển thị vị bị lệch

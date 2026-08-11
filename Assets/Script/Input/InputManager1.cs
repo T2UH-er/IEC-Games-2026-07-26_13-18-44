@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class InputManager1 : MonoBehaviour
 {
@@ -47,14 +47,19 @@ public class InputManager1 : MonoBehaviour
                     originalOriginCell = placedInfo.originCell;
                     originalItems = placedInfo.itemPerCell;
 
+                    // 1. Tính toán vị trí thế giới gốc của món ăn trên Grid trước
+                    startPosition = GridManager1.Instance.CellToWorld(originalOriginCell.x, originalOriginCell.y);
+
+                    // 2. Xóa món ăn cũ khỏi Grid
                     GridManager1.Instance.RemovePlacedBlock(shape, originalOriginCell);
 
-                    GameObject pieceObj = Instantiate(blockPiecePrefab, worldPos, Quaternion.identity);
+                    // 3. Tạo GameObject mới tại ĐÚNG startPosition (thay vì worldPos)
+                    GameObject pieceObj = Instantiate(blockPiecePrefab, startPosition, Quaternion.identity);
                     selectedPiece = pieceObj.GetComponent<BlockPiece1>();
                     selectedPiece.InitializeCustom(shape, originalItems, -1);
 
-                    startPosition = GridManager1.Instance.CellToWorld(originalOriginCell.x, originalOriginCell.y);
-                    dragOffset = selectedPiece.transform.position - worldPos;
+                    // 4. Tính dragOffset chuẩn xác giữa món ăn và vị trí con trỏ chuột
+                    dragOffset = startPosition - worldPos;
                     isFromGrid = true;
                     selectedPiece.transform.localScale = Vector3.one * 1.1f;
                 }
@@ -65,6 +70,8 @@ public class InputManager1 : MonoBehaviour
         {
             Vector3 worldPos = GetMouseWorldPos();
             selectedPiece.transform.position = worldPos + dragOffset;
+            // Đảm bảo Collider của Block đang kéo cũng đi theo Sprite ngay trong khung hình này
+            Physics2D.SyncTransforms();
         }
         if (selectedPiece != null && Input.GetMouseButtonUp(0))
         {

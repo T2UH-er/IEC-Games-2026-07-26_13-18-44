@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ItemData1
   itemId: ga_chien-2
   displayName: ga_chien-2
-  icon: {fileID: -2266125799702738380, guid: ad5626b1f53a1954a82832f376db81fe, type: 3}
+  icon: {fileID: 21300000, guid: ad5626b1f53a1954a82832f376db81fe, type: 3}
   flavorCounts:
   - flavorName: sour
     count: 0
