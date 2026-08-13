@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class InputManager1 : MonoBehaviour
@@ -16,10 +17,18 @@ public class InputManager1 : MonoBehaviour
 
     public float dragScaleMultiplier = 1.0f;
 
+    private SpriteFlavor flavor;
+    private SpriteNumber number;
+
     private void Awake()
     {
         Instance = this;
         mainCam = Camera.main != null ? Camera.main : FindObjectOfType<Camera>();
+
+        flavor = Resources.Load<SpriteFlavor>("SpriteFlavor");
+        if (flavor == null) Debug.LogError("Không có SpriteFlavor.asset");
+        number = Resources.Load<SpriteNumber>("SpriteNumber");
+        if (number == null) Debug.LogError("Không có SpriteNumber.asset");
     }
 
     private void Update()
@@ -59,6 +68,32 @@ public class InputManager1 : MonoBehaviour
                     GameObject pieceObj = Instantiate(blockPiecePrefab, startPosition, Quaternion.identity);
                     selectedPiece = pieceObj.GetComponent<BlockPiece1>();
                     selectedPiece.InitializeCustom(shape, originalItems, -1);
+                    // Tạo sprite hiển thị vị cho bubble
+                    Bubble bubble = selectedPiece.GetComponentInChildren<Bubble>();
+                    List<Sprite> sprites = new List<Sprite>();
+                    ItemData1 itDt1 = selectedPiece.itemPerCell[0];
+
+                    // Thêm "new string[]" để sửa lỗi cú pháp
+                    string[] flavors = new string[] { "sour", "spicy", "salty", "sweet", "bitter", "umami", "buttery" };
+
+                    foreach (string flv in flavors)
+                    {
+                        int count = itDt1.GetFlavorCount(flv);
+                        if (count > 0)
+                        {
+                            // Kiểm tra an toàn: Đảm bảo không vượt quá 4 Sprite nếu dùng cho Lưới 2x2
+                            if (sprites.Count + 2 > 4)
+                            {
+                                Debug.LogWarning("[Bubble] Đã đạt tối đa 4 Sprite, dừng thêm vị mới!");
+                                break;
+                            }
+
+                            sprites.Add(number.GetSprite(count));
+                            sprites.Add(flavor.GetSprite(flv));
+                        }
+                    }
+
+                    bubble.SetupBubble(sprites);
 
                     // 4. Tính dragOffset chuẩn xác giữa món ăn và vị trí con trỏ chuột
                     dragOffset = startPosition - worldPos;
@@ -86,14 +121,16 @@ public class InputManager1 : MonoBehaviour
                     bool returnedToTray = (BlockSpawner1.Instance != null) && BlockSpawner1.Instance.TryReturnToTray(selectedPiece);
                     if (!returnedToTray)
                     {
-                        
-                        GridManager1.Instance.PlaceBlock(selectedPiece.shapeData, originalOriginCell, originalItems, selectedPiece.cellIconPrefab);
+                        // Trả về vị trí cũ — truyền previousOriginCell để không trừ lượt
+                        GridManager1.Instance.PlaceBlock(selectedPiece.shapeData, originalOriginCell, originalItems, selectedPiece.cellIconPrefab, true, originalOriginCell);
                         Destroy(selectedPiece.gameObject);
                     }
+                    else ScoringSystem1.Instance.availableMoves--;
                 } 
                 else if (isFromGrid)
                 {
-                    GridManager1.Instance.PlaceBlock(selectedPiece.shapeData, originalOriginCell, originalItems, selectedPiece.cellIconPrefab);
+                    // Trả về vị trí cũ — truyền previousOriginCell để không trừ lượt
+                    GridManager1.Instance.PlaceBlock(selectedPiece.shapeData, originalOriginCell, originalItems, selectedPiece.cellIconPrefab, true, originalOriginCell);
                     Destroy(selectedPiece.gameObject);
                 }
                 else

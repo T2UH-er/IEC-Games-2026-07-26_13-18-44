@@ -1,8 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
-using TMPro;
 public enum CustomerDirection
 {
     Horizontal,
@@ -15,7 +15,9 @@ public class Customer1 : MonoBehaviour
     public float offsetFromGrid = 5.5f;
     public bool isRequirementMatched = false;
 
-    [SerializeField] private TMPro.TextMeshProUGUI requirementText;
+    [SerializeField] private Bubble bubble;
+
+    //[SerializeField] private TMPro.TextMeshProUGUI requirementText;
 
     [SerializeField] private CustomerDirection direction;
     // Affectedzone: a list of grid cells' position that are affected by the customer, in grid coordinates
@@ -32,6 +34,9 @@ public class Customer1 : MonoBehaviour
         new FlavorData { flavorName = "buttery", count = 0 }
     };
 
+    public SpriteFlavor flavor;
+    public SpriteNumber number;
+
     // Hàm tiện ích để lấy số lượng flavor từ List<FlavorData> requirement
     public int GetRequirementCount(string flavorName)
     {
@@ -43,10 +48,47 @@ public class Customer1 : MonoBehaviour
     void Start()
     {
         gridManager = GridManager1.Instance;
-        requirementText.text = "";
+        //requirementText.text = "";
+
+        flavor = Resources.Load<SpriteFlavor>("SpriteFlavor");
+        if (flavor == null) Debug.LogError("Không có SpriteFlavor.asset");
+        number = Resources.Load<SpriteNumber>("SpriteNumber");
+        if (number == null) Debug.LogError("Không có SpriteNumber.asset");
 
         ConfigurePosition();
         //DefaultConfigureAffectedZone();
+
+        bubble = gameObject.GetComponentInChildren<Bubble>();
+
+        List<Sprite> sprites = new List<Sprite>();
+
+        // Thêm "new string[]" để sửa lỗi cú pháp
+        string[] flavors = new string[] { "sour", "spicy", "salty", "sweet", "bitter", "umami", "buttery" };
+
+        foreach (string flv in flavors)
+        {
+            int count = GetRequirementCount(flv);
+            if (count > 0)
+            {
+                // Kiểm tra an toàn: Đảm bảo không vượt quá 4 Sprite nếu dùng cho Lưới 2x2
+                if (sprites.Count + 2 > 4)
+                {
+                    Debug.LogWarning("[Bubble] Đã đạt tối đa 4 Sprite, dừng thêm vị mới!");
+                    break;
+                }
+
+                sprites.Add(number.GetSprite(count));
+                sprites.Add(flavor.GetSprite(flv));
+            }
+        }
+
+        bubble.SetupBubble(sprites);
+
+    }
+
+    private void OnEnable()
+    {
+        bubble.ShowBubble();
     }
 
     // Update is called once per frame
@@ -309,14 +351,14 @@ public class Customer1 : MonoBehaviour
         }
         else
         {
-            // Compare with GridManager1.Instance.totalFlavorCounts
-            sour = GridManager1.Instance.totalFlavorCounts["sour"];
-            spicy = GridManager1.Instance.totalFlavorCounts["spicy"];
-            salty = GridManager1.Instance.totalFlavorCounts["salty"];
-            sweet = GridManager1.Instance.totalFlavorCounts["sweet"];
-            bitter = GridManager1.Instance.totalFlavorCounts["bitter"];
-            umami = GridManager1.Instance.totalFlavorCounts["umami"];
-            buttery = GridManager1.Instance.totalFlavorCounts["buttery"];
+            // Compare with ScoringSystem1.Instance.totalFlavorReq
+            sour = ScoringSystem1.Instance.totalFlavorReq["sour"];
+            spicy = ScoringSystem1.Instance.totalFlavorReq["spicy"];
+            salty = ScoringSystem1.Instance.totalFlavorReq["salty"];
+            sweet = ScoringSystem1.Instance.totalFlavorReq["sweet"];
+            bitter = ScoringSystem1.Instance.totalFlavorReq["bitter"];
+            umami = ScoringSystem1.Instance.totalFlavorReq["umami"];
+            buttery = ScoringSystem1.Instance.totalFlavorReq["buttery"];
         }
 
         // So sánh tổng vị thu được với yêu cầu của riêng khách hàng này (dùng hàm GetRequirementCount)
@@ -337,16 +379,17 @@ public class Customer1 : MonoBehaviour
     private void OnMouseDown()
     {
         // Hiển thị thông tin yêu cầu của khách hàng
-        requirementText.text = "Customer Requirement: " +
-            GetRequirementCount("sour") + " sours, " +
-            GetRequirementCount("spicy") + " spicies, " +
-            GetRequirementCount("salty") + " salties, " +
-            GetRequirementCount("sweet") + " sweets, " +
-            GetRequirementCount("bitter") + " bitters, " +
-            GetRequirementCount("umami") + " umamis, " +
-            GetRequirementCount("buttery") + " butteries.";
+        //requirementText.text = "Customer Requirement: " +
+        //    GetRequirementCount("sour") + " sours, " +
+        //    GetRequirementCount("spicy") + " spicies, " +
+        //    GetRequirementCount("salty") + " salties, " +
+        //    GetRequirementCount("sweet") + " sweets, " +
+        //    GetRequirementCount("bitter") + " bitters, " +
+        //    GetRequirementCount("umami") + " umamis, " +
+        //    GetRequirementCount("buttery") + " butteries.";
 
-        StartCoroutine(DisplayRequirement());
+        //StartCoroutine(DisplayRequirement());
+        bubble.ShowBubble();
         Debug.Log("Affected Zone: ");
         if (affectedZone.Count == 0)
         {
@@ -377,10 +420,10 @@ public class Customer1 : MonoBehaviour
         }
     }
 
-    IEnumerator DisplayRequirement()
-    {
-        requirementText.gameObject.SetActive(true);
-        yield return new WaitForSeconds(3.0f);
-        requirementText.gameObject.SetActive(false);
-    }
+    //IEnumerator DisplayRequirement()
+    //{
+    //    requirementText.gameObject.SetActive(true);
+    //    yield return new WaitForSeconds(3.0f);
+    //    requirementText.gameObject.SetActive(false);
+    //}
 }

@@ -24,7 +24,8 @@ public class GridManager1 : MonoBehaviour
     public GameObject cellSlotPrefab;    
 
     private ItemData1[,] cellItems;       
-    private GameObject[,] cellVisuals; 
+    private GameObject[,] cellVisuals;
+
     void Awake()
     {
         if (Instance == null)
@@ -95,35 +96,46 @@ public class GridManager1 : MonoBehaviour
             if (!IsCellEmpty(originCell + offset)) return false;
         return true;
     }
-    public void PlaceBlock(BlockShapeData shape, Vector2Int originCell, ItemData1[] itemPerCell, GameObject iconPrefab)
+    /// <summary>
+    /// Đặt khối vào Grid.
+    /// </summary>
+    /// <param name="previousOriginCell">Vị trí ban đầu của khối trước khi kéo (để null nếu là khối mới tinh sinh ra từ khay)</param>
+    public void PlaceBlock(BlockShapeData shape, Vector2Int originCell, ItemData1[] itemPerCell, GameObject iconPrefab, bool countMove = true, Vector2Int? previousOriginCell = null)
     {
-        // Cộng bộ vị của món ăn 1 lần duy nhất cho toàn bộ block
-        if (itemPerCell != null && itemPerCell.Length > 0 && itemPerCell[0] != null && itemPerCell[0].flavorCounts != null)
+        // Kiểm tra xem vị trí mới có TRÙNG HOÀN TOÀN với vị trí cũ hay không
+        bool isSamePosition = previousOriginCell.HasValue && (originCell == previousOriginCell.Value);
+
+        // CHỈ CỘNG HƯƠNG VỊ NẾU ĐÂY LÀ NƯỚC ĐI MỚI (Vị trí đã thay đổi)
+        if (!isSamePosition)
         {
-            foreach (var flavor in itemPerCell[0].flavorCounts)
+            if (itemPerCell != null && itemPerCell.Length > 0 && itemPerCell[0] != null && itemPerCell[0].flavorCounts != null)
             {
-                if (totalFlavorCounts.ContainsKey(flavor.flavorName))
+                foreach (var flavor in itemPerCell[0].flavorCounts)
                 {
-                    totalFlavorCounts[flavor.flavorName] += flavor.count;
-                }
-                else
-                {
-                    totalFlavorCounts[flavor.flavorName] = flavor.count;
+                    if (totalFlavorCounts.ContainsKey(flavor.flavorName))
+                    {
+                        totalFlavorCounts[flavor.flavorName] += flavor.count;
+                    }
+                    else
+                    {
+                        totalFlavorCounts[flavor.flavorName] = flavor.count;
+                    }
                 }
             }
         }
 
         Debug.Log("Total Flavor Counts: ");
         Debug.Log(
-                totalFlavorCounts["sour"].ToString() + " sours, " +
-                totalFlavorCounts["spicy"].ToString() + " spicies, " +
-                totalFlavorCounts["salty"].ToString() + " salties, " +
-                totalFlavorCounts["sweet"].ToString() + " sweets, " +
-                totalFlavorCounts["bitter"].ToString() + " bitters, " +
-                totalFlavorCounts["umami"].ToString() + " umamis, " +
-                totalFlavorCounts["buttery"].ToString() + " butteries."
-            );
+            (totalFlavorCounts.ContainsKey("sour") ? totalFlavorCounts["sour"] : 0) + " sours, " +
+            (totalFlavorCounts.ContainsKey("spicy") ? totalFlavorCounts["spicy"] : 0) + " spicies, " +
+            (totalFlavorCounts.ContainsKey("salty") ? totalFlavorCounts["salty"] : 0) + " salties, " +
+            (totalFlavorCounts.ContainsKey("sweet") ? totalFlavorCounts["sweet"] : 0) + " sweets, " +
+            (totalFlavorCounts.ContainsKey("bitter") ? totalFlavorCounts["bitter"] : 0) + " bitters, " +
+            (totalFlavorCounts.ContainsKey("umami") ? totalFlavorCounts["umami"] : 0) + " umamis, " +
+            (totalFlavorCounts.ContainsKey("buttery") ? totalFlavorCounts["buttery"] : 0) + " butteries."
+        );
 
+        // Tiến hành gán dữ liệu và tạo visual cho các cell
         for (int i = 0; i < shape.cells.Length; i++)
         {
             Vector2Int cell = originCell + shape.cells[i];
@@ -165,7 +177,9 @@ public class GridManager1 : MonoBehaviour
 
             cellVisuals[cell.x, cell.y] = icon;
         }
-        if (ScoringSystem1.Instance != null)
+
+        // CHỈ TRỪ LƯỢT ĐI NẾU VỊ TRÍ ĐÃ THAY ĐỔI
+        if (!isSamePosition && countMove && ScoringSystem1.Instance != null)
         {
             ScoringSystem1.Instance.availableMoves--;
         }

@@ -20,7 +20,7 @@ public class BlockSpawner1: MonoBehaviour
     private Vector3 initialTrayPosition; // Biến lưu vị trí Y ban đầu của Tray
     public Vector3 trayBlockScale = new Vector3(0.6f, 0.6f, 0.6f);
     public int totalBlocksCount = 10;      
-    public float slotSpacing = 10f; 
+    public float slotSpacing = 20f; 
     [SerializeField] private BlockPiece1[] currentPieces;
     private Vector3[] slotPositions;
 
@@ -40,6 +40,11 @@ public class BlockSpawner1: MonoBehaviour
         {
             slotPositions[i] = GetSlotPosition(i);
         }
+
+        flavor = Resources.Load<SpriteFlavor>("SpriteFlavor");
+        if (flavor == null) Debug.LogError("Không có SpriteFlavor.asset");
+        number = Resources.Load<SpriteNumber>("SpriteNumber");
+        if (number == null) Debug.LogError("Không có SpriteNumber.asset");
     }
 
 
@@ -72,6 +77,33 @@ public class BlockSpawner1: MonoBehaviour
             pieceObj.transform.localScale = trayBlockScale;
             BlockPiece1 piece = pieceObj.GetComponent<BlockPiece1>();
             piece.InitializeCustom(levelConfig.blockConfig.shapeData, levelConfig.blockConfig.itemPerCell, levelConfig.slotIndex);
+            // Tạo sprite hiển thị vị cho bubble
+            Bubble bubble = piece.GetComponentInChildren<Bubble>();
+            List<Sprite> sprites = new List<Sprite>();
+            ItemData1 itDt1 = piece.itemPerCell[0];
+
+            // Thêm "new string[]" để sửa lỗi cú pháp
+            string[] flavors = new string[] { "sour", "spicy", "salty", "sweet", "bitter", "umami", "buttery" };
+
+            foreach (string flv in flavors)
+            {
+                int count = itDt1.GetFlavorCount(flv);
+                if (count > 0)
+                {
+                    // Kiểm tra an toàn: Đảm bảo không vượt quá 4 Sprite nếu dùng cho Lưới 2x2
+                    if (sprites.Count + 2 > 4)
+                    {
+                        Debug.LogWarning("[Bubble] Đã đạt tối đa 4 Sprite, dừng thêm vị mới!");
+                        break;
+                    }
+
+                    sprites.Add(number.GetSprite(count));
+                    sprites.Add(flavor.GetSprite(flv));
+                }
+            }
+
+            bubble.SetupBubble(sprites);
+
             Debug.Log("ItemPerCell loaded");
             currentPieces[levelConfig.slotIndex] = piece;
         }

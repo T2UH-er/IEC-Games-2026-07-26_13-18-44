@@ -6,6 +6,8 @@ public class BlockPiece1 : MonoBehaviour
     public GameObject cellIconPrefab;     
     public int slotIndex;
 
+    public Vector2Int? previousOriginCell = null;
+
     private Camera cam;
      public void Initialize(BlockShapeData shape, ItemDatabase1 itemDb, int slot)
     {

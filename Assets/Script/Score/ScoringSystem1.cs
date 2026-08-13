@@ -28,6 +28,9 @@ public class ScoringSystem1 : MonoBehaviour
     public TextMeshProUGUI numOfFinishedText;
     public TextMeshProUGUI resultText;
     public TextMeshProUGUI scoreText;
+    public TextMeshProUGUI requirementText;
+
+    public GameObject result;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -46,6 +49,7 @@ public class ScoringSystem1 : MonoBehaviour
         numOfFinishedText.text = "";
         resultText.text = "";
         scoreText.text = "";
+        result.SetActive(false);
 
         // Find all customers in the scene and add them to the list
         Customer1[] customerArray = FindObjectsOfType<Customer1>();
@@ -67,16 +71,25 @@ public class ScoringSystem1 : MonoBehaviour
         }
 
         // Log the totalFlavorReq
-        Debug.Log("Total Flavor Requirement: ");
-        Debug.Log(
-                totalFlavorReq["sour"].ToString() + " sours, " +
-                totalFlavorReq["spicy"].ToString() + " spicies, " +
-                totalFlavorReq["salty"].ToString() + " salties, " +
-                totalFlavorReq["sweet"].ToString() + " sweets, " +
-                totalFlavorReq["bitter"].ToString() + " bitters, " +
-                totalFlavorReq["umami"].ToString() + " umamis, " +
-                totalFlavorReq["buttery"].ToString() + " butteries."
-            );
+        //Debug.Log("Total Flavor Requirement: ");
+        //Debug.Log(
+        //        totalFlavorReq["sour"].ToString() + " sours, " +
+        //        totalFlavorReq["spicy"].ToString() + " spicies, " +
+        //        totalFlavorReq["salty"].ToString() + " salties, " +
+        //        totalFlavorReq["sweet"].ToString() + " sweets, " +
+        //        totalFlavorReq["bitter"].ToString() + " bitters, " +
+        //        totalFlavorReq["umami"].ToString() + " umamis, " +
+        //        totalFlavorReq["buttery"].ToString() + " butteries."
+        //    );
+
+        requirementText.text = "Total Requirement: " +
+            totalFlavorReq["sour"] + " sours, " +
+            totalFlavorReq["spicy"] + " spicies, " +
+            totalFlavorReq["salty"] + " salties, " +
+            totalFlavorReq["sweet"] + " sweets, " +
+            totalFlavorReq["bitter"] + " bitters, " +
+            totalFlavorReq["umami"] + " umamis, " +
+            totalFlavorReq["buttery"] + " butteries.";
     }
 
     // Update is called once per frame
@@ -115,6 +128,7 @@ public class ScoringSystem1 : MonoBehaviour
         if (numOfFinished == customers.Count && availableMoves >= 0)
         {
             resultText.text = "You Win!";
+            result.SetActive(true);
             // Pause the game
             Time.timeScale = 0f;
             return 1;
@@ -122,6 +136,7 @@ public class ScoringSystem1 : MonoBehaviour
         else if (numOfFinished < customers.Count && availableMoves <= 0)
         {
             resultText.text = "You Lose!";
+            result.SetActive(true);
             // Pause the game
             Time.timeScale = 0f;
             return -1;

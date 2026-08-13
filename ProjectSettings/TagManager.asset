@@ -44,8 +44,14 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: customer
+    uniqueID: 1535164891
+    locked: 0
   - name: dialougeBox
     uniqueID: 1993617373
+    locked: 0
+  - name: UI
+    uniqueID: 3973946635
     locked: 0
   m_RenderingLayers:
   - Default
