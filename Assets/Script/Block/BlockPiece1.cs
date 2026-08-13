@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 public class BlockPiece1 : MonoBehaviour
 {
     public BlockShapeData shapeData;
@@ -32,16 +32,23 @@ public class BlockPiece1 : MonoBehaviour
         BuildVisual();
     }
 
+    public float dishScale = 1f;
+    public float iconScale = 1f;
+    public float shapeCellSpacing = 1.0f;
+    public bool showDishBackground = false;
+
     void BuildVisual()
     {
-        float cs = (GridManager1.Instance != null) ? GridManager1.Instance.cellSize : 1f;
+        float gSize = (GridManager1.Instance != null) ? GridManager1.Instance.cellSize : 1f;
+        float cs = gSize * shapeCellSpacing;
 
-        if (shapeData != null && shapeData.dishSprite != null)
+        if (showDishBackground && shapeData != null && shapeData.dishSprite != null)
         {
             GameObject dishObj = new GameObject("DishBackground");
             dishObj.transform.SetParent(transform, false);
             Vector2 center = shapeData.GetCenterOffset();
-            dishObj.transform.localPosition = new Vector3(center.x * cs*5f, center.y * cs*5f, 0f) + shapeData.dishOffset;
+            dishObj.transform.localPosition = new Vector3(center.x * cs, center.y * cs, 0f) + shapeData.dishOffset;
+            dishObj.transform.localScale = new Vector3(dishScale, dishScale, 1f);
 
             SpriteRenderer dishSr = dishObj.AddComponent<SpriteRenderer>();
             dishSr.sprite = shapeData.dishSprite;
@@ -51,8 +58,10 @@ public class BlockPiece1 : MonoBehaviour
         for (int i = 0; i < shapeData.cells.Length; i++)
         {
             Vector2Int offset = shapeData.cells[i];
+            if (cellIconPrefab == null) continue;
             GameObject icon = Instantiate(cellIconPrefab, transform);
             icon.transform.localPosition = new Vector3(offset.x * cs, offset.y * cs, 0f);
+            icon.transform.localScale = Vector3.one;
             SpriteRenderer[] srs = icon.GetComponentsInChildren<SpriteRenderer>();
             for (int j = 0; j < srs.Length; j++)
             {
@@ -64,6 +73,12 @@ public class BlockPiece1 : MonoBehaviour
                 if (targetSr != null && itemPerCell[i].icon != null)
                 {
                     targetSr.sprite = itemPerCell[i].icon;
+                    if (targetSr.sprite != null && targetSr.sprite.bounds.size.x > 0)
+                    {
+                        float spriteSize = Mathf.Max(targetSr.sprite.bounds.size.x, targetSr.sprite.bounds.size.y);
+                        float fitScale = (cs / spriteSize) * iconScale;
+                        targetSr.transform.localScale = new Vector3(fitScale, fitScale, 1f);
+                    }
                 }
             }
         }

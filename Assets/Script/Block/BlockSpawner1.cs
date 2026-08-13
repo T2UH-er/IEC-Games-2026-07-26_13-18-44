@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -7,8 +7,8 @@ public class BlockSpawner1: MonoBehaviour
 {
     public int levelNumber = 0;
 
-    [SerializeField] private SpriteFlavor flavor;
-    [SerializeField] private SpriteNumber number;
+    public SpriteFlavor flavor;
+    public SpriteNumber number;
     public static BlockSpawner1 Instance { get; private set; }
 
     public GameObject blockPiecePrefab;
@@ -68,28 +68,6 @@ public class BlockSpawner1: MonoBehaviour
             Vector3 localSpawnPos = new Vector3((levelConfig.slotIndex - (totalBlocksCount / 2)) * slotSpacing, 0f, 0f);
             slotPositions[levelConfig.slotIndex] = localSpawnPos;
             GameObject pieceObj = Instantiate(blockPiecePrefab, trayContainer);
-            Bubble bubble = pieceObj.GetComponentInChildren<Bubble>();
-            List<Sprite> mySprites = new List<Sprite>();
-            if (bubble != null)
-            {
-                // Add 4 sprites based the flavor:
-                ItemData1 itemdata = levelConfig.blockConfig.itemPerCell[0];
-                int currentFlavorCount = 0;
-                string[] flavorNames = { "sour", "spicy", "salty", "sweet", "bitter", "umami", "buttery" };
-
-                foreach (string flv in flavorNames)
-                {
-                    if(itemdata.GetFlavorCount(flv) > 0)
-                    {
-                        mySprites.Add(number.GetSprite(itemdata.GetFlavorCount(flv)));
-                        mySprites.Add(flavor.GetSprite(flv));
-                        currentFlavorCount++;
-                    }
-                    if (currentFlavorCount == 2) break;
-                }
-            }
-            bubble.SetupBubble(mySprites);
-            bubble.ShowBubble();
             pieceObj.transform.localPosition = localSpawnPos;
             pieceObj.transform.localScale = trayBlockScale;
             BlockPiece1 piece = pieceObj.GetComponent<BlockPiece1>();
@@ -101,20 +79,23 @@ public class BlockSpawner1: MonoBehaviour
 
     public void ConfigureFlavor()
     {
-        // Check if the level number exists in the levelConfigs array
-        foreach (var levelConfig in levelConfigs)
-        {
-            if (levelConfig.levelNumber != levelNumber) return;
-        }
+        if (levelConfigs == null) return;
 
-        // Assign the flavorCounts from the levelConfig to each ItemData1 in the blockConfig's itemData array
         for (int i = 0; i < levelConfigs.Length; i++)
         {
-            var levelConfig = levelConfigs[i];  
-            foreach (ItemData1 itemdata in levelConfig.blockConfig.itemPerCell)
+            var levelConfig = levelConfigs[i];
+            if (levelConfig == null || levelConfig.levelNumber != levelNumber) continue;
+
+            if (levelConfig.blockConfig != null && levelConfig.blockConfig.itemPerCell != null)
             {
-                itemdata.flavorCounts = levelConfig.flavorCounts;
-                itemdata.itemId = i.ToString();
+                foreach (ItemData1 itemdata in levelConfig.blockConfig.itemPerCell)
+                {
+                    if (itemdata != null)
+                    {
+                        itemdata.flavorCounts = levelConfig.flavorCounts;
+                        itemdata.itemId = i.ToString();
+                    }
+                }
             }
         }
     }

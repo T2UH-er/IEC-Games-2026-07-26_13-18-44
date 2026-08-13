@@ -15,9 +15,10 @@ public class GridManager1 : MonoBehaviour
     };
 
     public static GridManager1 Instance {get;private set;}
-    public int width = 8;
-    public int height = 8;
+    public int width = 4;
+    public int height = 4;
     public float cellSize = 1f;
+    public float placedIconScale = 1f;
     public Transform gridOrigin;          
 
     public GameObject cellSlotPrefab;    
@@ -126,32 +127,48 @@ public class GridManager1 : MonoBehaviour
         for (int i = 0; i < shape.cells.Length; i++)
         {
             Vector2Int cell = originCell + shape.cells[i];
+            if (!IsInsideGrid(cell)) continue;
             cellItems[cell.x, cell.y] = itemPerCell[i];
 
-            GameObject icon = Instantiate(iconPrefab, CellToWorld(cell.x, cell.y), Quaternion.identity, transform);
-
-            SpriteRenderer[] srs = icon.GetComponentsInChildren<SpriteRenderer>();
-            for (int j = 0; j < srs.Length; j++)
+            GameObject icon = null;
+            if (iconPrefab != null)
             {
-                srs[j].sortingOrder += 10;
-            }
+                icon = Instantiate(iconPrefab, CellToWorld(cell.x, cell.y), Quaternion.identity, transform);
+                icon.transform.localScale = Vector3.one;
 
-            if (srs.Length > 0 && itemPerCell != null && i < itemPerCell.Length && itemPerCell[i] != null)
-            {
-                SpriteRenderer targetSr = srs.Length > 1 ? srs[srs.Length - 1] : srs[0];
-                if (targetSr != null && itemPerCell[i].icon != null)
+                SpriteRenderer[] srs = icon.GetComponentsInChildren<SpriteRenderer>();
+                for (int j = 0; j < srs.Length; j++)
                 {
-                    targetSr.sprite = itemPerCell[i].icon;
+                    srs[j].sortingOrder += 10;
                 }
+
+                if (srs.Length > 0 && itemPerCell != null && i < itemPerCell.Length && itemPerCell[i] != null)
+                {
+                    SpriteRenderer targetSr = srs.Length > 1 ? srs[srs.Length - 1] : srs[0];
+                    if (targetSr != null && itemPerCell[i].icon != null)
+                    {
+                        targetSr.sprite = itemPerCell[i].icon;
+                        if (targetSr.sprite != null && targetSr.sprite.bounds.size.x > 0)
+                        {
+                            float spriteSize = Mathf.Max(targetSr.sprite.bounds.size.x, targetSr.sprite.bounds.size.y);
+                            float fitScale = cellSize / spriteSize;
+                            targetSr.transform.localScale = new Vector3(fitScale, fitScale, 1f);
+                        }
+                    }
+                }
+
+                PlacedBlockInfo1 info = icon.AddComponent<PlacedBlockInfo1>();
+                info.shapeData = shape;
+                info.originCell = originCell;
+                info.itemPerCell = itemPerCell;
             }
 
             cellVisuals[cell.x, cell.y] = icon;
-            PlacedBlockInfo1 info = icon.AddComponent<PlacedBlockInfo1>();
-            info.shapeData = shape;
-            info.originCell = originCell;
-            info.itemPerCell = itemPerCell;
         }
-        ScoringSystem1.Instance.availableMoves--;
+        if (ScoringSystem1.Instance != null)
+        {
+            ScoringSystem1.Instance.availableMoves--;
+        }
     }
 
     public void RemovePlacedBlock(BlockShapeData shape, Vector2Int originCell)
@@ -192,7 +209,8 @@ public class GridManager1 : MonoBehaviour
 
     public ItemData1 GetItemAt(int x, int y)
     {
-        return cellItems[x,y];
+        if (x < 0 || x >= width || y < 0 || y >= height) return null;
+        return cellItems[x, y];
     }
     //logic for destroy block can be remove if not be used
     public bool IsRowFull(int y)
@@ -222,6 +240,7 @@ public class GridManager1 : MonoBehaviour
     }
     void ClearCell(int x, int y)
     {
+        if (x < 0 || x >= width || y < 0 || y >= height) return;
         if (cellVisuals[x, y] != null) Destroy(cellVisuals[x, y]);
         cellVisuals[x, y] = null;
         cellItems[x, y] = null;

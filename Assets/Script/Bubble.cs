@@ -1,13 +1,14 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Bubble : MonoBehaviour
 {
-    public bool isAlwaysDisplay = true;
+    public bool isAlwaysDisplay = false;
+    public float displayDuration = 3.0f;
 
     [SerializeField] private GameObject bubbleObject; // GameObject chứa Sprite mẹ
-    [SerializeField] private float padding = 0.1f; // Lề thụt vào bên trong Sprite mẹ (tùy chọn)
+    [SerializeField] private float iconSpacing = 0.5f; // Khoảng cách giữa các icon
 
     public List<Sprite> fourSprites = new List<Sprite>();
     private Coroutine displayCoroutine;
@@ -25,20 +26,35 @@ public class Bubble : MonoBehaviour
 
         this.fourSprites = sprites;
 
-        // Xóa các sprite con cũ (nếu có) trước khi tạo mới
         ClearExistingChildren();
 
-        // Tiến hành tạo lưới với số lượng Sprite thực tế
-        SpriteGridUtility.InstantiateGridInSprite(bubbleObject, fourSprites, padding);
+        if (bubbleObject != null)
+        {
+            SpriteRenderer parentSR = bubbleObject.GetComponent<SpriteRenderer>();
+            int order = parentSR != null ? parentSR.sortingOrder + 1 : 1;
+            int layerID = parentSR != null ? parentSR.sortingLayerID : 0;
 
-        // Cấu hình trạng thái ẩn/hiện
-        if (isAlwaysDisplay)
-        {
-            bubbleObject.SetActive(true);
-        }
-        else
-        {
-            bubbleObject.SetActive(false);
+            int count = fourSprites.Count;
+            float spacing = (GridManager1.Instance != null && GridManager1.Instance.cellSize > 0) ? GridManager1.Instance.cellSize : iconSpacing;
+
+            for (int i = 0; i < count; i++)
+            {
+                if (fourSprites[i] == null) continue;
+
+                GameObject childGO = new GameObject($"FlavorIcon_{i}");
+                childGO.transform.SetParent(bubbleObject.transform, false);
+
+                // Công thức tính vị trí cân đối 2 bên cách nhau đúng bằng kích thước 1 khối (cellSize)
+                float offsetX = (i - (count - 1) / 2.0f) * spacing;
+                childGO.transform.localPosition = new Vector3(offsetX, 0f, 0f);
+
+                SpriteRenderer childSR = childGO.AddComponent<SpriteRenderer>();
+                childSR.sprite = fourSprites[i];
+                childSR.sortingLayerID = layerID;
+                childSR.sortingOrder = order;
+            }
+
+            bubbleObject.SetActive(isAlwaysDisplay);
         }
     }
 
@@ -57,16 +73,21 @@ public class Bubble : MonoBehaviour
     private IEnumerator DisplayTheBubbleRoutine()
     {
         bubbleObject.SetActive(true);
-        yield return new WaitForSeconds(3.0f);
+        yield return new WaitForSeconds(displayDuration);
         bubbleObject.SetActive(false);
         displayCoroutine = null;
     }
 
     private void ClearExistingChildren()
     {
-        foreach (Transform child in bubbleObject.transform)
+        if (bubbleObject == null) return;
+        for (int i = bubbleObject.transform.childCount - 1; i >= 0; i--)
         {
-            Destroy(child.gameObject);
+            GameObject child = bubbleObject.transform.GetChild(i).gameObject;
+            if (Application.isPlaying)
+                Destroy(child);
+            else
+                DestroyImmediate(child);
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections.Generic;
 using TMPro;
 
@@ -22,8 +22,8 @@ public class ScoringSystem1 : MonoBehaviour
 
     public int highestScore = 0;
 
-    public int availableMoves = 0;
-    public int thresholdMoves = 0;
+    public int availableMoves = 10;
+    public int thresholdMoves = 10;
 
     public TextMeshProUGUI numOfFinishedText;
     public TextMeshProUGUI resultText;
@@ -100,7 +100,7 @@ public class ScoringSystem1 : MonoBehaviour
 
         numOfFinishedText.text = "Finished Customers: " + numOfFinished + "/" + customers.Count;
 
-        if (availableMoves >= thresholdMoves)
+        if (thresholdMoves <= 0 || availableMoves >= thresholdMoves)
         {
             scoreText.text = "Score: " + highestScore;
         }

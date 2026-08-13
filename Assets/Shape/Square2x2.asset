@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: Square2x2
   m_EditorClassIdentifier: Assembly-CSharp::BlockShapeData
   cells:
-  - {x: 0, y: 1}
-  - {x: 1, y: 1}
+  - {x: -1, y: 0}
   - {x: 0, y: 0}
-  - {x: 1, y: 0}
+  - {x: -1, y: -1}
+  - {x: 0, y: -1}
   dishSprite: {fileID: 0}
   dishOffset: {x: 0, y: 0, z: 0}

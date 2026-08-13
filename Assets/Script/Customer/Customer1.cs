@@ -1,8 +1,13 @@
+using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using TMPro;
-using System.Collections;
+public enum CustomerDirection
+{
+    Horizontal,
+    Vertical
+}
 
 public class Customer1 : MonoBehaviour
 {
@@ -264,13 +269,10 @@ public class Customer1 : MonoBehaviour
         // Kiểm tra xem các ô trong affectedZone có chứa các item yêu cầu của customer hay không
         if (affectedZone != null && affectedZone.Count > 0)
         {
-            HashSet<string> checkedID = new HashSet<string>();
             foreach (Vector2Int cell in affectedZone)
             {
                 ItemData1 item = gridManager.GetItemAt(cell.x, cell.y);
-                if (item == null || string.IsNullOrEmpty(item.itemId)) continue;
-                if (checkedID.Contains(item.itemId)) continue;
-                checkedID.Add(item.itemId);
+                if (item == null) continue;
 
                 foreach (var flavor in item.flavorCounts ?? new List<FlavorData>())
                 {
@@ -317,14 +319,14 @@ public class Customer1 : MonoBehaviour
             buttery = GridManager1.Instance.totalFlavorCounts["buttery"];
         }
 
-        // So sánh tổng vị thu được với yêu cầu (dùng hàm GetRequirementCount)
-        if (sour >= ScoringSystem1.Instance.totalFlavorReq["sour"] &&
-            spicy >= ScoringSystem1.Instance.totalFlavorReq["spicy"] &&
-            salty >= ScoringSystem1.Instance.totalFlavorReq["salty"] &&
-            sweet >= ScoringSystem1.Instance.totalFlavorReq["sweet"] &&
-            bitter >= ScoringSystem1.Instance.totalFlavorReq["bitter"] &&
-            umami >= ScoringSystem1.Instance.totalFlavorReq["umami"] &&
-            buttery >= ScoringSystem1.Instance.totalFlavorReq["buttery"])
+        // So sánh tổng vị thu được với yêu cầu của riêng khách hàng này (dùng hàm GetRequirementCount)
+        if (sour >= GetRequirementCount("sour") &&
+            spicy >= GetRequirementCount("spicy") &&
+            salty >= GetRequirementCount("salty") &&
+            sweet >= GetRequirementCount("sweet") &&
+            bitter >= GetRequirementCount("bitter") &&
+            umami >= GetRequirementCount("umami") &&
+            buttery >= GetRequirementCount("buttery"))
         {
             return true;
         }

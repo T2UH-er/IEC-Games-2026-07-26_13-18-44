@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 public class InputManager1 : MonoBehaviour
 {
@@ -13,6 +13,8 @@ public class InputManager1 : MonoBehaviour
     private bool isFromGrid = false;
     private Vector2Int originalOriginCell;
     private ItemData1[] originalItems;
+
+    public float dragScaleMultiplier = 1.0f;
 
     private void Awake()
     {
@@ -36,7 +38,7 @@ public class InputManager1 : MonoBehaviour
                     startPosition = piece.transform.position;
                     dragOffset = piece.transform.position - worldPos;
                     isFromGrid = false;
-                    selectedPiece.transform.localScale = Vector3.one * 1.1f;
+                    selectedPiece.transform.localScale = Vector3.one * dragScaleMultiplier;
                     return;
                 }
 
@@ -61,7 +63,7 @@ public class InputManager1 : MonoBehaviour
                     // 4. Tính dragOffset chuẩn xác giữa món ăn và vị trí con trỏ chuột
                     dragOffset = startPosition - worldPos;
                     isFromGrid = true;
-                    selectedPiece.transform.localScale = Vector3.one * 1.1f;
+                    selectedPiece.transform.localScale = Vector3.one * dragScaleMultiplier;
                 }
             }
         }

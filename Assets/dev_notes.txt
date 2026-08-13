@@ -41,5 +41,7 @@ Ngày 11-08
     + Bong bóng hiển thị vị món ăn trên bàn ăn
     + Bong bóng hiển thị vị theo yêu cầu khác
     + Thay UI tạm thành UI sẽ được sử dụng
-    + Bàn ăn cần chuyển từ 8x8 thành 4x4
 - Bug tồn đọng: sprite hiển thị vị bị lệch
+
+Ngày 13-08
+- Đã gỡ bỏ cơ chế hiển thị bong bóng vị (Bubble) trực tiếp trên các khối món ăn ở khay trong BlockSpawner1.cs theo yêu cầu.
