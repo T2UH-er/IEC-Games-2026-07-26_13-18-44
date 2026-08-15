@@ -25,10 +25,10 @@ public class ScoringSystem1 : MonoBehaviour
     public int availableMoves = 10;
     public int thresholdMoves = 10;
 
-    public TextMeshProUGUI numOfFinishedText;
+    //public TextMeshProUGUI numOfFinishedText;
     public TextMeshProUGUI resultText;
     public TextMeshProUGUI scoreText;
-    public TextMeshProUGUI requirementText;
+    //public TextMeshProUGUI requirementText;
 
     public GameObject result;
 
@@ -46,7 +46,7 @@ public class ScoringSystem1 : MonoBehaviour
         }
 
         // Let all text be empty at the start of the game
-        if (numOfFinishedText != null) numOfFinishedText.text = "";
+        //if (numOfFinishedText != null) numOfFinishedText.text = "";
         if (resultText != null) resultText.text = "";
         if (scoreText != null) scoreText.text = "";
         if (result != null) result.SetActive(false);
@@ -72,7 +72,7 @@ public class ScoringSystem1 : MonoBehaviour
         numOfFinished = 0;
         if (result != null) result.SetActive(false);
         if (resultText != null) resultText.text = "";
-        if (numOfFinishedText != null) numOfFinishedText.text = "";
+        //if (numOfFinishedText != null) numOfFinishedText.text = "";
     }
 
     /// <summary>
@@ -113,17 +113,17 @@ public class ScoringSystem1 : MonoBehaviour
             totalFlavorReq["buttery"] += customer.GetRequirementCount("buttery");
         }
 
-        if (requirementText != null)
-        {
-            requirementText.text = "Total Requirement: " +
-                totalFlavorReq["sour"] + " sours, " +
-                totalFlavorReq["spicy"] + " spicies, " +
-                totalFlavorReq["salty"] + " salties, " +
-                totalFlavorReq["sweet"] + " sweets, " +
-                totalFlavorReq["bitter"] + " bitters, " +
-                totalFlavorReq["umami"] + " umamis, " +
-                totalFlavorReq["buttery"] + " butteries.";
-        }
+        //if (requirementText != null)
+        //{
+        //    requirementText.text = "Total Requirement: " +
+        //        totalFlavorReq["sour"] + " sours, " +
+        //        totalFlavorReq["spicy"] + " spicies, " +
+        //        totalFlavorReq["salty"] + " salties, " +
+        //        totalFlavorReq["sweet"] + " sweets, " +
+        //        totalFlavorReq["bitter"] + " bitters, " +
+        //        totalFlavorReq["umami"] + " umamis, " +
+        //        totalFlavorReq["buttery"] + " butteries.";
+        //}
     }
 
     // Update chi cap nhat UI nhe, KHONG goi CheckWinCondition moi frame
@@ -135,7 +135,7 @@ public class ScoringSystem1 : MonoBehaviour
     // Cap nhat text UI (chi doc bien, khong tinh toan)
     private void UpdateUI()
     {
-        numOfFinishedText.text = "Finished Customers: " + numOfFinished + "/" + customers.Count;
+        //numOfFinishedText.text = "Finished Customers: " + numOfFinished + "/" + customers.Count;
 
         if (thresholdMoves <= 0 || availableMoves >= thresholdMoves)
             scoreText.text = "Score: " + highestScore;

@@ -1,22 +1,27 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class HomeScreen : MonoBehaviour
 {
-    Button playBtn;
+    [SerializeField] Button playBtn;
+    [SerializeField] Button levelBtn;
+    [SerializeField] Button quitBtn;
     void Start()
     {
-        playBtn = FindFirstObjectByType<Button>();
-
         playBtn.onClick.AddListener(() =>
         {
 
         });
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
+        levelBtn.onClick.AddListener(() =>
+        {
+            SceneManager.LoadScene("LevelList");
+        });
 
+        quitBtn.onClick.AddListener(() =>
+        {
+            Application.Quit();
+        });
     }
 }

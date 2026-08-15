@@ -272,13 +272,22 @@ public class Customer1 : MonoBehaviour
             buttery = gridManager.totalFlavorCounts.ContainsKey("buttery") ? gridManager.totalFlavorCounts["buttery"] : 0;
         }
 
-        return sour >= GetRequirementCount("sour") &&
-               spicy >= GetRequirementCount("spicy") &&
-               salty >= GetRequirementCount("salty") &&
-               sweet >= GetRequirementCount("sweet") &&
-               bitter >= GetRequirementCount("bitter") &&
-               umami >= GetRequirementCount("umami") &&
-               buttery >= GetRequirementCount("buttery");
+        if (affectedZone != null && affectedZone.Count > 0)
+            return sour >= GetRequirementCount("sour") &&
+                   spicy >= GetRequirementCount("spicy") &&
+                   salty >= GetRequirementCount("salty") &&
+                   sweet >= GetRequirementCount("sweet") &&
+                   bitter >= GetRequirementCount("bitter") &&
+                   umami >= GetRequirementCount("umami") &&
+                   buttery >= GetRequirementCount("buttery");
+        else 
+            return sour >= ScoringSystem1.Instance.totalFlavorReq["sour"] &&
+                   spicy >= ScoringSystem1.Instance.totalFlavorReq["spicy"] &&
+                   salty >= ScoringSystem1.Instance.totalFlavorReq["salty"] &&
+                   sweet >= ScoringSystem1.Instance.totalFlavorReq["sweet"] &&
+                   bitter >= ScoringSystem1.Instance.totalFlavorReq["bitter"] &&
+                   umami >= ScoringSystem1.Instance.totalFlavorReq["umami"] &&
+                   buttery >= ScoringSystem1.Instance.totalFlavorReq["buttery"];
     }
 
     private void OnMouseDown()
