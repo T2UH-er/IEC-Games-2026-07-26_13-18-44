@@ -105,13 +105,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   isAlwaysDisplay: 1
+  flavorNumberPrefab: {fileID: 5636169885196986034, guid: 28d4d4ef44e358646a43e486f1df05ea, type: 3}
   bubbleObject: {fileID: 2315882594334770498}
-  fourSprites:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
   padding: 0.1
+  globalScale: 0.5
+  flavorNumberGap: 0.28
+  fourSprites: []
 --- !u!1 &9044055775875225234
 GameObject:
   m_ObjectHideFlags: 0
@@ -161,3 +160,10 @@ MonoBehaviour:
   itemPerCell: []
   cellIconPrefab: {fileID: 8280824351333163112, guid: 4152219a9365c17469ffd2e80e4697ac, type: 3}
   slotIndex: 0
+  dishScale: 1
+  iconScale: 1
+  shapeCellSpacing: 1
+  showDishBackground: 0
+  bubbleOffset: {x: 0.2, y: -1.5, z: 0}
+  bubbleScale: 1.5
+  alignBubbleToBottom: 1

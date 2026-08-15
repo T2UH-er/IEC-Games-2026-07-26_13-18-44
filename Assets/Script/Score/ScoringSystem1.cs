@@ -46,21 +46,64 @@ public class ScoringSystem1 : MonoBehaviour
         }
 
         // Let all text be empty at the start of the game
-        numOfFinishedText.text = "";
-        resultText.text = "";
-        scoreText.text = "";
-        result.SetActive(false);
+        if (numOfFinishedText != null) numOfFinishedText.text = "";
+        if (resultText != null) resultText.text = "";
+        if (scoreText != null) scoreText.text = "";
+        if (result != null) result.SetActive(false);
 
-        // Find all customers in the scene and add them to the list
-        Customer1[] customerArray = FindObjectsOfType<Customer1>();
-        foreach (Customer1 customer in customerArray)
+        // Fallback: Nếu trong Scene có sẵn Customer1 và chưa được spawn bởi CustomerSpawner1
+        if (customers.Count == 0)
         {
-            customers.Add(customer);
+            Customer1[] customerArray = FindObjectsOfType<Customer1>();
+            foreach (Customer1 customer in customerArray)
+            {
+                customers.Add(customer);
+            }
+            RecalculateTotalRequirements();
         }
+    }
+
+    /// <summary>
+    /// Reset lại trạng thái lượt đi, điểm số và ẩn panel kết quả khi load level mới.
+    /// </summary>
+    public void ResetGameStatus()
+    {
+        availableMoves = thresholdMoves;
+        numOfFinished = 0;
+        if (result != null) result.SetActive(false);
+        if (resultText != null) resultText.text = "";
+        if (numOfFinishedText != null) numOfFinishedText.text = "";
+    }
+
+    /// <summary>
+    /// Khởi tạo và liên kết danh sách khách hàng được sinh ra từ CustomerSpawner1.
+    /// </summary>
+    public void InitializeCustomers(List<Customer1> customerList)
+    {
+        customers.Clear();
+        if (customerList != null)
+        {
+            customers.AddRange(customerList);
+        }
+        RecalculateTotalRequirements();
+        NotifyGridChanged();
+    }
+
+    private void RecalculateTotalRequirements()
+    {
+        // Reset về 0
+        totalFlavorReq["sour"] = 0;
+        totalFlavorReq["spicy"] = 0;
+        totalFlavorReq["salty"] = 0;
+        totalFlavorReq["sweet"] = 0;
+        totalFlavorReq["bitter"] = 0;
+        totalFlavorReq["umami"] = 0;
+        totalFlavorReq["buttery"] = 0;
 
         // Calculate the total flavor requirements for all customers
         foreach (Customer1 customer in customers)
         {
+            if (customer == null) continue;
             totalFlavorReq["sour"] += customer.GetRequirementCount("sour");
             totalFlavorReq["spicy"] += customer.GetRequirementCount("spicy");
             totalFlavorReq["salty"] += customer.GetRequirementCount("salty");
@@ -70,66 +113,60 @@ public class ScoringSystem1 : MonoBehaviour
             totalFlavorReq["buttery"] += customer.GetRequirementCount("buttery");
         }
 
-        // Log the totalFlavorReq
-        //Debug.Log("Total Flavor Requirement: ");
-        //Debug.Log(
-        //        totalFlavorReq["sour"].ToString() + " sours, " +
-        //        totalFlavorReq["spicy"].ToString() + " spicies, " +
-        //        totalFlavorReq["salty"].ToString() + " salties, " +
-        //        totalFlavorReq["sweet"].ToString() + " sweets, " +
-        //        totalFlavorReq["bitter"].ToString() + " bitters, " +
-        //        totalFlavorReq["umami"].ToString() + " umamis, " +
-        //        totalFlavorReq["buttery"].ToString() + " butteries."
-        //    );
-
-        requirementText.text = "Total Requirement: " +
-            totalFlavorReq["sour"] + " sours, " +
-            totalFlavorReq["spicy"] + " spicies, " +
-            totalFlavorReq["salty"] + " salties, " +
-            totalFlavorReq["sweet"] + " sweets, " +
-            totalFlavorReq["bitter"] + " bitters, " +
-            totalFlavorReq["umami"] + " umamis, " +
-            totalFlavorReq["buttery"] + " butteries.";
+        if (requirementText != null)
+        {
+            requirementText.text = "Total Requirement: " +
+                totalFlavorReq["sour"] + " sours, " +
+                totalFlavorReq["spicy"] + " spicies, " +
+                totalFlavorReq["salty"] + " salties, " +
+                totalFlavorReq["sweet"] + " sweets, " +
+                totalFlavorReq["bitter"] + " bitters, " +
+                totalFlavorReq["umami"] + " umamis, " +
+                totalFlavorReq["buttery"] + " butteries.";
+        }
     }
 
-    // Update is called once per frame
+    // Update chi cap nhat UI nhe, KHONG goi CheckWinCondition moi frame
     void Update()
     {
+        UpdateUI();
+    }
+
+    // Cap nhat text UI (chi doc bien, khong tinh toan)
+    private void UpdateUI()
+    {
+        numOfFinishedText.text = "Finished Customers: " + numOfFinished + "/" + customers.Count;
+
+        if (thresholdMoves <= 0 || availableMoves >= thresholdMoves)
+            scoreText.text = "Score: " + highestScore;
+        else
+            scoreText.text = "Score: " + Mathf.Max(0, (int)((availableMoves * 1.0f / thresholdMoves) * highestScore));
+    }
+
+    /// <summary>
+    /// Goi sau moi lan grid thay doi (dat/boc khoi).
+    /// Tinh lai tat ca customers va kiem tra win/lose.
+    /// </summary>
+    public void NotifyGridChanged()
+    {
+        // Yeu cau tung khach hang tinh lai trang thai
+        numOfFinished = 0;
+        foreach (Customer1 customer in customers)
+        {
+            customer.RefreshRequirementStatus();
+            if (customer.isRequirementMatched) numOfFinished++;
+        }
         CheckWinCondition();
     }
 
     private int CheckWinCondition()
     {
-
-        // count the number of finished customers
-        numOfFinished = 0;
-        foreach (Customer1 customer in customers)
-        {
-            if (customer.isRequirementMatched)
-            {
-                numOfFinished++;
-            }
-        }
-
-        numOfFinishedText.text = "Finished Customers: " + numOfFinished + "/" + customers.Count;
-
-        if (thresholdMoves <= 0 || availableMoves >= thresholdMoves)
-        {
-            scoreText.text = "Score: " + highestScore;
-        }
-        else
-        {
-            // Ép kiểu trực tiếp từ float sang int, không qua trung gian string
-            int score = (int)((availableMoves * 1.0f / thresholdMoves) * highestScore);
-            scoreText.text = "Score: " + score;
-        }
-
-        // return 1 if all customers are finished, return -1 if no moves left, return 0 if still in progress
-        if (numOfFinished == customers.Count && availableMoves >= 0)
+        // numOfFinished da duoc tinh trong NotifyGridChanged(), chi can doc lai
+        // Bug G fix: chi xet dieu kien thang neu co it nhat 1 khach hang
+        if (customers.Count > 0 && numOfFinished == customers.Count && availableMoves >= 0)
         {
             resultText.text = "You Win!";
             result.SetActive(true);
-            // Pause the game
             Time.timeScale = 0f;
             return 1;
         }
@@ -137,16 +174,10 @@ public class ScoringSystem1 : MonoBehaviour
         {
             resultText.text = "You Lose!";
             result.SetActive(true);
-            // Pause the game
             Time.timeScale = 0f;
             return -1;
         }
-        else
-        {
-            return 0;
-        }
- 
-        
+        return 0;
     }
         
 }

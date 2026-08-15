@@ -13,6 +13,17 @@ MonoBehaviour:
   m_Name: Lv1-1
   m_EditorClassIdentifier: Assembly-CSharp::LevelConfig
   levelNumber: 1
+  customers:
+  - customerSprite: {fileID: -933039256083134843, guid: 31ba3aa0523bc8e449bb1cbdd73310d2, type: 3}
+    requirement:
+    - flavorName: 
+      count: 0
+    affectedZone: []
+    zoneColor: {r: 0, g: 0, b: 0, a: 0}
+  trayBlocks:
+  - slotIndex: 0
+    blockConfig: {fileID: 0}
+    flavorCounts: []
   blockConfig: {fileID: 11400000, guid: 7d780fe13dd8be54f95052414d14c2c8, type: 2}
   flavorCounts:
   - flavorName: sour

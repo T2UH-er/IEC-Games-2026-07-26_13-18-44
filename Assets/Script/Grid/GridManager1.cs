@@ -1,146 +1,97 @@
 using System.Collections.Generic;
 using UnityEngine;
+
 public class GridManager1 : MonoBehaviour
 {
-    // Dùng Dictionary để lưu số lượng từng loại vị hiện có trên toàn bàn chơi
+    // Tong so luong tung loai vi hien co tren toan ban choi
     public Dictionary<string, int> totalFlavorCounts = new Dictionary<string, int>()
     {
-        { "sour", 0 },
-        { "spicy", 0 },
-        { "salty", 0 },
-        { "sweet", 0 },
-        { "bitter", 0 },
-        { "umami", 0 },
-        { "buttery", 0 }
+        { "sour", 0 }, { "spicy", 0 }, { "salty", 0 }, { "sweet", 0 },
+        { "bitter", 0 }, { "umami", 0 }, { "buttery", 0 }
     };
 
-    public static GridManager1 Instance {get;private set;}
+    public static GridManager1 Instance { get; private set; }
     public int width = 4;
     public int height = 4;
     public float cellSize = 1f;
     public float placedIconScale = 1f;
-    public Transform gridOrigin;          
+    public Transform gridOrigin;
 
-    public GameObject cellSlotPrefab;    
+    public GameObject cellSlotPrefab;
 
-    private ItemData1[,] cellItems;       
+    private ItemData1[,] cellItems;
     private GameObject[,] cellVisuals;
 
     void Awake()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject); 
-        }
+        if (Instance == null) Instance = this;
+        else { Destroy(gameObject); return; }
+
         cellItems = new ItemData1[width, height];
         cellVisuals = new GameObject[width, height];
     }
-    void Start()
-    {
-        BuildVisualGrid();
-    }
+
+    void Start() => BuildVisualGrid();
+
     void BuildVisualGrid()
     {
         if (cellSlotPrefab == null) return;
         for (int x = 0; x < width; x++)
-            for (int y = 0; y < height; y++) {
+            for (int y = 0; y < height; y++)
                 Instantiate(cellSlotPrefab, CellToWorld(x, y), Quaternion.identity, transform);
-            }
     }
-    public Vector3 CellToWorld(int x,int y)
+
+    public Vector3 CellToWorld(int x, int y)
     {
-        Vector3 origin;
-        if(gridOrigin != null){
-            origin = gridOrigin.position;
-        }
-        else
-        {
-            origin = Vector3.zero;
-        }
+        Vector3 origin = gridOrigin != null ? gridOrigin.position : Vector3.zero;
         return origin + new Vector3(x * cellSize, y * cellSize, 0f);
     }
+
     public Vector2Int WorldToCell(Vector3 worldPos)
     {
-        Vector3 origin;
-        if(gridOrigin != null){
-            origin = gridOrigin.position;
-        }
-        else
-        {
-            origin = Vector3.zero;
-        }
+        Vector3 origin = gridOrigin != null ? gridOrigin.position : Vector3.zero;
         Vector3 local = worldPos - origin;
-        int x = Mathf.RoundToInt(local.x / cellSize);
-        int y = Mathf.RoundToInt(local.y / cellSize);
-        return new Vector2Int(x, y);
+        return new Vector2Int(Mathf.RoundToInt(local.x / cellSize), Mathf.RoundToInt(local.y / cellSize));
     }
-    public bool IsInsideGrid(Vector2Int cell)
-    {
-        return cell.x >= 0 &&
-            cell.x < width &&
-            cell.y >= 0 &&
-            cell.y < height;
-    }
-    public bool IsCellEmpty (Vector2Int cell)
-    {
-        return IsInsideGrid(cell)&&cellItems[cell.x,cell.y]==null;
-    }
+
+    public bool IsInsideGrid(Vector2Int cell) =>
+        cell.x >= 0 && cell.x < width && cell.y >= 0 && cell.y < height;
+
+    public bool IsCellEmpty(Vector2Int cell) =>
+        IsInsideGrid(cell) && cellItems[cell.x, cell.y] == null;
+
     public bool CanPlace(BlockShapeData shape, Vector2Int originCell)
     {
         foreach (var offset in shape.cells)
             if (!IsCellEmpty(originCell + offset)) return false;
         return true;
     }
-    /// <summary>
-    /// Đặt khối vào Grid.
-    /// </summary>
-    /// <param name="previousOriginCell">Vị trí ban đầu của khối trước khi kéo (để null nếu là khối mới tinh sinh ra từ khay)</param>
-    public void PlaceBlock(BlockShapeData shape, Vector2Int originCell, ItemData1[] itemPerCell, GameObject iconPrefab, bool countMove = true, Vector2Int? previousOriginCell = null)
-    {
-        // Kiểm tra xem vị trí mới có TRÙNG HOÀN TOÀN với vị trí cũ hay không
-        bool isSamePosition = previousOriginCell.HasValue && (originCell == previousOriginCell.Value);
 
-        // CHỈ CỘNG HƯƠNG VỊ NẾU ĐÂY LÀ NƯỚC ĐI MỚI (Vị trí đã thay đổi)
-        if (!isSamePosition)
+    /// <summary>
+    /// Dat khoi vao Grid va cap nhat totalFlavorCounts.
+    /// Viec dem luot di do GameManager1 quan ly.
+    /// </summary>
+    public void PlaceBlock(BlockShapeData shape, Vector2Int originCell, ItemData1[] itemPerCell, GameObject iconPrefab)
+    {
+        // Cap nhat tong vi
+        if (itemPerCell != null && itemPerCell.Length > 0 && itemPerCell[0]?.flavorCounts != null)
         {
-            if (itemPerCell != null && itemPerCell.Length > 0 && itemPerCell[0] != null && itemPerCell[0].flavorCounts != null)
+            foreach (var flavor in itemPerCell[0].flavorCounts)
             {
-                foreach (var flavor in itemPerCell[0].flavorCounts)
-                {
-                    if (totalFlavorCounts.ContainsKey(flavor.flavorName))
-                    {
-                        totalFlavorCounts[flavor.flavorName] += flavor.count;
-                    }
-                    else
-                    {
-                        totalFlavorCounts[flavor.flavorName] = flavor.count;
-                    }
-                }
+                if (totalFlavorCounts.ContainsKey(flavor.flavorName))
+                    totalFlavorCounts[flavor.flavorName] += flavor.count;
+                else
+                    totalFlavorCounts[flavor.flavorName] = flavor.count;
             }
         }
 
-        Debug.Log("Total Flavor Counts: ");
-        Debug.Log(
-            (totalFlavorCounts.ContainsKey("sour") ? totalFlavorCounts["sour"] : 0) + " sours, " +
-            (totalFlavorCounts.ContainsKey("spicy") ? totalFlavorCounts["spicy"] : 0) + " spicies, " +
-            (totalFlavorCounts.ContainsKey("salty") ? totalFlavorCounts["salty"] : 0) + " salties, " +
-            (totalFlavorCounts.ContainsKey("sweet") ? totalFlavorCounts["sweet"] : 0) + " sweets, " +
-            (totalFlavorCounts.ContainsKey("bitter") ? totalFlavorCounts["bitter"] : 0) + " bitters, " +
-            (totalFlavorCounts.ContainsKey("umami") ? totalFlavorCounts["umami"] : 0) + " umamis, " +
-            (totalFlavorCounts.ContainsKey("buttery") ? totalFlavorCounts["buttery"] : 0) + " butteries."
-        );
-
-        // Tiến hành gán dữ liệu và tạo visual cho các cell
+        // Ghi du lieu va tao visual
         for (int i = 0; i < shape.cells.Length; i++)
         {
             Vector2Int cell = originCell + shape.cells[i];
             if (!IsInsideGrid(cell)) continue;
-            cellItems[cell.x, cell.y] = itemPerCell[i];
+
+            cellItems[cell.x, cell.y] = itemPerCell != null && i < itemPerCell.Length ? itemPerCell[i] : null;
 
             GameObject icon = null;
             if (iconPrefab != null)
@@ -149,10 +100,7 @@ public class GridManager1 : MonoBehaviour
                 icon.transform.localScale = Vector3.one;
 
                 SpriteRenderer[] srs = icon.GetComponentsInChildren<SpriteRenderer>();
-                for (int j = 0; j < srs.Length; j++)
-                {
-                    srs[j].sortingOrder += 10;
-                }
+                for (int j = 0; j < srs.Length; j++) srs[j].sortingOrder += 10;
 
                 if (srs.Length > 0 && itemPerCell != null && i < itemPerCell.Length && itemPerCell[i] != null)
                 {
@@ -160,11 +108,10 @@ public class GridManager1 : MonoBehaviour
                     if (targetSr != null && itemPerCell[i].icon != null)
                     {
                         targetSr.sprite = itemPerCell[i].icon;
-                        if (targetSr.sprite != null && targetSr.sprite.bounds.size.x > 0)
+                        if (targetSr.sprite.bounds.size.x > 0)
                         {
                             float spriteSize = Mathf.Max(targetSr.sprite.bounds.size.x, targetSr.sprite.bounds.size.y);
-                            float fitScale = cellSize / spriteSize;
-                            targetSr.transform.localScale = new Vector3(fitScale, fitScale, 1f);
+                            targetSr.transform.localScale = Vector3.one * (cellSize / spriteSize);
                         }
                     }
                 }
@@ -177,48 +124,30 @@ public class GridManager1 : MonoBehaviour
 
             cellVisuals[cell.x, cell.y] = icon;
         }
-
-        // CHỈ TRỪ LƯỢT ĐI NẾU VỊ TRÍ ĐÃ THAY ĐỔI
-        if (!isSamePosition && countMove && ScoringSystem1.Instance != null)
-        {
-            ScoringSystem1.Instance.availableMoves--;
-        }
     }
 
     public void RemovePlacedBlock(BlockShapeData shape, Vector2Int originCell)
     {
-        // Trừ bộ vị của món ăn 1 lần duy nhất cho toàn bộ block
+        // Tru vi cua khoi 1 lan duy nhat
         ItemData1 firstItem = null;
         for (int i = 0; i < shape.cells.Length; i++)
         {
             Vector2Int cell = originCell + shape.cells[i];
-            if (cellItems[cell.x, cell.y] != null)
-            {
-                firstItem = cellItems[cell.x, cell.y];
-                break;
-            }
+            if (!IsInsideGrid(cell)) continue;
+            if (cellItems[cell.x, cell.y] != null) { firstItem = cellItems[cell.x, cell.y]; break; }
         }
 
-        if (firstItem != null && firstItem.flavorCounts != null)
+        if (firstItem?.flavorCounts != null)
         {
             foreach (var flavor in firstItem.flavorCounts)
             {
                 if (totalFlavorCounts.ContainsKey(flavor.flavorName))
-                {
-                    totalFlavorCounts[flavor.flavorName] -= flavor.count;
-                    if (totalFlavorCounts[flavor.flavorName] < 0)
-                    {
-                        totalFlavorCounts[flavor.flavorName] = 0; // Ensure it doesn't go negative
-                    }
-                }
+                    totalFlavorCounts[flavor.flavorName] = Mathf.Max(0, totalFlavorCounts[flavor.flavorName] - flavor.count);
             }
         }
 
         for (int i = 0; i < shape.cells.Length; i++)
-        {
-            Vector2Int cell = originCell + shape.cells[i];
-            ClearCell(cell.x, cell.y);
-        }
+            ClearCell((originCell + shape.cells[i]).x, (originCell + shape.cells[i]).y);
     }
 
     public ItemData1 GetItemAt(int x, int y)
@@ -226,32 +155,53 @@ public class GridManager1 : MonoBehaviour
         if (x < 0 || x >= width || y < 0 || y >= height) return null;
         return cellItems[x, y];
     }
-    //logic for destroy block can be remove if not be used
+
+    public PlacedBlockInfo1 GetPlacedBlockInfoAt(int x, int y)
+    {
+        if (x < 0 || x >= width || y < 0 || y >= height) return null;
+        return cellVisuals[x, y] != null ? cellVisuals[x, y].GetComponent<PlacedBlockInfo1>() : null;
+    }
+
     public bool IsRowFull(int y)
     {
-        for (int x = 0; x < width; x++)
-            if (cellItems[x, y] == null) return false;
+        for (int x = 0; x < width; x++) if (cellItems[x, y] == null) return false;
         return true;
     }
+
     public bool IsColFull(int x)
     {
-        for (int y = 0; y < height; y++)
-            if (cellItems[x, y] == null) return false;
+        for (int y = 0; y < height; y++) if (cellItems[x, y] == null) return false;
         return true;
     }
-    public void ClearRow(int y) 
-    { 
-        for (int x = 0; x < width; x++) 
+
+    public void ClearRow(int y) { for (int x = 0; x < width; x++) ClearCell(x, y); }
+    public void ClearCol(int x) { for (int y = 0; y < height; y++) ClearCell(x, y); }
+
+    /// <summary>
+    /// Xóa toàn bộ các khối trên bàn cờ và reset lại tổng vị về 0.
+    /// </summary>
+    public void ClearAllGrid()
+    {
+        for (int x = 0; x < width; x++)
+            for (int y = 0; y < height; y++)
+                ClearCell(x, y);
+
+        // Quét sạch tất cả PlacedBlockInfo1 còn sót lại trong Scene
+        PlacedBlockInfo1[] allPlaced = FindObjectsOfType<PlacedBlockInfo1>();
+        foreach (var p in allPlaced)
         {
-            ClearCell(x, y); 
+            if (p != null) Destroy(p.gameObject);
         }
+
+        totalFlavorCounts["sour"] = 0;
+        totalFlavorCounts["spicy"] = 0;
+        totalFlavorCounts["salty"] = 0;
+        totalFlavorCounts["sweet"] = 0;
+        totalFlavorCounts["bitter"] = 0;
+        totalFlavorCounts["umami"] = 0;
+        totalFlavorCounts["buttery"] = 0;
     }
-    public void ClearCol(int x) { 
-        for (int y = 0; y < height; y++) 
-        {
-            ClearCell(x, y); 
-        }
-    }
+
     void ClearCell(int x, int y)
     {
         if (x < 0 || x >= width || y < 0 || y >= height) return;
@@ -259,6 +209,7 @@ public class GridManager1 : MonoBehaviour
         cellVisuals[x, y] = null;
         cellItems[x, y] = null;
     }
+
     public bool HasAnyValidMove(BlockShapeData[] currentShapes)
     {
         foreach (var shape in currentShapes)

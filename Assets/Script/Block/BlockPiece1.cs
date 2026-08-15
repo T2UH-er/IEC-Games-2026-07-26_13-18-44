@@ -1,47 +1,53 @@
 using UnityEngine;
+
+/// <summary>
+/// BlockPiece1 — Luu data va hien thi visual cua 1 khoi mon an.
+/// Khong chua game logic (TryPlace da chuyen sang GameManager1).
+/// </summary>
 public class BlockPiece1 : MonoBehaviour
 {
     public BlockShapeData shapeData;
-    public ItemData1[] itemPerCell;       
-    public GameObject cellIconPrefab;     
+    public ItemData1[] itemPerCell;
+    public GameObject cellIconPrefab;
     public int slotIndex;
-
-    public Vector2Int? previousOriginCell = null;
-
-    private Camera cam;
-     public void Initialize(BlockShapeData shape, ItemDatabase1 itemDb, int slot)
-    {
-        shapeData = shape;
-        slotIndex = slot;
-        cam = Camera.main;
-
-        
-        itemPerCell = new ItemData1[shape.CellCount];
-        ItemData1 randomItem = itemDb.GetRandomItem();
-        for (int i = 0; i < shape.CellCount; i++)
-        {
-            itemPerCell[i] = randomItem;
-        }
-        BuildVisual();
-    }
-    
-    public void InitializeCustom(BlockShapeData shape, ItemData1[] items, int slot)
-    {
-        shapeData = shape;
-        slotIndex = slot;
-        itemPerCell = items;
-
-        BuildVisual();
-    }
 
     public float dishScale = 1f;
     public float iconScale = 1f;
     public float shapeCellSpacing = 1.0f;
     public bool showDishBackground = false;
 
+    [Header("Bubble Settings")]
+    [Tooltip("Độ lệch vị trí Bubble so với món ăn (chỉnh tự do trong Inspector)")]
+    public Vector3 bubbleOffset = new Vector3(0f, -1.2f, 0f);
+
+    [Tooltip("Tỷ lệ scale của Bubble trên món ăn")]
+    public float bubbleScale = 1.2f;
+
+    [Tooltip("True: Căn Bubble theo cạnh đáy món ăn; False: Căn theo tâm món ăn")]
+    public bool alignBubbleToBottom = true;
+
+    public void Initialize(BlockShapeData shape, ItemDatabase1 itemDb, int slot)
+    {
+        shapeData = shape;
+        slotIndex = slot;
+
+        itemPerCell = new ItemData1[shape.CellCount];
+        ItemData1 randomItem = itemDb.GetRandomItem();
+        for (int i = 0; i < shape.CellCount; i++) itemPerCell[i] = randomItem;
+        BuildVisual();
+    }
+
+    public void InitializeCustom(BlockShapeData shape, ItemData1[] items, int slot)
+    {
+        shapeData = shape;
+        slotIndex = slot;
+        itemPerCell = items;
+        BuildVisual();
+    }
+
     void BuildVisual()
     {
-        float gSize = (GridManager1.Instance != null) ? GridManager1.Instance.cellSize : 1f;
+        float gSize = GridManager1.Instance != null ? GridManager1.Instance.cellSize : 1f;
         float cs = gSize * shapeCellSpacing;
 
         if (showDishBackground && shapeData != null && shapeData.dishSprite != null)
@@ -61,14 +67,14 @@ public class BlockPiece1 : MonoBehaviour
         {
             Vector2Int offset = shapeData.cells[i];
             if (cellIconPrefab == null) continue;
+
             GameObject icon = Instantiate(cellIconPrefab, transform);
             icon.transform.localPosition = new Vector3(offset.x * cs, offset.y * cs, 0f);
             icon.transform.localScale = Vector3.one;
+
             SpriteRenderer[] srs = icon.GetComponentsInChildren<SpriteRenderer>();
-            for (int j = 0; j < srs.Length; j++)
-            {
-                srs[j].sortingOrder += 20; 
-            }
+            for (int j = 0; j < srs.Length; j++) srs[j].sortingOrder += 20;
+
             if (srs.Length > 0 && itemPerCell != null && i < itemPerCell.Length && itemPerCell[i] != null)
             {
                 SpriteRenderer targetSr = srs.Length > 1 ? srs[srs.Length - 1] : srs[0];
@@ -84,26 +90,24 @@ public class BlockPiece1 : MonoBehaviour
                 }
             }
         }
-    }
 
-    Vector3 GetMouseWorldPos()
-    {
-        Vector3 mouseScreen = Input.mousePosition;
-        mouseScreen.z = -cam.transform.position.z;
-        return cam.ScreenToWorldPoint(mouseScreen);
-    }
-
-    public bool TryPlace()
-    {
-        Vector2Int originCell = GridManager1.Instance.WorldToCell(transform.position);
-
-        if (GridManager1.Instance.CanPlace(shapeData, originCell))
+        // Tự động căn chỉnh vị trí & scale của Bubble theo thiết lập Inspector
+        Bubble bubble = GetComponentInChildren<Bubble>();
+        if (bubble != null && shapeData != null)
         {
-            GridManager1.Instance.PlaceBlock(shapeData, originCell, itemPerCell, cellIconPrefab);
-            if (BlockSpawner1.Instance != null&&slotIndex>=0) BlockSpawner1.Instance.OnPiecePlaced(slotIndex);
-            Destroy(gameObject);
-            return true;
+            Vector2 center = shapeData.GetCenterOffset();
+            float baseY = center.y;
+
+            if (alignBubbleToBottom && shapeData.cells != null && shapeData.cells.Length > 0)
+            {
+                float minY = shapeData.cells[0].y;
+                for (int j = 1; j < shapeData.cells.Length; j++)
+                    if (shapeData.cells[j].y < minY) minY = shapeData.cells[j].y;
+                baseY = minY;
+            }
+
+            bubble.transform.localPosition = new Vector3(center.x * cs, baseY * cs, 0f) + bubbleOffset;
+            bubble.transform.localScale = Vector3.one * bubbleScale;
         }
-        return false;
     }
 }

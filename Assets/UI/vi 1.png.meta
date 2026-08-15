@@ -147,7 +147,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: ChatGPT Image Aug 7, 2026, 09_09_29 AM-Photoroom_0
+      name: chua
       rect:
         serializedVersion: 2
         x: 57
@@ -169,7 +169,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ChatGPT Image Aug 7, 2026, 09_09_29 AM-Photoroom_1
+      name: cay
       rect:
         serializedVersion: 2
         x: 423
@@ -191,7 +191,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ChatGPT Image Aug 7, 2026, 09_09_29 AM-Photoroom_2
+      name: man
       rect:
         serializedVersion: 2
         x: 775
@@ -213,7 +213,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ChatGPT Image Aug 7, 2026, 09_09_29 AM-Photoroom_3
+      name: ngot
       rect:
         serializedVersion: 2
         x: 1132
@@ -235,7 +235,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ChatGPT Image Aug 7, 2026, 09_09_29 AM-Photoroom_4
+      name: dang
       rect:
         serializedVersion: 2
         x: 1480
@@ -257,7 +257,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ChatGPT Image Aug 7, 2026, 09_09_29 AM-Photoroom_5
+      name: beo
       rect:
         serializedVersion: 2
         x: 1834
@@ -279,7 +279,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ChatGPT Image Aug 7, 2026, 09_09_29 AM-Photoroom_6
+      name: chat
       rect:
         serializedVersion: 2
         x: 2182
@@ -301,7 +301,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ChatGPT Image Aug 7, 2026, 09_09_29 AM-Photoroom_7
+      name: umami
       rect:
         serializedVersion: 2
         x: 2537
@@ -336,14 +336,14 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      ChatGPT Image Aug 7, 2026, 09_09_29 AM-Photoroom_0: 5573873707177533925
-      ChatGPT Image Aug 7, 2026, 09_09_29 AM-Photoroom_1: -6260345905108128614
-      ChatGPT Image Aug 7, 2026, 09_09_29 AM-Photoroom_2: -3461008612195741229
-      ChatGPT Image Aug 7, 2026, 09_09_29 AM-Photoroom_3: 1609108009255328547
-      ChatGPT Image Aug 7, 2026, 09_09_29 AM-Photoroom_4: 3479228960868995591
-      ChatGPT Image Aug 7, 2026, 09_09_29 AM-Photoroom_5: 2408632715112473690
-      ChatGPT Image Aug 7, 2026, 09_09_29 AM-Photoroom_6: -2239166104845288100
-      ChatGPT Image Aug 7, 2026, 09_09_29 AM-Photoroom_7: 4880994731034860005
+      beo: 2408632715112473690
+      cay: -6260345905108128614
+      chat: -2239166104845288100
+      chua: 5573873707177533925
+      dang: 3479228960868995591
+      man: -3461008612195741229
+      ngot: 1609108009255328547
+      umami: 4880994731034860005
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -153,15 +153,15 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: ChatGPT_Image_Aug_7__2026__10_47_17_AM-removebg-preview_0
+      name: caube1
       rect:
         serializedVersion: 2
-        x: 4
+        x: 5
         y: 252
         width: 97
         height: 121
-      alignment: 6
-      pivot: {x: 0, y: 0}
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -175,7 +175,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ChatGPT_Image_Aug_7__2026__10_47_17_AM-removebg-preview_1
+      name: vobe2
       rect:
         serializedVersion: 2
         x: 101
@@ -197,7 +197,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ChatGPT_Image_Aug_7__2026__10_47_17_AM-removebg-preview_2
+      name: ong chu manh me
       rect:
         serializedVersion: 2
         x: 200
@@ -219,7 +219,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ChatGPT_Image_Aug_7__2026__10_47_17_AM-removebg-preview_3
+      name: ba co dep lao
       rect:
         serializedVersion: 2
         x: 300
@@ -241,7 +241,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ChatGPT_Image_Aug_7__2026__10_47_17_AM-removebg-preview_4
+      name: co be dang yeu
       rect:
         serializedVersion: 2
         x: 399
@@ -263,7 +263,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ChatGPT_Image_Aug_7__2026__10_47_17_AM-removebg-preview_5
+      name: mot sach
       rect:
         serializedVersion: 2
         x: 5
@@ -285,7 +285,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ChatGPT_Image_Aug_7__2026__10_47_17_AM-removebg-preview_6
+      name: lang tu
       rect:
         serializedVersion: 2
         x: 103
@@ -307,7 +307,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ChatGPT_Image_Aug_7__2026__10_47_17_AM-removebg-preview_7
+      name: co be
       rect:
         serializedVersion: 2
         x: 202
@@ -329,7 +329,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ChatGPT_Image_Aug_7__2026__10_47_17_AM-removebg-preview_8
+      name: caumap
       rect:
         serializedVersion: 2
         x: 300
@@ -351,7 +351,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ChatGPT_Image_Aug_7__2026__10_47_17_AM-removebg-preview_9
+      name: bac
       rect:
         serializedVersion: 2
         x: 399
@@ -386,16 +386,16 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      ChatGPT_Image_Aug_7__2026__10_47_17_AM-removebg-preview_0: -933039256083134843
-      ChatGPT_Image_Aug_7__2026__10_47_17_AM-removebg-preview_1: -8109498011733750753
-      ChatGPT_Image_Aug_7__2026__10_47_17_AM-removebg-preview_2: -8244782522586300649
-      ChatGPT_Image_Aug_7__2026__10_47_17_AM-removebg-preview_3: -5672726355236730284
-      ChatGPT_Image_Aug_7__2026__10_47_17_AM-removebg-preview_4: -4844361216394085602
-      ChatGPT_Image_Aug_7__2026__10_47_17_AM-removebg-preview_5: -3356075435265230419
-      ChatGPT_Image_Aug_7__2026__10_47_17_AM-removebg-preview_6: -2369648649729677281
-      ChatGPT_Image_Aug_7__2026__10_47_17_AM-removebg-preview_7: 5015438038243259908
-      ChatGPT_Image_Aug_7__2026__10_47_17_AM-removebg-preview_8: 4066244603018892438
-      ChatGPT_Image_Aug_7__2026__10_47_17_AM-removebg-preview_9: 8738686612174281462
+      ba co dep lao: -5672726355236730284
+      bac: 8738686612174281462
+      caube1: -933039256083134843
+      caumap: 4066244603018892438
+      co be: 5015438038243259908
+      co be dang yeu: -4844361216394085602
+      lang tu: -2369648649729677281
+      mot sach: -3356075435265230419
+      ong chu manh me: -8244782522586300649
+      vobe2: -8109498011733750753
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

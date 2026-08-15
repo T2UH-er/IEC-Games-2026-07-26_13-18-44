@@ -1,184 +1,182 @@
-using System;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
-public class BlockSpawner1: MonoBehaviour
+public class BlockSpawner1 : MonoBehaviour
 {
     public int levelNumber = 0;
-
-    public SpriteFlavor flavor;
-    public SpriteNumber number;
     public static BlockSpawner1 Instance { get; private set; }
 
     public GameObject blockPiecePrefab;
-    public List<Transform> spawnSlots = new List<Transform> ();
-
+    public List<Transform> spawnSlots = new List<Transform>();
     public LevelConfig[] levelConfigs;
 
     public Transform trayContainer;
-    private Vector3 initialTrayPosition; // Biến lưu vị trí Y ban đầu của Tray
+    private Vector3 initialTrayPosition;
     public Vector3 trayBlockScale = new Vector3(0.6f, 0.6f, 0.6f);
-    public int totalBlocksCount = 10;      
-    public float slotSpacing = 20f; 
+    public int totalBlocksCount = 10;
+    public float slotSpacing = 20f;
+
     [SerializeField] private BlockPiece1[] currentPieces;
     private Vector3[] slotPositions;
 
-    // 2. Khởi tạo mảng slotPositions trong Awake
     private void Awake()
     {
-        if (Instance == null) { Instance = this; }
-        else { Destroy(gameObject); }
-        // 1. Lưu lại vị trí chuẩn của Tray trong Scene (ví dụ: Y = -23)
+        if (Instance == null) Instance = this;
+        else { Destroy(gameObject); return; }
+
         if (trayContainer != null)
-        {
             initialTrayPosition = trayContainer.localPosition;
-        }
+
         currentPieces = new BlockPiece1[totalBlocksCount];
         slotPositions = new Vector3[totalBlocksCount];
         for (int i = 0; i < totalBlocksCount; i++)
-        {
             slotPositions[i] = GetSlotPosition(i);
-        }
-
-        flavor = Resources.Load<SpriteFlavor>("SpriteFlavor");
-        if (flavor == null) Debug.LogError("Không có SpriteFlavor.asset");
-        number = Resources.Load<SpriteNumber>("SpriteNumber");
-        if (number == null) Debug.LogError("Không có SpriteNumber.asset");
     }
 
-
-    // 1. Hàm tính toán vị trí local chuẩn cho bất kỳ slotIndex nào
     public Vector3 GetSlotPosition(int slotIndex)
     {
         float offsetX = (slotIndex - (totalBlocksCount / 2f) + 0.5f) * slotSpacing;
         return new Vector3(offsetX, 0f, 0f);
     }
+
     private void Start()
     {
         ConfigureFlavor();
         SpawnAllSlotsInLevelConfig(levelConfigs);
     }
 
-    public void SpawnAllSlotsInLevelConfig(LevelConfig[] levelConfigs)
+    public void SpawnAllSlotsInLevelConfig(LevelConfig[] configs)
     {
-        foreach (var levelConfig in levelConfigs)
+        if (configs == null || configs.Length == 0)
         {
-            if (levelConfig == null || levelConfig.blockConfig == null || levelConfig.blockConfig.itemPerCell == null)
+            configs = Resources.FindObjectsOfTypeAll<LevelConfig>();
+        }
+        if (configs == null) return;
+
+        foreach (var levelConfig in configs)
+        {
+            if (levelConfig == null || levelConfig.levelNumber != levelNumber) continue;
+
+            // ─── Cách Mới: Sinh từ danh sách trayBlocks trong 1 file LevelConfig ───
+            if (levelConfig.trayBlocks != null && levelConfig.trayBlocks.Count > 0)
             {
-                Debug.LogWarning("Invalid LevelConfig or BlockConfig.");
-                return;
-            }
-
-            Vector3 localSpawnPos = new Vector3((levelConfig.slotIndex - (totalBlocksCount / 2)) * slotSpacing, 0f, 0f);
-            slotPositions[levelConfig.slotIndex] = localSpawnPos;
-            GameObject pieceObj = Instantiate(blockPiecePrefab, trayContainer);
-            pieceObj.transform.localPosition = localSpawnPos;
-            pieceObj.transform.localScale = trayBlockScale;
-            BlockPiece1 piece = pieceObj.GetComponent<BlockPiece1>();
-            piece.InitializeCustom(levelConfig.blockConfig.shapeData, levelConfig.blockConfig.itemPerCell, levelConfig.slotIndex);
-            // Tạo sprite hiển thị vị cho bubble
-            Bubble bubble = piece.GetComponentInChildren<Bubble>();
-            List<Sprite> sprites = new List<Sprite>();
-            ItemData1 itDt1 = piece.itemPerCell[0];
-
-            // Thêm "new string[]" để sửa lỗi cú pháp
-            string[] flavors = new string[] { "sour", "spicy", "salty", "sweet", "bitter", "umami", "buttery" };
-
-            foreach (string flv in flavors)
-            {
-                int count = itDt1.GetFlavorCount(flv);
-                if (count > 0)
+                foreach (var blockCfg in levelConfig.trayBlocks)
                 {
-                    // Kiểm tra an toàn: Đảm bảo không vượt quá 4 Sprite nếu dùng cho Lưới 2x2
-                    if (sprites.Count + 2 > 4)
-                    {
-                        Debug.LogWarning("[Bubble] Đã đạt tối đa 4 Sprite, dừng thêm vị mới!");
-                        break;
-                    }
+                    if (blockCfg == null || blockCfg.blockConfig == null || blockCfg.blockConfig.itemPerCell == null)
+                        continue;
 
-                    sprites.Add(number.GetSprite(count));
-                    sprites.Add(flavor.GetSprite(flv));
+                    SpawnSinglePiece(blockCfg.blockConfig, blockCfg.slotIndex, blockCfg.flavorCounts);
                 }
             }
+            // ─── Tương thích ngược: Sinh từ asset đơn lẻ cũ ───────────────────────
+            else if (levelConfig.blockConfig != null && levelConfig.blockConfig.itemPerCell != null)
+            {
+                SpawnSinglePiece(levelConfig.blockConfig, levelConfig.slotIndex, levelConfig.flavorCounts);
+            }
+        }
+    }
 
-            bubble.SetupBubble(sprites);
+    private void SpawnSinglePiece(BlockConfig blockConfig, int slotIndex, List<FlavorData> flavors)
+    {
+        if (slotIndex < 0 || slotIndex >= totalBlocksCount) return;
 
-            Debug.Log("ItemPerCell loaded");
-            currentPieces[levelConfig.slotIndex] = piece;
+        // Clone ItemData để không ghi đè asset gốc
+        ItemData1[] clonedItems = new ItemData1[blockConfig.itemPerCell.Length];
+        for (int i = 0; i < blockConfig.itemPerCell.Length; i++)
+        {
+            if (blockConfig.itemPerCell[i] != null)
+            {
+                clonedItems[i] = Instantiate(blockConfig.itemPerCell[i]);
+                if (flavors != null)
+                {
+                    clonedItems[i].flavorCounts = new List<FlavorData>(flavors);
+                }
+            }
+        }
+
+        Vector3 localSpawnPos = GetSlotPosition(slotIndex);
+        slotPositions[slotIndex] = localSpawnPos;
+
+        GameObject pieceObj = Instantiate(blockPiecePrefab, trayContainer);
+        pieceObj.transform.localPosition = localSpawnPos;
+        pieceObj.transform.localScale = trayBlockScale;
+
+        BlockPiece1 piece = pieceObj.GetComponent<BlockPiece1>();
+        piece.InitializeCustom(blockConfig.shapeData, clonedItems, slotIndex);
+
+        // Hiển thị Bubble vị trên món ăn
+        if (GameManager1.Instance != null)
+            GameManager1.Instance.SetupPieceBubble(piece);
+
+        currentPieces[slotIndex] = piece;
+    }
+
+    /// <summary>
+    /// Xóa toàn bộ các khối món ăn đang có trên khay và trong scene.
+    /// </summary>
+    public void ClearAllPieces()
+    {
+        // 1. Xóa toàn bộ GameObject con trong trayContainer
+        if (trayContainer != null)
+        {
+            for (int i = trayContainer.childCount - 1; i >= 0; i--)
+            {
+                Destroy(trayContainer.GetChild(i).gameObject);
+            }
+        }
+
+        // 2. Quét sạch tất cả BlockPiece1 còn sót lại trong Scene
+        BlockPiece1[] allPieces = FindObjectsOfType<BlockPiece1>();
+        foreach (var piece in allPieces)
+        {
+            if (piece != null)
+                Destroy(piece.gameObject);
+        }
+
+        // 3. Reset mảng lưu trữ
+        if (currentPieces != null)
+        {
+            for (int i = 0; i < currentPieces.Length; i++)
+                currentPieces[i] = null;
         }
     }
 
     public void ConfigureFlavor()
     {
-        if (levelConfigs == null) return;
-
-        for (int i = 0; i < levelConfigs.Length; i++)
-        {
-            var levelConfig = levelConfigs[i];
-            if (levelConfig == null || levelConfig.levelNumber != levelNumber) continue;
-
-            if (levelConfig.blockConfig != null && levelConfig.blockConfig.itemPerCell != null)
-            {
-                foreach (ItemData1 itemdata in levelConfig.blockConfig.itemPerCell)
-                {
-                    if (itemdata != null)
-                    {
-                        itemdata.flavorCounts = levelConfig.flavorCounts;
-                        itemdata.itemId = i.ToString();
-                    }
-                }
-            }
-        }
+        // Đã được xử lý tự động và an toàn khi clone item trong SpawnSinglePiece
     }
 
     public void OnPiecePlaced(int slotIndex)
     {
         if (slotIndex >= 0 && slotIndex < currentPieces.Length)
-        {
             currentPieces[slotIndex] = null;
-        }
+
         bool allEmpty = true;
         for (int i = 0; i < currentPieces.Length; i++)
-        {
-            if (currentPieces[i] != null)
-            {
-                allEmpty = false;
-                break;
-            }
-        }
-        if (allEmpty)
-        {
-            // 2. Trả trayContainer về đúng vị trí ban đầu thay vì gán -4.5f
+            if (currentPieces[i] != null) { allEmpty = false; break; }
+
+        if (allEmpty && trayContainer != null)
             trayContainer.localPosition = initialTrayPosition;
-        }
     }
-    // 3. Hàm trả món ăn về Tray
+
     public bool TryReturnToTray(BlockPiece1 piece)
     {
         int emptySlot = -1;
         for (int i = 0; i < currentPieces.Length; i++)
+            if (currentPieces[i] == null) { emptySlot = i; break; }
+
+        if (emptySlot == -1)
         {
-            if (currentPieces[i] == null)
-            {
-                emptySlot = i;
-                break;
-            }
-        }
-        if (emptySlot != -1)
-        {
-            piece.transform.SetParent(trayContainer);
-            // Đặt vị trí local chính xác theo ô trống
-            piece.transform.localPosition = GetSlotPosition(emptySlot);
-            piece.transform.localScale = trayBlockScale;
-            piece.slotIndex = emptySlot;
-            currentPieces[emptySlot] = piece;
-            // Đồng bộ lại Physics2D để Collider di chuyển theo món ăn trên Tray ngay lập tức
-            Physics2D.SyncTransforms();
-            return true;
+            Debug.Log("No Place Left on Tray");
+            return false;
         }
 
-        Debug.Log("No Place Left on Tray");
-        return false;
+        piece.transform.SetParent(trayContainer);
+        piece.transform.localPosition = GetSlotPosition(emptySlot);
+        piece.transform.localScale = trayBlockScale;
+        piece.slotIndex = emptySlot;
+        currentPieces[emptySlot] = piece;
+        Physics2D.SyncTransforms();
+        return true;
     }
 }
