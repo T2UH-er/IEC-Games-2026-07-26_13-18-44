@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Level_2_Demo
   m_EditorClassIdentifier: Assembly-CSharp::LevelConfig
   levelNumber: 2
-  gridWidth: 5
-  gridHeight: 5
+  gridWidth: 10
+  gridHeight: 10
   customers:
   - customerSprite: {fileID: -933039256083134843, guid: 31ba3aa0523bc8e449bb1cbdd73310d2, type: 3}
     requirement:

@@ -45,3 +45,7 @@ Ngày 11-08
 
 Ngày 13-08
 - Đã gỡ bỏ cơ chế hiển thị bong bóng vị (Bubble) trực tiếp trên các khối món ăn ở khay trong BlockSpawner1.cs theo yêu cầu.
+
+Ngày 16-08
+- Điều chỉnh lại UI cho các độ phân giải: 1080x1920, 2160x3840, 600x800 và 720x1080 | 600x800 và 720x1080 hơi xấu ở scene 'test'
+- Thêm nút cho scene LevelList (thiếu Listener cho nút)
