@@ -63,15 +63,48 @@ public class GameManager1 : MonoBehaviour
     public void LoadLevel(int targetLevel)
     {
         currentLevelIndex = targetLevel;
-        Debug.Log($"[GameManager1] === Đang chuyển sang Level {targetLevel} ===");
+        Debug.Log($"[GameManager1] === Loading Level {targetLevel} ===");
 
-        // 1. Dọn sạch các khối đã đặt trên Grid và reset tổng vị
+        // 0. Tim LevelConfig tuong ung de lay kich thuoc Grid
+        LevelConfig levelCfg = null;
+        if (BlockSpawner1.Instance?.levelConfigs != null)
+        {
+            foreach (var cfg in BlockSpawner1.Instance.levelConfigs)
+            {
+                if (cfg != null && cfg.levelNumber == targetLevel)
+                {
+                    levelCfg = cfg;
+                    break;
+                }
+            }
+        }
+        // Fallback: tim trong toan bo asset da load
+        if (levelCfg == null)
+        {
+            LevelConfig[] all = Resources.FindObjectsOfTypeAll<LevelConfig>();
+            foreach (var cfg in all)
+            {
+                if (cfg != null && cfg.levelNumber == targetLevel)
+                {
+                    levelCfg = cfg;
+                    break;
+                }
+            }
+        }
+
+        // 1. Resize Grid neu LevelConfig co chi dinh kich thuoc moi
         if (GridManager1.Instance != null)
         {
             GridManager1.Instance.ClearAllGrid();
+
+            if (levelCfg != null && levelCfg.gridWidth > 0 && levelCfg.gridHeight > 0)
+            {
+                GridManager1.Instance.ResizeGrid(levelCfg.gridWidth, levelCfg.gridHeight);
+                Debug.Log($"[GameManager1] Grid resized to {levelCfg.gridWidth}x{levelCfg.gridHeight}, cellSize={GridManager1.Instance.cellSize}");
+            }
         }
 
-        // 2. Dọn và sinh lại các món ăn trên khay theo Level mới
+        // 2. Spawn lai mon an tren khay
         if (BlockSpawner1.Instance != null)
         {
             BlockSpawner1.Instance.levelNumber = targetLevel;
@@ -79,14 +112,14 @@ public class GameManager1 : MonoBehaviour
             BlockSpawner1.Instance.SpawnAllSlotsInLevelConfig(BlockSpawner1.Instance.levelConfigs);
         }
 
-        // 3. Dọn và sinh lại danh sách Khách hàng theo Level mới
+        // 3. Spawn lai khach hang
         if (CustomerSpawner1.Instance != null)
         {
             CustomerSpawner1.Instance.levelNumber = targetLevel;
             CustomerSpawner1.Instance.SpawnCustomersForLevel(targetLevel);
         }
 
-        // 4. Reset điểm số, lượt đi và ẩn bảng thông báo kết quả
+        // 4. Reset diem so va luot di
         if (ScoringSystem1.Instance != null)
         {
             ScoringSystem1.Instance.ResetGameStatus();

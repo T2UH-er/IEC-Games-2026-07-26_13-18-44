@@ -106,8 +106,9 @@ public class BlockPiece1 : MonoBehaviour
                 baseY = minY;
             }
 
-            bubble.transform.localPosition = new Vector3(center.x * cs, baseY * cs, 0f) + bubbleOffset;
-            bubble.transform.localScale = Vector3.one * bubbleScale;
+            float scaleRatio = GridManager1.Instance != null ? GridManager1.Instance.ScaleRatio : 1f;
+            bubble.transform.localPosition = new Vector3(center.x * cs, baseY * cs, 0f) + bubbleOffset * scaleRatio;
+            bubble.transform.localScale = Vector3.one * (bubbleScale * scaleRatio);
         }
     }
 }

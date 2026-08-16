@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -62,8 +62,14 @@ public class LevelBlockSpawnConfig
 [CreateAssetMenu(fileName = "LevelConfig", menuName = "LevelConfig/LevelConfig")]
 public class LevelConfig : ScriptableObject
 {
-    [Header("Thông Tin Level")]
+    [Header("Thong Tin Level")]
     public int levelNumber = 0;
+
+    [Header("Kich Thuoc Grid")]
+    [Tooltip("So cot cua ban co (vd: 4 = 4x4, 5 = 5x5). De 0 se giu nguyen kich thuoc cu.")]
+    public int gridWidth = 4;
+    [Tooltip("So hang cua ban co (vd: 4 = 4x4, 5 = 5x5). De 0 se giu nguyen kich thuoc cu.")]
+    public int gridHeight = 4;
 
     [Header("1. Danh Sách Khách Hàng Trong Level")]
     public List<CustomerConfig> customers = new List<CustomerConfig>();

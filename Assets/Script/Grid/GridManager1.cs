@@ -13,9 +13,21 @@ public class GridManager1 : MonoBehaviour
     public static GridManager1 Instance { get; private set; }
     public int width = 4;
     public int height = 4;
-    public float cellSize = 1f;
+    public float cellSize = 7.2f;
+
+    [Header("Visual Scale Settings")]
+    [Tooltip("Tỷ lệ kích thước món ăn khi đặt vào bàn cờ (1.0 = vừa khít ô như lúc đang kéo, 0.85 = lọt lòng bên trong ô)")]
     public float placedIconScale = 1f;
     public Transform gridOrigin;
+
+    // Lưu thông số gốc ban đầu từ Scene làm chuẩn (mặc định 4x4, cellSize = 7.2)
+    private float baseCellSize = -1f;
+    private int baseWidth = 4;
+    private int baseHeight = 4;
+    private Vector3 initialCellSlotPrefabScale = Vector3.one;
+
+    /// <summary>Tỷ lệ thu phóng hiện tại so với kích thước chuẩn 4x4.</summary>
+    public float ScaleRatio => (baseCellSize > 0f && cellSize > 0f) ? (cellSize / baseCellSize) : 1f;
 
     public GameObject cellSlotPrefab;
 
@@ -27,18 +39,61 @@ public class GridManager1 : MonoBehaviour
         if (Instance == null) Instance = this;
         else { Destroy(gameObject); return; }
 
+        if (baseCellSize <= 0f) baseCellSize = cellSize;
+        if (baseWidth <= 0) baseWidth = width > 0 ? width : 4;
+        if (baseHeight <= 0) baseHeight = height > 0 ? height : 4;
+        if (cellSlotPrefab != null) initialCellSlotPrefabScale = cellSlotPrefab.transform.localScale;
+
         cellItems = new ItemData1[width, height];
         cellVisuals = new GameObject[width, height];
     }
 
-    void Start() => BuildVisualGrid();
+    void Start() => RebuildVisualGrid();
 
-    void BuildVisualGrid()
+    public void RebuildVisualGrid()
     {
+        // Xoa cell slot cu
+        for (int i = transform.childCount - 1; i >= 0; i--)
+            Destroy(transform.GetChild(i).gameObject);
+
         if (cellSlotPrefab == null) return;
+
+        float ratio = ScaleRatio;
+        Vector3 slotScale = initialCellSlotPrefabScale * ratio;
+
         for (int x = 0; x < width; x++)
+        {
             for (int y = 0; y < height; y++)
-                Instantiate(cellSlotPrefab, CellToWorld(x, y), Quaternion.identity, transform);
+            {
+                GameObject slot = Instantiate(cellSlotPrefab, CellToWorld(x, y), Quaternion.identity, transform);
+                slot.transform.localScale = slotScale;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Resize Grid sang kich thuoc moi (5x5, 6x6...), tu dong scale cellSize va cac o vuong vua khit khung ban co.
+    /// </summary>
+    public void ResizeGrid(int newWidth, int newHeight)
+    {
+        if (baseCellSize <= 0f) baseCellSize = cellSize > 0f ? cellSize : 7.2f;
+        if (baseWidth <= 0) baseWidth = 4;
+        if (baseHeight <= 0) baseHeight = 4;
+        if (cellSlotPrefab != null && initialCellSlotPrefabScale == Vector3.one)
+            initialCellSlotPrefabScale = cellSlotPrefab.transform.localScale;
+
+        width = newWidth > 0 ? newWidth : 4;
+        height = newHeight > 0 ? newHeight : 4;
+
+        // Tong chieu rong ban co goc = baseWidth * baseCellSize (vd: 4 * 7.2 = 28.8)
+        float totalBaseGridSize = baseWidth * baseCellSize;
+        cellSize = totalBaseGridSize / Mathf.Max(width, height);
+
+        // Reset data arrays
+        cellItems = new ItemData1[width, height];
+        cellVisuals = new GameObject[width, height];
+
+        RebuildVisualGrid();
     }
 
     public Vector3 CellToWorld(int x, int y)
@@ -111,7 +166,7 @@ public class GridManager1 : MonoBehaviour
                         if (targetSr.sprite.bounds.size.x > 0)
                         {
                             float spriteSize = Mathf.Max(targetSr.sprite.bounds.size.x, targetSr.sprite.bounds.size.y);
-                            targetSr.transform.localScale = Vector3.one * (cellSize / spriteSize);
+                            targetSr.transform.localScale = Vector3.one * ((cellSize / spriteSize) * placedIconScale);
                         }
                     }
                 }
