@@ -21,7 +21,7 @@ public class GridManager1 : MonoBehaviour
     public Transform gridOrigin;
 
     // Lưu thông số gốc ban đầu từ Scene làm chuẩn (mặc định 4x4, cellSize = 7.2)
-    private float baseCellSize = -1f;
+    public float baseCellSize = -1f;
     private int baseWidth = 4;
     private int baseHeight = 4;
     private Vector3 initialCellSlotPrefabScale = Vector3.one;
@@ -33,6 +33,7 @@ public class GridManager1 : MonoBehaviour
 
     private ItemData1[,] cellItems;
     private GameObject[,] cellVisuals;
+    public bool[,] isBlocked;
 
     void Awake()
     {
@@ -46,9 +47,24 @@ public class GridManager1 : MonoBehaviour
 
         cellItems = new ItemData1[width, height];
         cellVisuals = new GameObject[width, height];
+        isBlocked = new bool[width, height];
     }
 
     void Start() => RebuildVisualGrid();
+
+    public void SetBlockedCells(List<Vector2Int> blockedList)
+    {
+        isBlocked = new bool[width, height];
+        if (blockedList != null)
+        {
+            foreach (var pos in blockedList)
+            {
+                if (IsInsideGrid(pos))
+                    isBlocked[pos.x, pos.y] = true;
+            }
+        }
+        RebuildVisualGrid();
+    }
 
     public void RebuildVisualGrid()
     {
@@ -67,6 +83,12 @@ public class GridManager1 : MonoBehaviour
             {
                 GameObject slot = Instantiate(cellSlotPrefab, CellToWorld(x, y), Quaternion.identity, transform);
                 slot.transform.localScale = slotScale;
+
+                if (isBlocked != null && isBlocked[x, y])
+                {
+                    SpriteRenderer sr = slot.GetComponentInChildren<SpriteRenderer>();
+                    if (sr != null) sr.color = new Color(0.2f, 0.2f, 0.2f, 1f); // Mau den xam
+                }
             }
         }
     }
@@ -92,6 +114,7 @@ public class GridManager1 : MonoBehaviour
         // Reset data arrays
         cellItems = new ItemData1[width, height];
         cellVisuals = new GameObject[width, height];
+        isBlocked = new bool[width, height];
 
         RebuildVisualGrid();
     }
@@ -113,7 +136,7 @@ public class GridManager1 : MonoBehaviour
         cell.x >= 0 && cell.x < width && cell.y >= 0 && cell.y < height;
 
     public bool IsCellEmpty(Vector2Int cell) =>
-        IsInsideGrid(cell) && cellItems[cell.x, cell.y] == null;
+        IsInsideGrid(cell) && cellItems[cell.x, cell.y] == null && (isBlocked == null || !isBlocked[cell.x, cell.y]);
 
     public bool CanPlace(BlockShapeData shape, Vector2Int originCell)
     {
@@ -126,7 +149,7 @@ public class GridManager1 : MonoBehaviour
     /// Dat khoi vao Grid va cap nhat totalFlavorCounts.
     /// Viec dem luot di do GameManager1 quan ly.
     /// </summary>
-    public void PlaceBlock(BlockShapeData shape, Vector2Int originCell, ItemData1[] itemPerCell, GameObject iconPrefab)
+    public void PlaceBlock(BlockShapeData shape, Vector2Int originCell, ItemData1[] itemPerCell, GameObject iconPrefab, float rotationAngle = 0f)
     {
         // Cap nhat tong vi
         if (itemPerCell != null && itemPerCell.Length > 0 && itemPerCell[0]?.flavorCounts != null)
@@ -151,7 +174,16 @@ public class GridManager1 : MonoBehaviour
             GameObject icon = null;
             if (iconPrefab != null)
             {
-                icon = Instantiate(iconPrefab, CellToWorld(cell.x, cell.y), Quaternion.identity, transform);
+                // Xử lý bù trừ vị trí do pivot của sprite nằm ở Bottom-Left (0,0)
+                Vector3 pivotOffset = Vector3.zero;
+                int angle = Mathf.RoundToInt(rotationAngle) % 360;
+                if (angle < 0) angle += 360;
+                if (angle == 270) pivotOffset = new Vector3(0, cellSize, 0);       // -90 độ
+                else if (angle == 180) pivotOffset = new Vector3(cellSize, cellSize, 0); // -180 độ
+                else if (angle == 90) pivotOffset = new Vector3(cellSize, 0, 0);   // -270 độ (+90)
+
+                icon = Instantiate(iconPrefab, CellToWorld(cell.x, cell.y) + pivotOffset, Quaternion.identity, transform);
+                icon.transform.localRotation = Quaternion.Euler(0f, 0f, rotationAngle);
                 icon.transform.localScale = Vector3.one;
 
                 SpriteRenderer[] srs = icon.GetComponentsInChildren<SpriteRenderer>();
@@ -175,9 +207,81 @@ public class GridManager1 : MonoBehaviour
                 info.shapeData = shape;
                 info.originCell = originCell;
                 info.itemPerCell = itemPerCell;
+                info.cellIconPrefab = iconPrefab;
+                info.rotationAngle = rotationAngle;
             }
 
             cellVisuals[cell.x, cell.y] = icon;
+        }
+    }
+
+    /// <summary>
+    /// Lấy tất cả PlacedBlockInfo1 của các ô thuộc cùng 1 khối.
+    /// </summary>
+    public List<PlacedBlockInfo1> GetAllCellsOfBlock(Vector2Int originCell, BlockShapeData shape)
+    {
+        List<PlacedBlockInfo1> list = new List<PlacedBlockInfo1>();
+        if (shape == null || shape.cells == null) return list;
+
+        for (int i = 0; i < shape.cells.Length; i++)
+        {
+            Vector2Int cell = originCell + shape.cells[i];
+            PlacedBlockInfo1 info = GetPlacedBlockInfoAt(cell.x, cell.y);
+            if (info != null && info.originCell == originCell && !list.Contains(info))
+            {
+                list.Add(info);
+            }
+        }
+        return list;
+    }
+
+    /// <summary>
+    /// Thử xoay khối đã đặt trên Grid theo chiều kim đồng hồ.
+    /// Nếu hợp lệ: xoay và cập nhật lại Grid.
+    /// Nếu không hợp lệ: khôi phục vị trí cũ và chớp đỏ cảnh báo.
+    /// </summary>
+    public bool TryRotatePlacedBlock(PlacedBlockInfo1 blockInfo)
+    {
+        if (blockInfo == null || blockInfo.shapeData == null) return false;
+
+        BlockShapeData oldShape = blockInfo.shapeData;
+        Vector2Int origin = blockInfo.originCell;
+        ItemData1[] items = blockInfo.itemPerCell;
+        GameObject iconPrefab = blockInfo.cellIconPrefab;
+        float oldRotationAngle = blockInfo.rotationAngle;
+        float newRotationAngle = oldRotationAngle - 90f;
+
+        BlockShapeData rotatedShape = oldShape.GetRotatedClockwiseShape();
+
+        // 1. Tạm gỡ khối cũ khỏi Grid (để không tự kiểm tra va chạm với chính nó)
+        RemovePlacedBlock(oldShape, origin);
+
+        // 2. Kiểm tra xem hình dạng mới có đặt vừa không
+        if (CanPlace(rotatedShape, origin))
+        {
+            // Đặt hình dạng mới đã xoay vào Grid
+            PlaceBlock(rotatedShape, origin, items, iconPrefab, newRotationAngle);
+
+            // Cập nhật lượt đi và thông báo cho ScoringSystem
+            if (ScoringSystem1.Instance != null)
+            {
+                ScoringSystem1.Instance.availableMoves--;
+                ScoringSystem1.Instance.NotifyGridChanged();
+            }
+            return true;
+        }
+        else
+        {
+            // Không đặt được -> Khôi phục lại khối ban đầu
+            PlaceBlock(oldShape, origin, items, iconPrefab, oldRotationAngle);
+
+            // Báo đỏ trên các ô của khối
+            PlacedBlockInfo1 restoredInfo = GetPlacedBlockInfoAt(origin.x + oldShape.cells[0].x, origin.y + oldShape.cells[0].y);
+            if (restoredInfo != null)
+            {
+                restoredInfo.FlashRed();
+            }
+            return false;
         }
     }
 

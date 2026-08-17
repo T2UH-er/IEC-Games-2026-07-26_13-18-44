@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
@@ -24,11 +24,13 @@ public class PauseMenu : MonoBehaviour
 
         resumeBtn.onClick.AddListener(() =>
         {
+            Time.timeScale = 1f;
             gameObject.SetActive(false);
         });
 
         homeBtn.onClick.AddListener(() => {
-            SceneManager.LoadScene("HomeScreen");
+            Time.timeScale = 1f;
+            SceneManager.LoadScene("HomeScence");
         });
     }
 }

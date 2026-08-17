@@ -77,6 +77,10 @@ public class LevelConfig : ScriptableObject
     [Header("2. Danh Sách Khối Món Ăn Xuất Hiện Trên Khay")]
     public List<LevelBlockSpawnConfig> trayBlocks = new List<LevelBlockSpawnConfig>();
 
+    [Header("3. Các Ô Bị Chặn (Chốt Chặn)")]
+    [Tooltip("Danh sách tọa độ (x,y) của các ô bị chặn (màu đen). Ví dụ: x=1, y=2")]
+    public List<Vector2Int> blockedCells = new List<Vector2Int>();
+
     // Giữ trường đơn lẻ để tương thích ngược nếu còn asset cũ
     [HideInInspector] public BlockConfig blockConfig;
     [HideInInspector] public List<FlavorData> flavorCounts;

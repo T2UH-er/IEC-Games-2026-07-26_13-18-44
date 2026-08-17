@@ -10,6 +10,7 @@ public class BlockPiece1 : MonoBehaviour
     public ItemData1[] itemPerCell;
     public GameObject cellIconPrefab;
     public int slotIndex;
+    public float currentRotationAngle = 0f;
 
     public float dishScale = 1f;
     public float iconScale = 1f;
@@ -45,9 +46,73 @@ public class BlockPiece1 : MonoBehaviour
         BuildVisual();
     }
 
-    void BuildVisual()
+    public bool IsRotating => isRotating;
+    private bool isRotating = false;
+
+    public void TriggerRotate(float duration = 0.18f)
     {
-        float gSize = GridManager1.Instance != null ? GridManager1.Instance.cellSize : 1f;
+        if (isRotating || shapeData == null) return;
+        StartCoroutine(RotateRoutine(duration));
+    }
+
+    private System.Collections.IEnumerator RotateRoutine(float duration)
+    {
+        isRotating = true;
+        Quaternion startRot = transform.localRotation;
+        Quaternion endRot = startRot * Quaternion.Euler(0f, 0f, -90f);
+
+        Transform bubbleT = GetComponentInChildren<Bubble>()?.transform;
+        Quaternion bubbleStartRot = bubbleT != null ? bubbleT.rotation : Quaternion.identity;
+
+        float elapsed = 0f;
+        while (elapsed < duration)
+        {
+            elapsed += Time.unscaledDeltaTime;
+            float t = Mathf.Clamp01(elapsed / duration);
+            // Ease-out cubic
+            float easeT = 1f - Mathf.Pow(1f - t, 3f);
+            transform.localRotation = Quaternion.Slerp(startRot, endRot, easeT);
+
+            // Giữ Bubble luôn thẳng đứng không bị xoay lộn ngược
+            if (bubbleT != null)
+                bubbleT.rotation = bubbleStartRot;
+
+            yield return null;
+        }
+
+        transform.localRotation = Quaternion.identity;
+        if (bubbleT != null)
+            bubbleT.rotation = Quaternion.identity;
+
+        shapeData = shapeData.GetRotatedClockwiseShape();
+        currentRotationAngle -= 90f;
+
+        ClearVisual();
+        BuildVisual();
+
+        Physics2D.SyncTransforms();
+        isRotating = false;
+    }
+
+    public void ClearVisual()
+    {
+        for (int i = transform.childCount - 1; i >= 0; i--)
+        {
+            Transform child = transform.GetChild(i);
+            // Giữ lại Bubble nếu có
+            if (child.GetComponent<Bubble>() != null || child.name.ToLower().Contains("bubble"))
+                continue;
+
+            if (Application.isPlaying)
+                Destroy(child.gameObject);
+            else
+                DestroyImmediate(child.gameObject);
+        }
+    }
+
+    public void BuildVisual()
+    {
+        float gSize = GridManager1.Instance != null ? GridManager1.Instance.baseCellSize : 7.2f;
         float cs = gSize * shapeCellSpacing;
 
         if (showDishBackground && shapeData != null && shapeData.dishSprite != null)
@@ -56,6 +121,7 @@ public class BlockPiece1 : MonoBehaviour
             dishObj.transform.SetParent(transform, false);
             Vector2 center = shapeData.GetCenterOffset();
             dishObj.transform.localPosition = new Vector3(center.x * cs, center.y * cs, 0f) + shapeData.dishOffset;
+            dishObj.transform.localRotation = Quaternion.Euler(0f, 0f, currentRotationAngle);
             dishObj.transform.localScale = new Vector3(dishScale, dishScale, 1f);
 
             SpriteRenderer dishSr = dishObj.AddComponent<SpriteRenderer>();
@@ -69,7 +135,17 @@ public class BlockPiece1 : MonoBehaviour
             if (cellIconPrefab == null) continue;
 
             GameObject icon = Instantiate(cellIconPrefab, transform);
-            icon.transform.localPosition = new Vector3(offset.x * cs, offset.y * cs, 0f);
+            
+            // Xử lý bù trừ vị trí do pivot của sprite nằm ở Bottom-Left (0,0)
+            Vector3 pivotOffset = Vector3.zero;
+            int angle = Mathf.RoundToInt(currentRotationAngle) % 360;
+            if (angle < 0) angle += 360;
+            if (angle == 270) pivotOffset = new Vector3(0, cs, 0);       // -90 độ
+            else if (angle == 180) pivotOffset = new Vector3(cs, cs, 0); // -180 độ
+            else if (angle == 90) pivotOffset = new Vector3(cs, 0, 0);   // -270 độ (+90)
+
+            icon.transform.localPosition = new Vector3(offset.x * cs, offset.y * cs, 0f) + pivotOffset;
+            icon.transform.localRotation = Quaternion.Euler(0f, 0f, currentRotationAngle);
             icon.transform.localScale = Vector3.one;
 
             SpriteRenderer[] srs = icon.GetComponentsInChildren<SpriteRenderer>();

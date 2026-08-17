@@ -32,7 +32,7 @@ public class TrayScrollManager1 : MonoBehaviour
         {
             // 3. Co giãn Scale X theo độ rộng cần thiết
             Vector3 scale = trayBoard.localScale;
-            scale.x = requiredWidth / 10f; // (10f là độ rộng gốc của sprite)
+            scale.x = requiredWidth / 7f; // (10f là độ rộng gốc của sprite)
             trayBoard.localScale = scale;
         }
     }

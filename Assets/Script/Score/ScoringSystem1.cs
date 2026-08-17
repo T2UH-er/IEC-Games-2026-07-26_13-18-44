@@ -68,6 +68,7 @@ public class ScoringSystem1 : MonoBehaviour
     /// </summary>
     public void ResetGameStatus()
     {
+        Time.timeScale = 1f;
         availableMoves = thresholdMoves;
         numOfFinished = 0;
         if (result != null) result.SetActive(false);

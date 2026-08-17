@@ -23,4 +23,35 @@ public class BlockShapeData : ScriptableObject
         }
         return new Vector2((minX + maxX) * 0.5f, (minY + maxY) * 0.5f);
     }
+
+    /// <summary>
+    /// Tạo bản sao BlockShapeData với các ô được xoay 90 độ theo chiều kim đồng hồ quanh đúng tâm gốc (0,0).
+    /// Công thức biến đổi: (x', y') = (y, -x)
+    /// </summary>
+    public BlockShapeData GetRotatedClockwiseShape()
+    {
+        BlockShapeData rotated = ScriptableObject.CreateInstance<BlockShapeData>();
+        rotated.name = this.name + "_Rotated";
+        rotated.dishSprite = this.dishSprite;
+        rotated.dishOffset = this.dishOffset;
+
+        if (cells == null || cells.Length == 0)
+        {
+            rotated.cells = new Vector2Int[0];
+            return rotated;
+        }
+
+        Vector2Int[] newCells = new Vector2Int[cells.Length];
+
+        // Xoay 90 độ theo chiều kim đồng hồ quanh đúng tâm (0,0): (x', y') = (y, -x)
+        for (int i = 0; i < cells.Length; i++)
+        {
+            int rx = cells[i].y;
+            int ry = -cells[i].x;
+            newCells[i] = new Vector2Int(rx, ry);
+        }
+
+        rotated.cells = newCells;
+        return rotated;
+    }
 }
