@@ -1285,6 +1285,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 94a8512c15d6d99b44a4740caf9519e2, type: 2}
   - {fileID: 11400000, guid: a5b9623c15d6d99b44a4740caf9519f3, type: 2}
   - {fileID: 11400000, guid: b6c0734c15d6d99b44a4740caf951904, type: 2}
+  - {fileID: 11400000, guid: b6c0734c15d6d99b44a4740caf951904, type: 2}
   trayContainer: {fileID: 1157675534}
   trayBlockScale: {x: 0.6, y: 0.6, z: 0.6}
   totalBlocksCount: 2
@@ -1603,6 +1604,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da7e884ee42ada14db87334e0f67ec2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InputManager1
+  doubleClickThreshold: 0.3
+  dragThresholdDistance: 10
 --- !u!1 &1007627047
 GameObject:
   m_ObjectHideFlags: 0
@@ -2013,6 +2016,7 @@ MonoBehaviour:
   cellSize: 7.2
   placedIconScale: 1
   gridOrigin: {fileID: 812324222}
+  baseCellSize: -1
   cellSlotPrefab: {fileID: 1541565707601388936, guid: fe9a3441df081214292b577fe4197851, type: 3}
 --- !u!4 &1146717208
 Transform:
