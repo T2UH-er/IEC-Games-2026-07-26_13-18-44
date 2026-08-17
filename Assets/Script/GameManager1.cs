@@ -57,6 +57,11 @@ public class GameManager1 : MonoBehaviour
         LoadLevel(currentLevelIndex + 1);
     }
 
+    public void LoadCurrentLevel()
+    {
+        LoadLevel(currentLevelIndex);
+    }
+
     /// <summary>
     /// Nạp dữ liệu level theo index (levelNumber).
     /// </summary>

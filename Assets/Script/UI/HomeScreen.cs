@@ -6,9 +6,13 @@ public class HomeScreen : MonoBehaviour
 {
     [SerializeField] Button playBtn;
     [SerializeField] Button levelBtn;
-    [SerializeField] Button quitBtn;
+    [SerializeField] Button infoBtn;
+
+    [SerializeField] GameObject in4Banner;
     void Start()
     {
+        in4Banner.SetActive(false);
+
         playBtn.onClick.AddListener(() =>
         {
 
@@ -19,9 +23,9 @@ public class HomeScreen : MonoBehaviour
             SceneManager.LoadScene("LevelList");
         });
 
-        quitBtn.onClick.AddListener(() =>
+        infoBtn.onClick.AddListener(() =>
         {
-            Application.Quit();
+            in4Banner.SetActive(true);
         });
     }
 }

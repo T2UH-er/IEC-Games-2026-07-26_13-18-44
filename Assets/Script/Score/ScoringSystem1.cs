@@ -28,9 +28,12 @@ public class ScoringSystem1 : MonoBehaviour
     //public TextMeshProUGUI numOfFinishedText;
     public TextMeshProUGUI resultText;
     public TextMeshProUGUI scoreText;
+
+    public TextMeshProUGUI availableMovesText;
     //public TextMeshProUGUI requirementText;
 
-    public GameObject result;
+    public GameObject WinResult;
+    public GameObject LoseResult;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -49,7 +52,8 @@ public class ScoringSystem1 : MonoBehaviour
         //if (numOfFinishedText != null) numOfFinishedText.text = "";
         if (resultText != null) resultText.text = "";
         if (scoreText != null) scoreText.text = "";
-        if (result != null) result.SetActive(false);
+        if (WinResult != null) WinResult.SetActive(false);
+        if (LoseResult != null) LoseResult.SetActive(false);
 
         // Fallback: Nếu trong Scene có sẵn Customer1 và chưa được spawn bởi CustomerSpawner1
         if (customers.Count == 0)
@@ -70,7 +74,8 @@ public class ScoringSystem1 : MonoBehaviour
     {
         availableMoves = thresholdMoves;
         numOfFinished = 0;
-        if (result != null) result.SetActive(false);
+        if (WinResult != null) WinResult.SetActive(false);
+        if (LoseResult != null) LoseResult.SetActive(false);
         if (resultText != null) resultText.text = "";
         //if (numOfFinishedText != null) numOfFinishedText.text = "";
     }
@@ -141,6 +146,8 @@ public class ScoringSystem1 : MonoBehaviour
             scoreText.text = "Score: " + highestScore;
         else
             scoreText.text = "Score: " + Mathf.Max(0, (int)((availableMoves * 1.0f / thresholdMoves) * highestScore));
+
+        availableMovesText.text = availableMoves.ToString();
     }
 
     /// <summary>
@@ -166,14 +173,14 @@ public class ScoringSystem1 : MonoBehaviour
         if (customers.Count > 0 && numOfFinished == customers.Count && availableMoves >= 0)
         {
             resultText.text = "You Win!";
-            result.SetActive(true);
+            WinResult.SetActive(true);
             Time.timeScale = 0f;
             return 1;
         }
         else if (numOfFinished < customers.Count && availableMoves <= 0)
         {
             resultText.text = "You Lose!";
-            result.SetActive(true);
+            LoseResult.SetActive(true);
             Time.timeScale = 0f;
             return -1;
         }
