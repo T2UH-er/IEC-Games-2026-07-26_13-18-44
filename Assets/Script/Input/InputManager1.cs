@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 public class InputManager1 : MonoBehaviour
 {
@@ -6,6 +6,24 @@ public class InputManager1 : MonoBehaviour
 
     // Tuong thich nguoc voi TrayScrollManager1 dang doc selectedPiece
     public BlockPiece1 selectedPiece => GameManager1.Instance != null ? GameManager1.Instance.HeldPiece : null;
+
+    [Header("Double Click Settings")]
+    [Tooltip("Thời gian tối đa giữa 2 lần click để tính là Double Click")]
+    public float doubleClickThreshold = 0.3f;
+
+    [Header("Drag Settings")]
+    [Tooltip("Khoảng cách di chuyển chuột tối thiểu (pixel) để bắt đầu nhấc khối kéo đi")]
+    public float dragThresholdDistance = 10f;
+
+    private float lastClickTime = -1f;
+    private BlockPiece1 lastClickedPiece = null;
+    private Vector2Int lastClickedGridOrigin = new Vector2Int(-999, -999);
+
+    private bool isPendingDrag = false;
+    private Vector3 mouseDownScreenPos;
+    private Vector3 mouseDownWorldPos;
+    private BlockPiece1 pendingPiece = null;
+    private PlacedBlockInfo1 pendingGridInfo = null;
 
     private Vector3 dragOffset;
     private Camera mainCam;
@@ -18,41 +36,138 @@ public class InputManager1 : MonoBehaviour
 
     private void Update()
     {
+        // ─── 1. XỬ LÝ CHUỘT TRÁI (CLICK XUỐNG) ───
         if (Input.GetMouseButtonDown(0))
+        {
+            mouseDownScreenPos = Input.mousePosition;
+            mouseDownWorldPos = GetMouseWorldPos();
+            RaycastHit2D hit = Physics2D.Raycast(mouseDownWorldPos, Vector2.zero);
+
+            if (hit.collider != null)
+            {
+                // Kiểm tra khối trên Khay
+                BlockPiece1 piece = hit.collider.GetComponentInParent<BlockPiece1>();
+                if (piece != null)
+                {
+                    if (piece.IsRotating) return; // Đang xoay thì không nhận input
+
+                    // Kiểm tra Double Click trên Khay
+                    if (piece == lastClickedPiece && (Time.unscaledTime - lastClickTime) <= doubleClickThreshold)
+                    {
+                        lastClickTime = -1f;
+                        lastClickedPiece = null;
+                        isPendingDrag = false;
+                        pendingPiece = null;
+                        piece.TriggerRotate();
+                        return;
+                    }
+                    else
+                    {
+                        lastClickTime = Time.unscaledTime;
+                        lastClickedPiece = piece;
+                        lastClickedGridOrigin = new Vector2Int(-999, -999);
+                        pendingPiece = piece;
+                        pendingGridInfo = null;
+                        isPendingDrag = true;
+                        return;
+                    }
+                }
+
+                // Kiểm tra khối đã đặt trên Grid
+                PlacedBlockInfo1 info = hit.collider.GetComponentInParent<PlacedBlockInfo1>();
+                if (info != null)
+                {
+                    // Kiểm tra Double Click trên Grid
+                    if (info.originCell == lastClickedGridOrigin && (Time.unscaledTime - lastClickTime) <= doubleClickThreshold)
+                    {
+                        lastClickTime = -1f;
+                        lastClickedGridOrigin = new Vector2Int(-999, -999);
+                        lastClickedPiece = null;
+                        isPendingDrag = false;
+                        pendingGridInfo = null;
+
+                        if (GridManager1.Instance != null)
+                            GridManager1.Instance.TryRotatePlacedBlock(info);
+                        return;
+                    }
+                    else
+                    {
+                        lastClickTime = Time.unscaledTime;
+                        lastClickedGridOrigin = info.originCell;
+                        lastClickedPiece = null;
+                        pendingPiece = null;
+                        pendingGridInfo = info;
+                        isPendingDrag = true;
+                    }
+                }
+            }
+        }
+
+        // ─── 2. HỖ TRỢ CHUỘT PHẢI ĐỂ XOAY NHANH TRÊN PC ───
+        if (Input.GetMouseButtonDown(1))
         {
             Vector3 worldPos = GetMouseWorldPos();
             RaycastHit2D hit = Physics2D.Raycast(worldPos, Vector2.zero);
 
             if (hit.collider != null)
             {
-                // Uu tien: khoi dang nam tren Khay
                 BlockPiece1 piece = hit.collider.GetComponentInParent<BlockPiece1>();
-                if (piece != null)
+                if (piece != null && !piece.IsRotating)
                 {
-                    dragOffset = piece.transform.position - worldPos;
-                    GameManager1.Instance.BeginPickFromTray(piece);
+                    piece.TriggerRotate();
                     return;
                 }
 
-                // Thu hai: khoi da dat tren Grid
                 PlacedBlockInfo1 info = hit.collider.GetComponentInParent<PlacedBlockInfo1>();
-                if (info != null)
+                if (info != null && GridManager1.Instance != null)
                 {
-                    GameManager1.Instance.BeginPickFromGrid(info);
-                    if (GameManager1.Instance.HeldPiece != null)
-                        dragOffset = GameManager1.Instance.HeldPiece.transform.position - worldPos;
+                    GridManager1.Instance.TryRotatePlacedBlock(info);
+                    return;
                 }
             }
         }
 
+        // ─── 3. KIỂM TRA BẮT ĐẦU KÉO (KHI CHUỘT DI CHUYỂN VƯỢT NGƯỠNG) ───
+        if (isPendingDrag && Input.GetMouseButton(0))
+        {
+            if (Vector3.Distance(Input.mousePosition, mouseDownScreenPos) >= dragThresholdDistance)
+            {
+                isPendingDrag = false;
+
+                if (pendingPiece != null)
+                {
+                    dragOffset = pendingPiece.transform.position - mouseDownWorldPos;
+                    GameManager1.Instance.BeginPickFromTray(pendingPiece);
+                }
+                else if (pendingGridInfo != null)
+                {
+                    GameManager1.Instance.BeginPickFromGrid(pendingGridInfo);
+                    if (GameManager1.Instance.HeldPiece != null)
+                        dragOffset = GameManager1.Instance.HeldPiece.transform.position - mouseDownWorldPos;
+                }
+
+                pendingPiece = null;
+                pendingGridInfo = null;
+            }
+        }
+
+        // ─── 4. CẬP NHẬT KÉO THẢ (DRAGGING) ───
         if (GameManager1.Instance != null && GameManager1.Instance.HeldPiece != null && Input.GetMouseButton(0))
         {
             GameManager1.Instance.UpdateDrag(GetMouseWorldPos() + dragOffset);
         }
 
-        if (GameManager1.Instance != null && GameManager1.Instance.HeldPiece != null && Input.GetMouseButtonUp(0))
+        // ─── 5. THẢ KHỐI (END DRAG) ───
+        if (Input.GetMouseButtonUp(0))
         {
-            GameManager1.Instance.EndDrag(GetMouseWorldPos());
+            isPendingDrag = false;
+            pendingPiece = null;
+            pendingGridInfo = null;
+
+            if (GameManager1.Instance != null && GameManager1.Instance.HeldPiece != null)
+            {
+                GameManager1.Instance.EndDrag(GetMouseWorldPos());
+            }
         }
     }
 

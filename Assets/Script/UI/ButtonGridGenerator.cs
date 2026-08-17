@@ -1,8 +1,19 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
+#if UNITY_EDITOR
+using UnityEditor;
+using UnityEditor.SceneManagement;
+#endif
+
+[ExecuteAlways]
 public class ButtonGridGenerator : MonoBehaviour
 {
+    [Header("Chế độ sinh nút")]
+    [Tooltip("Nếu tích chọn, các nút sẽ tự động được sinh lại khi ấn Play (Start)")]
+    public bool generateOnStart = false;
+
     [Header("Cài đặt Component cha")]
     [Tooltip("Kéo object Content của Scroll View vào đây")]
     public RectTransform contentParent;
@@ -20,11 +31,24 @@ public class ButtonGridGenerator : MonoBehaviour
 
     void Start()
     {
-        GenerateButtons();
+        if (Application.isPlaying && generateOnStart)
+        {
+            GenerateButtons();
+        }
     }
 
-    void GenerateButtons()
+    [ContextMenu("Generate Buttons (Tạo Nút)")]
+    public void GenerateButtons()
     {
+        if (contentParent == null)
+        {
+            Debug.LogWarning("[ButtonGridGenerator] Vui lòng gán contentParent trước khi tạo nút!");
+            return;
+        }
+
+        // Xóa các nút cũ trước khi tạo mới
+        ClearButtons();
+
         // 1. Tự động thêm Content Size Fitter nếu chưa có để Content tự co giãn chiều cao khi cuộn
         ContentSizeFitter sizeFitter = contentParent.GetComponent<ContentSizeFitter>();
         if (sizeFitter == null)
@@ -72,11 +96,52 @@ public class ButtonGridGenerator : MonoBehaviour
         // Gán khoảng cách ngang (x) và khoảng cách dọc (y - mặc định 20f)
         grid.spacing = new Vector2(horizontalSpacing, 20f);
 
-        // 4. Vòng lặp tạo 30 nút
+        // 4. Vòng lặp tạo các nút
         for (int i = 1; i <= numberOfButtons; i++)
         {
             CreateSingleButton(i);
         }
+
+#if UNITY_EDITOR
+        if (!Application.isPlaying)
+        {
+            EditorUtility.SetDirty(contentParent.gameObject);
+            EditorSceneManager.MarkSceneDirty(contentParent.gameObject.scene);
+        }
+#endif
+        Debug.Log($"[ButtonGridGenerator] Đã tạo thành công {numberOfButtons} nút!");
+    }
+
+    [ContextMenu("Clear Buttons (Xóa Nút)")]
+    public void ClearButtons()
+    {
+        if (contentParent == null) return;
+
+        // Xóa tất cả các object con trong contentParent
+        for (int i = contentParent.childCount - 1; i >= 0; i--)
+        {
+            GameObject child = contentParent.GetChild(i).gameObject;
+            if (Application.isPlaying)
+            {
+                Destroy(child);
+            }
+            else
+            {
+#if UNITY_EDITOR
+                Undo.DestroyObjectImmediate(child);
+#else
+                DestroyImmediate(child);
+#endif
+            }
+        }
+
+#if UNITY_EDITOR
+        if (!Application.isPlaying)
+        {
+            EditorUtility.SetDirty(contentParent.gameObject);
+            EditorSceneManager.MarkSceneDirty(contentParent.gameObject.scene);
+        }
+#endif
     }
 
     void CreateSingleButton(int index)
@@ -98,6 +163,14 @@ public class ButtonGridGenerator : MonoBehaviour
 
         // Cấu hình Button component
         Button btn = buttonObj.AddComponent<Button>();
+
+        // Gán sự kiện khi click vào nút level
+        btn.onClick.AddListener(() =>
+        {
+            Time.timeScale = 1f;
+            Debug.Log($"[ButtonGridGenerator] Chọn Level {index}");
+            SceneManager.LoadScene("test");
+        });
 
         // --- TẠO OBJECT TEXT CON ---
         GameObject textObj = new GameObject("Text");
@@ -132,5 +205,44 @@ public class ButtonGridGenerator : MonoBehaviour
         {
             btnText.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
         }
+
+#if UNITY_EDITOR
+        if (!Application.isPlaying)
+        {
+            Undo.RegisterCreatedObjectUndo(buttonObj, "Create Level Button " + index);
+        }
+#endif
     }
 }
+
+#if UNITY_EDITOR
+[CustomEditor(typeof(ButtonGridGenerator))]
+public class ButtonGridGeneratorEditor : Editor
+{
+    public override void OnInspectorGUI()
+    {
+        DrawDefaultInspector();
+
+        ButtonGridGenerator generator = (ButtonGridGenerator)target;
+
+        EditorGUILayout.Space(15);
+        EditorGUILayout.LabelField("🛠️ Button Grid Tool Actions", EditorStyles.boldLabel);
+
+        GUI.backgroundColor = new Color(0.4f, 0.9f, 0.4f);
+        if (GUILayout.Button("▶ Generate Buttons (Tạo danh sách nút)", GUILayout.Height(35)))
+        {
+            generator.GenerateButtons();
+        }
+
+        GUI.backgroundColor = new Color(1.0f, 0.4f, 0.4f);
+        if (GUILayout.Button("🗑️ Clear Buttons (Xóa sạch danh sách nút)", GUILayout.Height(28)))
+        {
+            if (EditorUtility.DisplayDialog("Xác nhận xóa", "Bạn có chắc chắn muốn xóa tất cả nút trong Content không?", "Xóa", "Hủy"))
+            {
+                generator.ClearButtons();
+            }
+        }
+        GUI.backgroundColor = Color.white;
+    }
+}
+#endif

@@ -15,7 +15,8 @@ public class HomeScreen : MonoBehaviour
 
         playBtn.onClick.AddListener(() =>
         {
-
+            Time.timeScale = 1f;
+            SceneManager.LoadScene("test");
         });
 
         levelBtn.onClick.AddListener(() =>

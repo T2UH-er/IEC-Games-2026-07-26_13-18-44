@@ -67,6 +67,7 @@ public class GameManager1 : MonoBehaviour
     /// </summary>
     public void LoadLevel(int targetLevel)
     {
+        Time.timeScale = 1f;
         currentLevelIndex = targetLevel;
         Debug.Log($"[GameManager1] === Loading Level {targetLevel} ===");
 
@@ -107,6 +108,16 @@ public class GameManager1 : MonoBehaviour
                 GridManager1.Instance.ResizeGrid(levelCfg.gridWidth, levelCfg.gridHeight);
                 Debug.Log($"[GameManager1] Grid resized to {levelCfg.gridWidth}x{levelCfg.gridHeight}, cellSize={GridManager1.Instance.cellSize}");
             }
+            
+            // Cập nhật các ô bị chặn (chốt chặn)
+            if (levelCfg != null && levelCfg.blockedCells != null)
+            {
+                GridManager1.Instance.SetBlockedCells(levelCfg.blockedCells);
+            }
+            else
+            {
+                GridManager1.Instance.SetBlockedCells(new List<Vector2Int>()); // Reset
+            }
         }
 
         // 2. Spawn lai mon an tren khay
@@ -139,7 +150,9 @@ public class GameManager1 : MonoBehaviour
         HeldPiece = piece;
         startWorldPosition = piece.transform.position;
         isFromGrid = false;
-        HeldPiece.transform.localScale = Vector3.one * dragScaleMultiplier;
+
+        float gridScaleRatio = GridManager1.Instance != null ? GridManager1.Instance.ScaleRatio : 1f;
+        HeldPiece.transform.localScale = Vector3.one * dragScaleMultiplier * gridScaleRatio;
     }
 
     /// <summary>Bốc khối đang nằm trên Grid.</summary>
@@ -157,14 +170,16 @@ public class GameManager1 : MonoBehaviour
         // Sinh khối tạm để kéo
         GameObject pieceObj = Instantiate(blockPiecePrefab, startWorldPosition, Quaternion.identity);
         HeldPiece = pieceObj.GetComponent<BlockPiece1>();
+        HeldPiece.currentRotationAngle = info.rotationAngle;
         HeldPiece.InitializeCustom(originalShape, originalItems, -1);
         SetupPieceBubble(HeldPiece);
 
         isFromGrid = true;
-        HeldPiece.transform.localScale = Vector3.one * dragScaleMultiplier;
+        
+        float gridScaleRatio = GridManager1.Instance != null ? GridManager1.Instance.ScaleRatio : 1f;
+        HeldPiece.transform.localScale = Vector3.one * dragScaleMultiplier * gridScaleRatio;
     }
 
-    /// <summary>Cập nhật vị trí khối đang kéo mỗi frame.</summary>
     public void UpdateDrag(Vector3 targetWorldPos)
     {
         if (HeldPiece == null) return;
@@ -185,7 +200,7 @@ public class GameManager1 : MonoBehaviour
             bool isNewPosition = !isFromGrid || (targetCell != originalOriginCell);
 
             GridManager1.Instance.PlaceBlock(
-                HeldPiece.shapeData, targetCell, HeldPiece.itemPerCell, HeldPiece.cellIconPrefab);
+                HeldPiece.shapeData, targetCell, HeldPiece.itemPerCell, HeldPiece.cellIconPrefab, HeldPiece.currentRotationAngle);
 
             if (isNewPosition && ScoringSystem1.Instance != null)
                 ScoringSystem1.Instance.availableMoves--;
@@ -217,7 +232,7 @@ public class GameManager1 : MonoBehaviour
             {
                 // Khay đầy → hoàn trả về Grid cũ, không tính lượt
                 GridManager1.Instance.PlaceBlock(
-                    HeldPiece.shapeData, originalOriginCell, originalItems, HeldPiece.cellIconPrefab);
+                    HeldPiece.shapeData, originalOriginCell, originalItems, HeldPiece.cellIconPrefab, HeldPiece.currentRotationAngle);
                 Destroy(HeldPiece.gameObject);
                 if (ScoringSystem1.Instance != null) ScoringSystem1.Instance.NotifyGridChanged();
             }
@@ -226,7 +241,7 @@ public class GameManager1 : MonoBehaviour
         {
             // ── Tha khong hop le tren Grid → tra ve vi tri cu, khong tinh luot ──
             GridManager1.Instance.PlaceBlock(
-                HeldPiece.shapeData, originalOriginCell, originalItems, HeldPiece.cellIconPrefab);
+                HeldPiece.shapeData, originalOriginCell, originalItems, HeldPiece.cellIconPrefab, HeldPiece.currentRotationAngle);
             Destroy(HeldPiece.gameObject);
             if (ScoringSystem1.Instance != null) ScoringSystem1.Instance.NotifyGridChanged();
         }
