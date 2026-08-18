@@ -1280,11 +1280,11 @@ MonoBehaviour:
   - {fileID: 1112492238}
   - {fileID: 1792442481}
   levelConfigs:
+  - {fileID: 11400000, guid: b6c0734c15d6d99b44a4740caf951904, type: 2}
   - {fileID: 11400000, guid: 723b22c15d6d99b44a4740caf9519d08, type: 2}
   - {fileID: 11400000, guid: 83e7492c15d6d99b44a4740caf9519d1, type: 2}
   - {fileID: 11400000, guid: 94a8512c15d6d99b44a4740caf9519e2, type: 2}
   - {fileID: 11400000, guid: a5b9623c15d6d99b44a4740caf9519f3, type: 2}
-  - {fileID: 11400000, guid: b6c0734c15d6d99b44a4740caf951904, type: 2}
   - {fileID: 11400000, guid: b6c0734c15d6d99b44a4740caf951904, type: 2}
   trayContainer: {fileID: 1157675534}
   trayBlockScale: {x: 0.6, y: 0.6, z: 0.6}

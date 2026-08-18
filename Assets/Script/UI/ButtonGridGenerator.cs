@@ -169,6 +169,7 @@ public class ButtonGridGenerator : MonoBehaviour
         {
             Time.timeScale = 1f;
             Debug.Log($"[ButtonGridGenerator] Chọn Level {index}");
+            GameManager1.selectedLevelIndex = index;
             SceneManager.LoadScene("test");
         });
 

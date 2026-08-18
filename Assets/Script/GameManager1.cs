@@ -26,6 +26,7 @@ public class GameManager1 : MonoBehaviour
     private Vector3 startWorldPosition;
 
     [Header("Level Flow")]
+    public static int selectedLevelIndex = 0;
     public int currentLevelIndex = 0;
 
     // ─── Sprite Resources ─────────────────────────────────────────────────
@@ -39,11 +40,21 @@ public class GameManager1 : MonoBehaviour
         if (Instance == null) Instance = this;
         else { Destroy(gameObject); return; }
 
+        if (selectedLevelIndex >= 0)
+        {
+            currentLevelIndex = selectedLevelIndex;
+        }
+
         spriteFlavor = Resources.Load<SpriteFlavor>("SpriteFlavor");
         if (spriteFlavor == null) Debug.LogError("[GameManager1] Không tìm thấy SpriteFlavor.asset trong Resources/");
 
         spriteNumber = Resources.Load<SpriteNumber>("SpriteNumber");
         if (spriteNumber == null) Debug.LogError("[GameManager1] Không tìm thấy SpriteNumber.asset trong Resources/");
+    }
+
+    private void Start()
+    {
+        LoadLevel(currentLevelIndex);
     }
 
     // ─── Level Management API ─────────────────────────────────────────────
