@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ba1e65e3bbc5104e8204f808c34e0a7, type: 3}
+  m_Name: keo sau
+  m_EditorClassIdentifier: Assembly-CSharp::BlockConfig
+  shapeData: {fileID: 11400000, guid: 6c0d528ff6c6f4186b813f11b2d33e2d, type: 2}
+  itemPerCell:
+  - {fileID: 11400000, guid: 4bc121b399cd24cc58b9f0a9629e4464, type: 2}
+  - {fileID: 11400000, guid: 574d47decdabb4461bef67bd150dc4cb, type: 2}
+  - {fileID: 11400000, guid: e761cba5dd3bd4f1f9a50241165b6567, type: 2}
+  - {fileID: 11400000, guid: 903f4a410dafa4613a8b78f6fa221439, type: 2}

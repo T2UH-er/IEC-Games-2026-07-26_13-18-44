@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ba1e65e3bbc5104e8204f808c34e0a7, type: 3}
+  m_Name: banh chung
+  m_EditorClassIdentifier: Assembly-CSharp::BlockConfig
+  shapeData: {fileID: 11400000, guid: 31102d9bd664b46bda99dc7b65aa7d0e, type: 2}
+  itemPerCell:
+  - {fileID: 11400000, guid: 8e2b79c4f186f4f35a83effd69650124, type: 2}
+  - {fileID: 11400000, guid: 4d940936819594c7e8a41ef444addc8e, type: 2}
+  - {fileID: 11400000, guid: a8aba4c4958894f338985c2af99e385f, type: 2}
+  - {fileID: 11400000, guid: b5450722b53074d229c0e627557d816b, type: 2}
+  - {fileID: 11400000, guid: c06b23734521a4ff39ab5547ae104ccb, type: 2}
+  - {fileID: 11400000, guid: 91730731837c2483388b46cb1fd80f33, type: 2}
+  - {fileID: 11400000, guid: 16df8d5b84a6540db9038dcdc73a8c81, type: 2}
+  - {fileID: 11400000, guid: 6a2a6485018cc47d79002a72b7474473, type: 2}
+  - {fileID: 11400000, guid: 40272d990b9204bb49cd16a6cb409f22, type: 2}

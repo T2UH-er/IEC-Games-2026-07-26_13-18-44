@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ItemData1
   itemId: pizza
   displayName: pizza-1
-  icon: {fileID: -4368858068074727896, guid: 9b325d9bf631ee84dbdcefbd96ce8868, type: 3}
+  icon: {fileID: 21300000, guid: 9b325d9bf631ee84dbdcefbd96ce8868, type: 3}
   flavorCounts:
   - flavorName: sour
     count: 0

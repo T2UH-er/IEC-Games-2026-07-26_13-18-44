@@ -28,7 +28,7 @@ MonoBehaviour:
     zoneColor: {r: 1, g: 0.8941177, b: 0.7686275, a: 1}
   trayBlocks:
   - slotIndex: 0
-    blockConfig: {fileID: 11400000, guid: fb78d19f0e5426945b08aac140b59093, type: 2}
+    blockConfig: {fileID: 11400000, guid: d127fef5cd5f24726add9e7259816751, type: 2}
     flavorCounts:
     - flavorName: spicy
       count: 3

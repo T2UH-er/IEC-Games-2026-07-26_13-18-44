@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ba1e65e3bbc5104e8204f808c34e0a7, type: 3}
+  m_Name: suon cot 2
+  m_EditorClassIdentifier: Assembly-CSharp::BlockConfig
+  shapeData: {fileID: 11400000, guid: a1d73c9e7f2484a20aa5c3ac8a627c01, type: 2}
+  itemPerCell:
+  - {fileID: 11400000, guid: 95e4b796f5aac41789dd16aea98eadff, type: 2}
+  - {fileID: 11400000, guid: 407a4328607b9490cb171f019d8c6095, type: 2}
+  - {fileID: 11400000, guid: cd6fcf75753ad46d494392850683a057, type: 2}
+  - {fileID: 11400000, guid: 3b95b40b383174cf296766cf03ceff84, type: 2}
+  - {fileID: 11400000, guid: 63257569719084b8ba985ba8cde5eb92, type: 2}

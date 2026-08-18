@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ItemData1
   itemId: com_ca_ri
   displayName: com_ca_ri-1
-  icon: {fileID: 1141856677681496422, guid: 704a55dfe778e9440a7c946fb419721b, type: 3}
+  icon: {fileID: 21300000, guid: 704a55dfe778e9440a7c946fb419721b, type: 3}
   flavorCounts:
   - flavorName: sour
     count: 0
