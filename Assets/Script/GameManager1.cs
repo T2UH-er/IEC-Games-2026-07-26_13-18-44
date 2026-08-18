@@ -26,8 +26,8 @@ public class GameManager1 : MonoBehaviour
     private Vector3 startWorldPosition;
 
     [Header("Level Flow")]
-    public static int selectedLevelIndex = 0;
-    public int currentLevelIndex = 0;
+    public static int selectedLevelIndex = -1;
+    public int currentLevelIndex = 1;
 
     // ─── Sprite Resources ─────────────────────────────────────────────────
     private SpriteFlavor spriteFlavor;
@@ -40,11 +40,6 @@ public class GameManager1 : MonoBehaviour
         if (Instance == null) Instance = this;
         else { Destroy(gameObject); return; }
 
-        if (selectedLevelIndex >= 0)
-        {
-            currentLevelIndex = selectedLevelIndex;
-        }
-
         spriteFlavor = Resources.Load<SpriteFlavor>("SpriteFlavor");
         if (spriteFlavor == null) Debug.LogError("[GameManager1] Không tìm thấy SpriteFlavor.asset trong Resources/");
 
@@ -54,6 +49,18 @@ public class GameManager1 : MonoBehaviour
 
     private void Start()
     {
+        // 1. Ưu tiên lấy từ menu chọn màn (selectedLevelIndex)
+        if (selectedLevelIndex > 0)
+        {
+            currentLevelIndex = selectedLevelIndex;
+            selectedLevelIndex = -1;
+        }
+        // 2. Nếu test trực tiếp trong Scene: Lấy trực tiếp từ biến levelNumber của BlockSpawner1 như trước
+        else if (BlockSpawner1.Instance != null)
+        {
+            currentLevelIndex = BlockSpawner1.Instance.levelNumber;
+        }
+
         LoadLevel(currentLevelIndex);
     }
 

@@ -10,34 +10,34 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ddc1085d90205e942bb1ded690f9c90f, type: 3}
-  m_Name: Lv1-1
+  m_Name: Lv2
   m_EditorClassIdentifier: Assembly-CSharp::LevelConfig
-  levelNumber: 1
+  levelNumber: 2
+  gridWidth: 3
+  gridHeight: 3
   customers:
   - customerSprite: {fileID: -933039256083134843, guid: 31ba3aa0523bc8e449bb1cbdd73310d2, type: 3}
     requirement:
-    - flavorName: 
-      count: 0
+    - flavorName: salty
+      count: 1
+    - flavorName: sweet
+      count: 3
     affectedZone: []
-    zoneColor: {r: 0, g: 0, b: 0, a: 0}
+    zoneColor: {r: 1, g: 0.5, b: 0.1, a: 0.35}
   trayBlocks:
   - slotIndex: 0
-    blockConfig: {fileID: 0}
-    flavorCounts: []
-  blockConfig: {fileID: 11400000, guid: 7d780fe13dd8be54f95052414d14c2c8, type: 2}
-  flavorCounts:
-  - flavorName: sour
-    count: 0
-  - flavorName: spicy
-    count: 1
-  - flavorName: salty
-    count: 1
-  - flavorName: sweet
-    count: 0
-  - flavorName: bitter
-    count: 0
-  - flavorName: umami
-    count: 0
-  - flavorName: buttery
-    count: 0
+    blockConfig: {fileID: 11400000, guid: 131d2bfecf2bf410daa88280d8820248, type: 2}
+    flavorCounts:
+    - flavorName: sweet
+      count: 2
+  - slotIndex: 1
+    blockConfig: {fileID: 11400000, guid: 960209f8a8bc2478ea53d386f8efb519, type: 2}
+    flavorCounts:
+    - flavorName: salty
+      count: 1
+    - flavorName: sweet
+      count: 1
+  blockedCells: []
+  blockConfig: {fileID: 0}
+  flavorCounts: []
   slotIndex: 0
