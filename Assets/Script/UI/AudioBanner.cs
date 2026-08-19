@@ -1,14 +1,10 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
-
-public class PauseMenu : MonoBehaviour
+public class AudioBanner : MonoBehaviour
 {
     [SerializeField] Slider volumeSlider;
-    [SerializeField] Button resumeBtn;
-    [SerializeField] Button homeBtn;
+    [SerializeField] Button closeBtn;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         if (volumeSlider != null)
@@ -30,15 +26,9 @@ public class PauseMenu : MonoBehaviour
 
         volumeSlider.onValueChanged.AddListener(OnVolumeScrollbarChanged);
 
-        resumeBtn.onClick.AddListener(() =>
+        closeBtn.onClick.AddListener(() =>
         {
-            Time.timeScale = 1f;
             gameObject.SetActive(false);
-        });
-
-        homeBtn.onClick.AddListener(() => {
-            Time.timeScale = 1f;
-            SceneManager.LoadScene("HomeScence");
         });
     }
 
