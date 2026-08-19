@@ -57,7 +57,29 @@ public class BlockSpawner1 : MonoBehaviour
         {
             if (levelConfig == null || levelConfig.levelNumber != levelNumber) continue;
 
-            // ─── Cách Mới: Sinh từ danh sách trayBlocks trong 1 file LevelConfig ───
+            // 1. Tự động tính toán số slot cần thiết cho Level này
+            int requiredSlots = 2;
+            if (levelConfig.trayBlocks != null && levelConfig.trayBlocks.Count > 0)
+            {
+                foreach (var b in levelConfig.trayBlocks)
+                {
+                    if (b != null && b.slotIndex >= requiredSlots)
+                        requiredSlots = b.slotIndex + 1;
+                }
+            }
+            else if (levelConfig.blockConfig != null)
+            {
+                if (levelConfig.slotIndex >= requiredSlots)
+                    requiredSlots = levelConfig.slotIndex + 1;
+            }
+
+            totalBlocksCount = requiredSlots;
+            currentPieces = new BlockPiece1[totalBlocksCount];
+            slotPositions = new Vector3[totalBlocksCount];
+            for (int i = 0; i < totalBlocksCount; i++)
+                slotPositions[i] = GetSlotPosition(i);
+
+            // 2. Sinh các khối món ăn
             if (levelConfig.trayBlocks != null && levelConfig.trayBlocks.Count > 0)
             {
                 foreach (var blockCfg in levelConfig.trayBlocks)
@@ -72,6 +94,22 @@ public class BlockSpawner1 : MonoBehaviour
             else if (levelConfig.blockConfig != null && levelConfig.blockConfig.itemPerCell != null)
             {
                 SpawnSinglePiece(levelConfig.blockConfig, levelConfig.slotIndex, levelConfig.flavorCounts);
+            }
+
+            // 3. Tự động đồng bộ thanh cuộn khay
+            if (TrayScrollManager1.Instance != null)
+            {
+                TrayScrollManager1.Instance.AutoResizeTrayBoard();
+                TrayScrollManager1.Instance.CalculateScrollBounds();
+            }
+            else
+            {
+                TrayScrollManager1 scrollMgr = FindObjectOfType<TrayScrollManager1>();
+                if (scrollMgr != null)
+                {
+                    scrollMgr.AutoResizeTrayBoard();
+                    scrollMgr.CalculateScrollBounds();
+                }
             }
         }
     }

@@ -79,10 +79,10 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1993617373
-  m_SortingLayer: 1
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 21300000, guid: 8f4bee2bd99821145a775a0b70cb5bc1, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 01f622581bd9d974e87e6eec51543082, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -105,11 +105,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   isAlwaysDisplay: 1
+  displayDuration: 3
   flavorNumberPrefab: {fileID: 5636169885196986034, guid: 28d4d4ef44e358646a43e486f1df05ea, type: 3}
   bubbleObject: {fileID: 2315882594334770498}
   padding: 0.1
-  globalScale: 0.5
   flavorNumberGap: 0.28
+  globalScale: 1
+  contentOffset: {x: 0, y: 0}
+  contentWidthRatio: 1
   fourSprites: []
 --- !u!1 &9044055775875225234
 GameObject:
@@ -160,10 +163,11 @@ MonoBehaviour:
   itemPerCell: []
   cellIconPrefab: {fileID: 8280824351333163112, guid: 4152219a9365c17469ffd2e80e4697ac, type: 3}
   slotIndex: 0
+  currentRotationAngle: 0
   dishScale: 1
   iconScale: 1
   shapeCellSpacing: 1
   showDishBackground: 0
-  bubbleOffset: {x: 0.2, y: -1.5, z: 0}
-  bubbleScale: 1.5
+  bubbleOffset: {x: 0, y: -0.7, z: 0}
+  bubbleScale: 0.75
   alignBubbleToBottom: 1

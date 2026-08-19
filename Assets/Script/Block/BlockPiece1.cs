@@ -19,10 +19,10 @@ public class BlockPiece1 : MonoBehaviour
 
     [Header("Bubble Settings")]
     [Tooltip("Độ lệch vị trí Bubble so với món ăn (chỉnh tự do trong Inspector)")]
-    public Vector3 bubbleOffset = new Vector3(0f, -1.2f, 0f);
+    public Vector3 bubbleOffset = new Vector3(0f, -0.7f, 0f);
 
     [Tooltip("Tỷ lệ scale của Bubble trên món ăn")]
-    public float bubbleScale = 1.2f;
+    public float bubbleScale = 1.0f;
 
     [Tooltip("True: Căn Bubble theo cạnh đáy món ăn; False: Căn theo tâm món ăn")]
     public bool alignBubbleToBottom = true;

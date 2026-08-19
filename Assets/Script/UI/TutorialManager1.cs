@@ -116,10 +116,21 @@ public class TutorialManager1 : MonoBehaviour
             Sprite[] allUi = Resources.FindObjectsOfTypeAll<Sprite>();
             foreach (var s in allUi)
             {
-                if (s != null && s.name.Contains("DialougeBox"))
+                if (s != null && (s.name.Contains("DialougeBox (1) 1") || s.name == "DialougeBox (1) 1"))
                 {
                     dialogueBoxSprite = s;
                     break;
+                }
+            }
+            if (dialogueBoxSprite == null)
+            {
+                foreach (var s in allUi)
+                {
+                    if (s != null && s.name.Contains("DialougeBox"))
+                    {
+                        dialogueBoxSprite = s;
+                        break;
+                    }
                 }
             }
         }
