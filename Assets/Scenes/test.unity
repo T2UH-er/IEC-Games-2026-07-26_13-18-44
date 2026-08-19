@@ -1300,6 +1300,16 @@ MonoBehaviour:
   - {fileID: 11400000, guid: b18c88d99e00f11a22b33c44d55e66f8, type: 2}
   - {fileID: 11400000, guid: c19d99e00f11a22b33c44d55e66f77a9, type: 2}
   - {fileID: 11400000, guid: d20e00f11a22b33c44d55e66f77a88b0, type: 2}
+  - {fileID: 11400000, guid: a21b11c22d33e44f55a66b77c88d99e0, type: 2}
+  - {fileID: 11400000, guid: b22c22d33e44f55a66b77c88d99e00f1, type: 2}
+  - {fileID: 11400000, guid: c23d33e44f55a66b77c88d99e00f11a2, type: 2}
+  - {fileID: 11400000, guid: d24e44f55a66b77c88d99e00f11a22b3, type: 2}
+  - {fileID: 11400000, guid: e25f55a66b77c88d99e00f11a22b33c4, type: 2}
+  - {fileID: 11400000, guid: a26b11c22d33e44f55a66b77c88d99e1, type: 2}
+  - {fileID: 11400000, guid: b27c22d33e44f55a66b77c88d99e00f2, type: 2}
+  - {fileID: 11400000, guid: c28d33e44f55a66b77c88d99e00f11a3, type: 2}
+  - {fileID: 11400000, guid: d29e44f55a66b77c88d99e00f11a22b4, type: 2}
+  - {fileID: 11400000, guid: e30f55a66b77c88d99e00f11a22b33c5, type: 2}
   trayContainer: {fileID: 1157675534}
   trayBlockScale: {x: 0.6, y: 0.6, z: 0.6}
   totalBlocksCount: 10
