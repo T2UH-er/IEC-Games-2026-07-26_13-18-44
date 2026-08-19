@@ -25,7 +25,7 @@ public class CustomerSpawner1 : MonoBehaviour
     [Header("Cấu Hình Level (Chứa Khách Hàng)")]
     public LevelConfig[] levelConfigs;
 
-    private List<Customer1> currentCustomers = new List<Customer1>();
+    public List<Customer1> currentCustomers = new List<Customer1>();
 
     private void Awake()
     {

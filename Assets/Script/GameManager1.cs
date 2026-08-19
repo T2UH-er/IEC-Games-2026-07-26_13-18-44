@@ -62,6 +62,12 @@ public class GameManager1 : MonoBehaviour
         }
 
         LoadLevel(currentLevelIndex);
+
+        if (FindObjectOfType<TutorialManager1>() == null)
+        {
+            GameObject tutObj = new GameObject("TutorialManager1");
+            tutObj.AddComponent<TutorialManager1>();
+        }
     }
 
     // ─── Level Management API ─────────────────────────────────────────────
@@ -157,6 +163,17 @@ public class GameManager1 : MonoBehaviour
         if (ScoringSystem1.Instance != null)
         {
             ScoringSystem1.Instance.ResetGameStatus();
+        }
+
+        // 5. Kích hoạt hướng dẫn (TutorialManager tự xử lý theo level)
+        if (TutorialManager1.Instance != null)
+        {
+            TutorialManager1.Instance.CheckAndStartLevelTutorial(targetLevel);
+        }
+        else
+        {
+            GameObject tutObj = new GameObject("TutorialManager1");
+            tutObj.AddComponent<TutorialManager1>();
         }
     }
 

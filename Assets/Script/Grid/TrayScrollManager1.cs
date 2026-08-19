@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class TrayScrollManager1 : MonoBehaviour
 {
+    public static TrayScrollManager1 Instance { get; private set; }
+
     public Transform trayContainer;
     public float minX = -9.6f;
     public float maxX = 0.0f; 
@@ -10,6 +12,12 @@ public class TrayScrollManager1 : MonoBehaviour
     public float boardPadding = 2.0f;
 
     private Vector3 lastMousePos;
+
+    private void Awake()
+    {
+        if (Instance == null) Instance = this;
+    }
+
     private void Start()
     {
         AutoResizeTrayBoard();
@@ -19,7 +27,7 @@ public class TrayScrollManager1 : MonoBehaviour
     
     public void AutoResizeTrayBoard()
     {
-        if (trayBoard == null) return;
+        if (trayBoard == null || BlockSpawner1.Instance == null) return;
         // 1. Tính tổng độ rộng cần thiết
         float requiredWidth = (BlockSpawner1.Instance.totalBlocksCount * BlockSpawner1.Instance.slotSpacing) + boardPadding;
         // 2. Kiểm tra nếu SpriteRenderer đang ở chế độ Sliced (9-Slice)
@@ -43,8 +51,11 @@ public class TrayScrollManager1 : MonoBehaviour
             int N = BlockSpawner1.Instance.totalBlocksCount;
             float S = BlockSpawner1.Instance.slotSpacing;
             float halfN = N / 2f;
-            maxX = halfN * S;                     
-            minX = -((N - 1) - halfN) * S;       
+            float bound1 = halfN * S;                     
+            float bound2 = -((N - 1) - halfN) * S;
+
+            minX = Mathf.Min(bound1, bound2);
+            maxX = Mathf.Max(bound1, bound2);
         }
     }
     private void Update()

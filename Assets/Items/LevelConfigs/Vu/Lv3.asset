@@ -18,12 +18,12 @@ MonoBehaviour:
   customers:
   - customerSprite: {fileID: -933039256083134843, guid: 31ba3aa0523bc8e449bb1cbdd73310d2, type: 3}
     requirement:
-    - flavorName: spicy
-      count: 1
     - flavorName: salty
       count: 2
-    - flavorName: sweet
+    - flavorName: spicy
       count: 1
+    - flavorName: sweet
+      count: 2
     affectedZone: []
     zoneColor: {r: 0.18, g: 0.52, b: 1, a: 0.35}
   trayBlocks:
@@ -37,12 +37,14 @@ MonoBehaviour:
     flavorCounts:
     - flavorName: salty
       count: 1
-    - flavorName: spicy
+    - flavorName: sweet
       count: 1
   - slotIndex: 2
     blockConfig: {fileID: 11400000, guid: d127fef5cd5f24726add9e7259816751, type: 2}
     flavorCounts:
     - flavorName: salty
+      count: 1
+    - flavorName: spicy
       count: 1
   blockedCells:
   - {x: 1, y: 2}

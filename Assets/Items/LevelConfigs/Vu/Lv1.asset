@@ -18,9 +18,9 @@ MonoBehaviour:
   customers:
   - customerSprite: {fileID: -933039256083134843, guid: 31ba3aa0523bc8e449bb1cbdd73310d2, type: 3}
     requirement:
-    - flavorName: spicy
+    - flavorName: salty
       count: 2
-    - flavorName: sweet
+    - flavorName: spicy
       count: 1
     affectedZone: []
     zoneColor: {r: 0.18, g: 0.52, b: 1, a: 0.35}

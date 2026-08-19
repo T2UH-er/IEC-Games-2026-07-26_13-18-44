@@ -21,7 +21,9 @@ MonoBehaviour:
     - flavorName: salty
       count: 1
     - flavorName: sweet
-      count: 3
+      count: 2
+    - flavorName: sour
+      count: 1
     affectedZone: []
     zoneColor: {r: 1, g: 0.5, b: 0.1, a: 0.35}
   trayBlocks:
@@ -29,7 +31,9 @@ MonoBehaviour:
     blockConfig: {fileID: 11400000, guid: 131d2bfecf2bf410daa88280d8820248, type: 2}
     flavorCounts:
     - flavorName: sweet
-      count: 2
+      count: 1
+    - flavorName: sour
+      count: 1
   - slotIndex: 1
     blockConfig: {fileID: 11400000, guid: 960209f8a8bc2478ea53d386f8efb519, type: 2}
     flavorCounts:

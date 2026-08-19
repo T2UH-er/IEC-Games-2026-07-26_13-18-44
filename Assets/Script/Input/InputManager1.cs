@@ -39,6 +39,12 @@ public class InputManager1 : MonoBehaviour
         // ─── 1. XỬ LÝ CHUỘT TRÁI (CLICK XUỐNG) ───
         if (Input.GetMouseButtonDown(0))
         {
+            // Bỏ qua nếu đang click lên UI (Menu, Tutorial Dark Overlay, Button...)
+            if (UnityEngine.EventSystems.EventSystem.current != null && UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
+            {
+                return;
+            }
+
             mouseDownScreenPos = Input.mousePosition;
             mouseDownWorldPos = GetMouseWorldPos();
             RaycastHit2D hit = Physics2D.Raycast(mouseDownWorldPos, Vector2.zero);
