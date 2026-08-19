@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Collections;
 using TMPro;
 
 public class ScoringSystem1 : MonoBehaviour
@@ -17,7 +18,7 @@ public class ScoringSystem1 : MonoBehaviour
         { "buttery", 0 }
     };
 
-    private int numOfFinished = 0;
+    [SerializeField] private int numOfFinished = 0;
     private List<Customer1> customers = new List<Customer1>();
 
     public int highestScore = 0;
@@ -35,18 +36,18 @@ public class ScoringSystem1 : MonoBehaviour
     public GameObject WinResult;
     public GameObject LoseResult;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    public GameObject chefPrefab;
+    public Transform chefSpawnpoint;
+
+    private bool gameEnded = false;
+
+    private void Awake()
+    {
+        if (Instance == null) Instance = this;
+        else { Destroy(gameObject); return; }
+    }
     void Start()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-            return;
-        }
 
         // Let all text be empty at the start of the game
         //if (numOfFinishedText != null) numOfFinishedText.text = "";
@@ -73,6 +74,7 @@ public class ScoringSystem1 : MonoBehaviour
     public void ResetGameStatus()
     {
         Time.timeScale = 1f;
+        gameEnded = false;
         availableMoves = thresholdMoves;
         numOfFinished = 0;
         if (WinResult != null) WinResult.SetActive(false);
@@ -132,10 +134,10 @@ public class ScoringSystem1 : MonoBehaviour
         //}
     }
 
-    // Update chi cap nhat UI nhe, KHONG goi CheckWinCondition moi frame
     void Update()
     {
         UpdateUI();
+        CheckWinCondition();
     }
 
     // Cap nhat text UI (chi doc bien, khong tinh toan)
@@ -169,23 +171,55 @@ public class ScoringSystem1 : MonoBehaviour
 
     private int CheckWinCondition()
     {
+        if (gameEnded) return 0;
         // numOfFinished da duoc tinh trong NotifyGridChanged(), chi can doc lai
         // Bug G fix: chi xet dieu kien thang neu co it nhat 1 khach hang
         if (customers.Count > 0 && numOfFinished == customers.Count && availableMoves >= 0)
         {
+            gameEnded = true;
+            AudioManager.Instance.PlayAudio("level-complete");
             resultText.text = "You Win!";
-            WinResult.SetActive(true);
+            //WinResult.SetActive(true);
+            StartCoroutine(ShowWinBanner());
             Time.timeScale = 0f;
             return 1;
         }
         else if (numOfFinished < customers.Count && availableMoves <= 0)
         {
+            gameEnded = true;
             resultText.text = "You Lose!";
-            LoseResult.SetActive(true);
+            //LoseResult.SetActive(true);
+            StartCoroutine(ShowLoseBanner());
             Time.timeScale = 0f;
             return -1;
         }
         return 0;
     }
+
+    IEnumerator ShowWinBanner()
+    {
+        GameObject chef = Instantiate(chefPrefab, chefSpawnpoint);
+        Animator chefAnimator = chef.GetComponent<Animator>();
+
+        chefAnimator.Play("Happy");
+
+        yield return new WaitForSecondsRealtime(3.0f);
+        Destroy(chef);
+
+        WinResult.SetActive(true);
+    }
+
+    IEnumerator ShowLoseBanner()
+    {
+        GameObject chef = Instantiate(chefPrefab, chefSpawnpoint);
+        Animator chefAnimator = chef.GetComponent<Animator>();
+
+        chefAnimator.Play("Cry");
+
+        yield return new WaitForSecondsRealtime(3.0f);
+        Destroy(chef);
+
+        LoseResult.SetActive(true);
+    }    
         
 }

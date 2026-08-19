@@ -41,6 +41,7 @@ public class BlockSpawner1 : MonoBehaviour
 
     private void Start()
     {
+        AudioManager.Instance.PlayAudio("bgm");
         ConfigureFlavor();
         SpawnAllSlotsInLevelConfig(levelConfigs);
     }

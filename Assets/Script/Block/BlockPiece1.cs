@@ -52,6 +52,7 @@ public class BlockPiece1 : MonoBehaviour
     public void TriggerRotate(float duration = 0.18f)
     {
         if (isRotating || shapeData == null) return;
+        AudioManager.Instance.PlayAudio("rotate");
         StartCoroutine(RotateRoutine(duration));
     }
 

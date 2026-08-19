@@ -50,6 +50,9 @@ TagManager:
   - name: dialougeBox
     uniqueID: 1993617373
     locked: 0
+  - name: char
+    uniqueID: 812033285
+    locked: 0
   - name: UI
     uniqueID: 3973946635
     locked: 0

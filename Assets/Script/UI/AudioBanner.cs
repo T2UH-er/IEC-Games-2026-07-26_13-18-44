@@ -28,7 +28,13 @@ public class AudioBanner : MonoBehaviour
 
         closeBtn.onClick.AddListener(() =>
         {
+            AudioManager.Instance.PlayAudio("back");
             gameObject.SetActive(false);
+
+            Button[] buttons = FindObjectsOfType<Button>();
+            foreach (Button b in buttons) {
+                b.interactable = true;
+            }
         });
     }
 

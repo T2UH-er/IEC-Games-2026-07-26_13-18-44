@@ -17,22 +17,31 @@ public class HomeScreen : MonoBehaviour
 
         playBtn.onClick.AddListener(() =>
         {
+            AudioManager.Instance.PlayAudio("next");
             Time.timeScale = 1f;
             SceneManager.LoadScene("test");
         });
 
         levelBtn.onClick.AddListener(() =>
         {
+            AudioManager.Instance.PlayAudio("next");
             SceneManager.LoadScene("LevelList");
         });
 
         infoBtn.onClick.AddListener(() =>
         {
+            AudioManager.Instance.PlayAudio("next");
             in4Banner.SetActive(true);
         });
 
-        audioBtn.onClick.AddListener(() => { 
+        audioBtn.onClick.AddListener(() => {
+            AudioManager.Instance.PlayAudio("next");
             audioBanner.SetActive(true);
+
+            playBtn.interactable = false;
+            levelBtn.interactable = false;
+            audioBtn.interactable = false;
+            infoBtn.interactable = false;
         });
     }
 }

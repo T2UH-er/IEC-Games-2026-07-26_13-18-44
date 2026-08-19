@@ -12,12 +12,20 @@ public class LevelListButtonsGroup : MonoBehaviour
     {
         homeBtn.onClick.AddListener(
             () => {
-                SceneManager.LoadScene("HomeScreen");
+                AudioManager.Instance.PlayAudio("back");
+                SceneManager.LoadScene("HomeScene");
         });
 
         audioBtn.onClick.AddListener(
             () => {
+                AudioManager.Instance.PlayAudio("next");
                 audioBanner.SetActive(true);
+
+                Button[] buttons = FindObjectsOfType<Button>();
+
+                foreach (Button button in buttons) { 
+                    if ( button != audioBanner.GetComponentInChildren<Button>()) button.interactable = false;
+                }
         });
     }
 }

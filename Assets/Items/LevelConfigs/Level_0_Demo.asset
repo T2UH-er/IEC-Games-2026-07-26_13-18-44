@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Level_0_Demo
   m_EditorClassIdentifier: Assembly-CSharp::LevelConfig
   levelNumber: 0
-  gridWidth: 10
-  gridHeight: 10
+  gridWidth: 4
+  gridHeight: 4
   customers:
   - customerSprite: {fileID: -933039256083134843, guid: 31ba3aa0523bc8e449bb1cbdd73310d2, type: 3}
     requirement:
@@ -95,8 +95,7 @@ MonoBehaviour:
       count: 0
     - flavorName: buttery
       count: 0
-  blockedCells:
-  - {x: 0, y: 0}
+  blockedCells: []
   blockConfig: {fileID: 0}
   flavorCounts: []
   slotIndex: 0
