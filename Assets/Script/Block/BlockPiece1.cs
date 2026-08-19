@@ -46,12 +46,14 @@ public class BlockPiece1 : MonoBehaviour
         BuildVisual();
     }
 
-    public bool IsRotating => isRotating;
     private bool isRotating = false;
+    public bool IsRotating => isRotating;
+    public static System.Action<BlockPiece1> OnPieceRotated;
 
     public void TriggerRotate(float duration = 0.18f)
     {
         if (isRotating || shapeData == null) return;
+        OnPieceRotated?.Invoke(this);
         StartCoroutine(RotateRoutine(duration));
     }
 

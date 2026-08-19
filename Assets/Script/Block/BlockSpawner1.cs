@@ -16,7 +16,7 @@ public class BlockSpawner1 : MonoBehaviour
     public int totalBlocksCount = 10;
     public float slotSpacing = 20f;
 
-    [SerializeField] private BlockPiece1[] currentPieces;
+    [SerializeField] public BlockPiece1[] currentPieces;
     private Vector3[] slotPositions;
 
     private void Awake()
@@ -150,6 +150,9 @@ public class BlockSpawner1 : MonoBehaviour
     {
         if (slotIndex >= 0 && slotIndex < currentPieces.Length)
             currentPieces[slotIndex] = null;
+
+        if (TutorialManager1.Instance != null)
+            TutorialManager1.Instance.OnFirstPiecePlaced();
 
         bool allEmpty = true;
         for (int i = 0; i < currentPieces.Length; i++)
