@@ -75,21 +75,14 @@ MonoBehaviour:
     zoneColor: {r: 1, g: 0.2, b: 0.2, a: 0.35}
   trayBlocks:
   - slotIndex: 0
-    blockConfig: {fileID: 11400000, guid: cba05e41c1c404c969a77c0a86f89669, type: 2}
+    blockConfig: {fileID: 11400000, guid: 7f191620fe61649caa19ee09ff4e9b6d, type: 2}
     flavorCounts:
     - flavorName: salty
       count: 1
     - flavorName: sweet
       count: 3
   - slotIndex: 1
-    blockConfig: {fileID: 11400000, guid: fb78d19f0e5426945b08aac140b59093, type: 2}
-    flavorCounts:
-    - flavorName: sweet
-      count: 2
-    - flavorName: sour
-      count: 2
-  - slotIndex: 2
-    blockConfig: {fileID: 11400000, guid: 7d780fe13dd8be54f95052414d14c2c8, type: 2}
+    blockConfig: {fileID: 11400000, guid: 321607b1cc1d6481683c19f2d2d439a2, type: 2}
     flavorCounts:
     - flavorName: salty
       count: 1

@@ -62,7 +62,7 @@ MonoBehaviour:
     - flavorName: sour
       count: 2
   - slotIndex: 1
-    blockConfig: {fileID: 11400000, guid: 116f73838326e8a48b4379db4d0a8ed8, type: 2}
+    blockConfig: {fileID: 11400000, guid: 5bd8a9c21d546654ca13c6b54deb89c8, type: 2}
     flavorCounts:
     - flavorName: sour
       count: 1

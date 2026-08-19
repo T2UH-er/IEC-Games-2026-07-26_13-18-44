@@ -88,7 +88,7 @@ MonoBehaviour:
     zoneColor: {r: 0.2, g: 0.8, b: 0.3, a: 0.35}
   trayBlocks:
   - slotIndex: 0
-    blockConfig: {fileID: 11400000, guid: 06ad325af7820754fbbc1d4f1ba60bb5, type: 2}
+    blockConfig: {fileID: 11400000, guid: 2756dc29ae54344e78ba36b314e9ec2f, type: 2}
     flavorCounts:
     - flavorName: salty
       count: 4

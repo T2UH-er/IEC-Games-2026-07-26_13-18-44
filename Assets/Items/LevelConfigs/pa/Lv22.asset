@@ -56,7 +56,7 @@ MonoBehaviour:
     zoneColor: {r: 1, g: 0.2, b: 0.2, a: 0.35}
   trayBlocks:
   - slotIndex: 0
-    blockConfig: {fileID: 11400000, guid: 321607b1cc1d6481683c19f2d2d439a2, type: 2}
+    blockConfig: {fileID: 11400000, guid: 7d780fe13dd8be54f95052414d14c2c8, type: 2}
     flavorCounts:
     - flavorName: sour
       count: 4

@@ -138,6 +138,15 @@ public class InputManager1 : MonoBehaviour
         {
             if (Vector3.Distance(Input.mousePosition, mouseDownScreenPos) >= dragThresholdDistance)
             {
+                // Nếu đang ở Tutorial Level 2 bước hướng dẫn xoay món ăn, bắt buộc phải double-click xoay trước khi được kéo
+                if (TutorialManager1.Instance != null && TutorialManager1.Instance.IsLevel2AwaitingRotate())
+                {
+                    isPendingDrag = false;
+                    pendingPiece = null;
+                    pendingGridInfo = null;
+                    return;
+                }
+
                 isPendingDrag = false;
 
                 if (pendingPiece != null)

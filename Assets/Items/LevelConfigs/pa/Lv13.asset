@@ -76,7 +76,7 @@ MonoBehaviour:
     - flavorName: salty
       count: 1
   - slotIndex: 2
-    blockConfig: {fileID: 11400000, guid: 7d780fe13dd8be54f95052414d14c2c8, type: 2}
+    blockConfig: {fileID: 11400000, guid: 116f73838326e8a48b4379db4d0a8ed8, type: 2}
     flavorCounts:
     - flavorName: salty
       count: 1

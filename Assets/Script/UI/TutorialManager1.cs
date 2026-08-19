@@ -277,15 +277,13 @@ public class TutorialManager1 : MonoBehaviour
         handPointer.gameObject.SetActive(false);
     }
 
+    public bool IsLevel2AwaitingRotate() => activeTutorialLevel == 2 && currentStep == 1;
+
     private void OnScreenTapped()
     {
         if (activeTutorialLevel == 1 && currentStep == 1)
         {
             GoToStep2_GuideDragAndDrop();
-        }
-        else if (activeTutorialLevel == 2 && currentStep == 1)
-        {
-            if (darkOverlay != null) darkOverlay.gameObject.SetActive(false);
         }
         else if (activeTutorialLevel == 8 && currentStep == 1)
         {
@@ -484,6 +482,7 @@ public class TutorialManager1 : MonoBehaviour
         {
             darkOverlay.gameObject.SetActive(true);
             darkOverlay.color = new Color(0f, 0f, 0f, 0.65f);
+            darkOverlay.raycastTarget = false;
         }
 
         if (dialogueBox != null)
