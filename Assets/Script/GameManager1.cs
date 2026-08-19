@@ -49,6 +49,7 @@ public class GameManager1 : MonoBehaviour
 
     private void Start()
     {
+        AudioManager.Instance.PlayAudio("bgm");
         // 1. Ưu tiên lấy từ menu chọn màn (selectedLevelIndex)
         if (selectedLevelIndex > 0)
         {

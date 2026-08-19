@@ -100,13 +100,20 @@ public class TutorialManager1 : MonoBehaviour
     {
         if (handSprite == null)
         {
-            Sprite[] allUi = Resources.FindObjectsOfTypeAll<Sprite>();
-            foreach (var s in allUi)
+            // Thử load trực tiếp từ thư mục Resources trước
+            handSprite = Resources.Load<Sprite>("hand");
+
+            // Nếu không có trong Resources, dùng cách tìm kiếm cũ nhưng không phân biệt hoa/thường
+            if (handSprite == null)
             {
-                if (s != null && s.name.Contains("ban tay"))
+                Sprite[] allUi = Resources.FindObjectsOfTypeAll<Sprite>();
+                foreach (var s in allUi)
                 {
-                    handSprite = s;
-                    break;
+                    if (s != null && s.name.ToLower().Contains("hand"))
+                    {
+                        handSprite = s;
+                        break;
+                    }
                 }
             }
         }
@@ -116,7 +123,7 @@ public class TutorialManager1 : MonoBehaviour
             Sprite[] allUi = Resources.FindObjectsOfTypeAll<Sprite>();
             foreach (var s in allUi)
             {
-                if (s != null && (s.name.Contains("DialougeBox (1) 1") || s.name == "DialougeBox (1) 1"))
+                if (s != null && (s.name.Contains("DialougeBox_1_1") || s.name == "DialougeBox_1_1"))
                 {
                     dialogueBoxSprite = s;
                     break;
@@ -126,7 +133,7 @@ public class TutorialManager1 : MonoBehaviour
             {
                 foreach (var s in allUi)
                 {
-                    if (s != null && s.name.Contains("DialougeBox"))
+                    if (s != null && s.name.Contains("DialougeBox_1_1"))
                     {
                         dialogueBoxSprite = s;
                         break;

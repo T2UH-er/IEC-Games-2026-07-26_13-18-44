@@ -10,8 +10,8 @@ MonoImporter:
   - dialogueText: {instanceID: 0}
   - tapToContinueText: {instanceID: 0}
   - handPointer: {instanceID: 0}
-  - handSprite: {fileID: 5709153593221189097, guid: 5f1d9e5a17a654e6899440b81372c59a, type: 3}
-  - dialogueBoxSprite: {fileID: 21300000, guid: 01f622581bd9d974e87e6eec51543082, type: 3}
+  - handSprite: {fileID: 8403215288983880825, guid: 9cbdf5c397d7097488d20a60d2f34649, type: 3}
+  - dialogueBoxSprite: {fileID: -7460414191861208736, guid: 7cf90628b024f5b45955267d25ddfe74, type: 3}
   - fontAsset: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}

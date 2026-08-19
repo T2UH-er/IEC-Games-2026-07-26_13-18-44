@@ -173,6 +173,7 @@ public class ScoringSystem1 : MonoBehaviour
         // Bug G fix: chi xet dieu kien thang neu co it nhat 1 khach hang
         if (customers.Count > 0 && numOfFinished == customers.Count && availableMoves >= 0)
         {
+            AudioManager.Instance.PlayAudio("level-complete");
             resultText.text = "You Win!";
             WinResult.SetActive(true);
             Time.timeScale = 0f;

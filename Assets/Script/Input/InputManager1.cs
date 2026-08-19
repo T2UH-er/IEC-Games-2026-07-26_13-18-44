@@ -39,6 +39,7 @@ public class InputManager1 : MonoBehaviour
         // ─── 1. XỬ LÝ CHUỘT TRÁI (CLICK XUỐNG) ───
         if (Input.GetMouseButtonDown(0))
         {
+            AudioManager.Instance.PlayAudio("dragdrop");
             // Bỏ qua nếu đang click lên UI (Menu, Tutorial Dark Overlay, Button...)
             if (UnityEngine.EventSystems.EventSystem.current != null && UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
             {
@@ -175,6 +176,7 @@ public class InputManager1 : MonoBehaviour
         // ─── 5. THẢ KHỐI (END DRAG) ───
         if (Input.GetMouseButtonUp(0))
         {
+            AudioManager.Instance.PlayAudio("dragdrop");
             isPendingDrag = false;
             pendingPiece = null;
             pendingGridInfo = null;

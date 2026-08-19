@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class CommonInGameCanvas : MonoBehaviour
 {
@@ -14,4 +15,9 @@ public class CommonInGameCanvas : MonoBehaviour
             Time.timeScale = 0f;
         });
     }
+
+    public void GoHome()
+    {
+        SceneManager.LoadScene("HomeScence");
+    }    
 }

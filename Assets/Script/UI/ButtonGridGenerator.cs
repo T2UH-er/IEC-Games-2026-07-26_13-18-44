@@ -167,6 +167,7 @@ public class ButtonGridGenerator : MonoBehaviour
         // Gán sự kiện khi click vào nút level
         btn.onClick.AddListener(() =>
         {
+            AudioManager.Instance.PlayAudio("next");
             Time.timeScale = 1f;
             Debug.Log($"[ButtonGridGenerator] Chọn Level {index}");
             GameManager1.selectedLevelIndex = index;

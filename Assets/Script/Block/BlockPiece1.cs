@@ -59,6 +59,7 @@ public class BlockPiece1 : MonoBehaviour
 
     private System.Collections.IEnumerator RotateRoutine(float duration)
     {
+        AudioManager.Instance.PlayAudio("rotate");
         isRotating = true;
         Quaternion startRot = transform.localRotation;
         Quaternion endRot = startRot * Quaternion.Euler(0f, 0f, -90f);

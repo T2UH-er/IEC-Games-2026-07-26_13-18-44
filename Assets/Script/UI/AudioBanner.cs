@@ -28,6 +28,12 @@ public class AudioBanner : MonoBehaviour
 
         closeBtn.onClick.AddListener(() =>
         {
+            Button[] buttons = FindObjectsOfType<Button>();
+            foreach (Button button in buttons)
+            {
+                button.interactable = true;
+            }
+
             gameObject.SetActive(false);
         });
     }
