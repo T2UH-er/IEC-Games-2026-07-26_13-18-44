@@ -1331,21 +1331,58 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09b63101c89fd2d4fb81a7836a15be59, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BlockSpawner1
+<<<<<<< HEAD
   levelNumber: 3
+=======
+  levelNumber: 5
+>>>>>>> origin/vu
   blockPiecePrefab: {fileID: 9044055775875225234, guid: 138cbe3a863dc1c47a172e1395f8130e, type: 3}
   spawnSlots:
   - {fileID: 717660159}
   - {fileID: 1112492238}
   - {fileID: 1792442481}
   levelConfigs:
+<<<<<<< HEAD
   - {fileID: 11400000, guid: 723b22c15d6d99b44a4740caf9519d08, type: 2}
   - {fileID: 11400000, guid: 83e7492c15d6d99b44a4740caf9519d1, type: 2}
   - {fileID: 11400000, guid: 94a8512c15d6d99b44a4740caf9519e2, type: 2}
   - {fileID: 11400000, guid: a5b9623c15d6d99b44a4740caf9519f3, type: 2}
   - {fileID: 11400000, guid: b6c0734c15d6d99b44a4740caf951904, type: 2}
+=======
+  - {fileID: 11400000, guid: 1918b2a76f31c46bc8c8db4c76c82c73, type: 2}
+  - {fileID: 11400000, guid: fd130a4accf84acbbb2efc1e33a69373, type: 2}
+  - {fileID: 11400000, guid: 5bad43c2f69946c7adf98599bf3d862c, type: 2}
+  - {fileID: 11400000, guid: d522f82ff53043f79a5d016f5de30f0f, type: 2}
+  - {fileID: 11400000, guid: d764c352f82b465e9ebd86b98042580c, type: 2}
+  - {fileID: 11400000, guid: c87be5a8930d4a68abaa22e4e1970fbc, type: 2}
+  - {fileID: 11400000, guid: d1794049e69242ef83e4680014e4453c, type: 2}
+  - {fileID: 11400000, guid: bb36244b2342478e93053dcd2cd842e4, type: 2}
+  - {fileID: 11400000, guid: 11a8f9f606744c6aa45addd57044e9e8, type: 2}
+  - {fileID: 11400000, guid: fb8a93edccb64bbb9cdb981e7be87857, type: 2}
+  - {fileID: 11400000, guid: 066235bbb5dd2f947af143a63b979726, type: 2}
+  - {fileID: 11400000, guid: b12c22d33e44f55a66b77c88d99e00f2, type: 2}
+  - {fileID: 11400000, guid: c13d33e44f55a66b77c88d99e00f11a3, type: 2}
+  - {fileID: 11400000, guid: d14e44f55a66b77c88d99e00f11a22b4, type: 2}
+  - {fileID: 11400000, guid: e15f55a66b77c88d99e00f11a22b33c5, type: 2}
+  - {fileID: 11400000, guid: f16a66b77c88d99e00f11a22b33c44d6, type: 2}
+  - {fileID: 11400000, guid: a17b77c88d99e00f11a22b33c44d55e7, type: 2}
+  - {fileID: 11400000, guid: b18c88d99e00f11a22b33c44d55e66f8, type: 2}
+  - {fileID: 11400000, guid: c19d99e00f11a22b33c44d55e66f77a9, type: 2}
+  - {fileID: 11400000, guid: d20e00f11a22b33c44d55e66f77a88b0, type: 2}
+  - {fileID: 11400000, guid: a21b11c22d33e44f55a66b77c88d99e0, type: 2}
+  - {fileID: 11400000, guid: b22c22d33e44f55a66b77c88d99e00f1, type: 2}
+  - {fileID: 11400000, guid: c23d33e44f55a66b77c88d99e00f11a2, type: 2}
+  - {fileID: 11400000, guid: d24e44f55a66b77c88d99e00f11a22b3, type: 2}
+  - {fileID: 11400000, guid: e25f55a66b77c88d99e00f11a22b33c4, type: 2}
+  - {fileID: 11400000, guid: a26b11c22d33e44f55a66b77c88d99e1, type: 2}
+  - {fileID: 11400000, guid: b27c22d33e44f55a66b77c88d99e00f2, type: 2}
+  - {fileID: 11400000, guid: c28d33e44f55a66b77c88d99e00f11a3, type: 2}
+  - {fileID: 11400000, guid: d29e44f55a66b77c88d99e00f11a22b4, type: 2}
+  - {fileID: 11400000, guid: e30f55a66b77c88d99e00f11a22b33c5, type: 2}
+>>>>>>> origin/vu
   trayContainer: {fileID: 1157675534}
   trayBlockScale: {x: 0.6, y: 0.6, z: 0.6}
-  totalBlocksCount: 2
+  totalBlocksCount: 10
   slotSpacing: 20
   currentPieces: []
 --- !u!4 &749525917
@@ -3161,7 +3198,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GameManager1
   blockPiecePrefab: {fileID: 9044055775875225234, guid: 138cbe3a863dc1c47a172e1395f8130e, type: 3}
   dragScaleMultiplier: 1
-  currentLevelIndex: 0
+  currentLevelIndex: 1
 --- !u!4 &1385508940
 Transform:
   m_ObjectHideFlags: 0
@@ -4144,6 +4181,7 @@ MonoBehaviour:
   customerRowAnchor: {fileID: 1950727024}
   customerContainer: {fileID: 1950727024}
   levelConfigs: []
+  currentCustomers: []
 --- !u!4 &1950727024
 Transform:
   m_ObjectHideFlags: 0

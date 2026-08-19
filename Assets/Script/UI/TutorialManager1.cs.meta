@@ -1,0 +1,20 @@
+fileFormatVersion: 2
+guid: 243bb45aadead4fc4864bae801ab31b1
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - tutorialCanvas: {instanceID: 0}
+  - darkOverlay: {instanceID: 0}
+  - dialogueBox: {instanceID: 0}
+  - dialogueText: {instanceID: 0}
+  - tapToContinueText: {instanceID: 0}
+  - handPointer: {instanceID: 0}
+  - handSprite: {fileID: 5709153593221189097, guid: 5f1d9e5a17a654e6899440b81372c59a, type: 3}
+  - dialogueBoxSprite: {fileID: 21300000, guid: 01f622581bd9d974e87e6eec51543082, type: 3}
+  - fontAsset: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

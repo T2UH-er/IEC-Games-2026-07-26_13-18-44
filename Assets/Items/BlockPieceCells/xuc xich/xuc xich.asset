@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ba1e65e3bbc5104e8204f808c34e0a7, type: 3}
+  m_Name: xuc xich
+  m_EditorClassIdentifier: Assembly-CSharp::BlockConfig
+  shapeData: {fileID: 11400000, guid: 6479f96be29d241b3aa700e3a2ce125b, type: 2}
+  itemPerCell:
+  - {fileID: 11400000, guid: f2187b863a1654d34ae5ecb5214fa3e3, type: 2}
+  - {fileID: 11400000, guid: e7a557f8e7f57482c9b071afab7cc1e6, type: 2}
+  - {fileID: 11400000, guid: 9f0692c81951d4b19aab954afe7d9d82, type: 2}
+  - {fileID: 11400000, guid: 11e5fc7e5ccec43da9dfe70775c28d8f, type: 2}

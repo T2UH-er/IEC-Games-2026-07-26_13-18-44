@@ -1,0 +1,141 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ddc1085d90205e942bb1ded690f9c90f, type: 3}
+  m_Name: Lv24
+  m_EditorClassIdentifier: Assembly-CSharp::LevelConfig
+  levelNumber: 24
+  gridWidth: 9
+  gridHeight: 9
+  customers:
+  - customerSprite: {fileID: -933039256083134843, guid: 31ba3aa0523bc8e449bb1cbdd73310d2, type: 3}
+    requirement:
+    - flavorName: salty
+      count: 3
+    - flavorName: sweet
+      count: 3
+    affectedZone:
+    - {x: 3, y: 5}
+    - {x: 4, y: 5}
+    - {x: 5, y: 5}
+    - {x: 3, y: 4}
+    - {x: 5, y: 4}
+    - {x: 3, y: 3}
+    - {x: 4, y: 3}
+    - {x: 5, y: 3}
+    zoneColor: {r: 0.18, g: 0.52, b: 1, a: 0.35}
+  - customerSprite: {fileID: -8109498011733750753, guid: 31ba3aa0523bc8e449bb1cbdd73310d2, type: 3}
+    requirement:
+    - flavorName: salty
+      count: 3
+    - flavorName: sweet
+      count: 3
+    affectedZone:
+    - {x: 4, y: 8}
+    - {x: 3, y: 7}
+    - {x: 4, y: 7}
+    - {x: 5, y: 7}
+    - {x: 3, y: 6}
+    - {x: 4, y: 6}
+    - {x: 5, y: 6}
+    - {x: 2, y: 5}
+    - {x: 6, y: 5}
+    - {x: 0, y: 4}
+    - {x: 1, y: 4}
+    - {x: 2, y: 4}
+    - {x: 6, y: 4}
+    - {x: 7, y: 4}
+    - {x: 8, y: 4}
+    - {x: 2, y: 3}
+    - {x: 6, y: 3}
+    - {x: 3, y: 2}
+    - {x: 4, y: 2}
+    - {x: 5, y: 2}
+    - {x: 3, y: 1}
+    - {x: 4, y: 1}
+    - {x: 5, y: 1}
+    - {x: 4, y: 0}
+    zoneColor: {r: 1, g: 0.2, b: 0.2, a: 0.35}
+  trayBlocks:
+  - slotIndex: 0
+    blockConfig: {fileID: 11400000, guid: 06ad325af7820754fbbc1d4f1ba60bb5, type: 2}
+    flavorCounts:
+    - flavorName: salty
+      count: 3
+    - flavorName: sweet
+      count: 3
+  - slotIndex: 1
+    blockConfig: {fileID: 11400000, guid: 116f73838326e8a48b4379db4d0a8ed8, type: 2}
+    flavorCounts:
+    - flavorName: salty
+      count: 2
+    - flavorName: sweet
+      count: 2
+  - slotIndex: 2
+    blockConfig: {fileID: 11400000, guid: ab9a97966b944614096558c5fff90e42, type: 2}
+    flavorCounts:
+    - flavorName: salty
+      count: 1
+    - flavorName: sweet
+      count: 1
+  blockedCells:
+  - {x: 0, y: 0}
+  - {x: 0, y: 1}
+  - {x: 0, y: 2}
+  - {x: 0, y: 3}
+  - {x: 0, y: 5}
+  - {x: 0, y: 6}
+  - {x: 0, y: 7}
+  - {x: 0, y: 8}
+  - {x: 1, y: 0}
+  - {x: 1, y: 1}
+  - {x: 1, y: 2}
+  - {x: 1, y: 3}
+  - {x: 1, y: 5}
+  - {x: 1, y: 6}
+  - {x: 1, y: 7}
+  - {x: 1, y: 8}
+  - {x: 2, y: 0}
+  - {x: 2, y: 1}
+  - {x: 2, y: 2}
+  - {x: 2, y: 6}
+  - {x: 2, y: 7}
+  - {x: 2, y: 8}
+  - {x: 3, y: 0}
+  - {x: 3, y: 8}
+  - {x: 4, y: 4}
+  - {x: 5, y: 0}
+  - {x: 5, y: 8}
+  - {x: 6, y: 0}
+  - {x: 6, y: 1}
+  - {x: 6, y: 2}
+  - {x: 6, y: 6}
+  - {x: 6, y: 7}
+  - {x: 6, y: 8}
+  - {x: 7, y: 0}
+  - {x: 7, y: 1}
+  - {x: 7, y: 2}
+  - {x: 7, y: 3}
+  - {x: 7, y: 5}
+  - {x: 7, y: 6}
+  - {x: 7, y: 7}
+  - {x: 7, y: 8}
+  - {x: 8, y: 0}
+  - {x: 8, y: 1}
+  - {x: 8, y: 2}
+  - {x: 8, y: 3}
+  - {x: 8, y: 5}
+  - {x: 8, y: 6}
+  - {x: 8, y: 7}
+  - {x: 8, y: 8}
+  blockConfig: {fileID: 0}
+  flavorCounts: []
+  slotIndex: 0

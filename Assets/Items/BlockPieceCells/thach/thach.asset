@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ba1e65e3bbc5104e8204f808c34e0a7, type: 3}
+  m_Name: thach
+  m_EditorClassIdentifier: Assembly-CSharp::BlockConfig
+  shapeData: {fileID: 11400000, guid: f2194e23df54a441589a68bb4d68e1b0, type: 2}
+  itemPerCell:
+  - {fileID: 11400000, guid: 3aa429de879f549999e8963e7ab8d7f9, type: 2}
+  - {fileID: 11400000, guid: 92096ddeaa45e47c784b9ce28981ac24, type: 2}
+  - {fileID: 11400000, guid: 5ad5c2e6b372041b8ba8edb9671c5785, type: 2}
+  - {fileID: 11400000, guid: 528729a469c16459b899de149982a3fe, type: 2}
+  - {fileID: 11400000, guid: 05b005939cc0d4bcfb87ff3254f202d7, type: 2}
+  - {fileID: 11400000, guid: e912f34c0a55f46cc89cae14e4332aeb, type: 2}

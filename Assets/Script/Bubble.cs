@@ -23,7 +23,7 @@ public class Bubble : MonoBehaviour
     public float flavorNumberGap = 0.28f;
 
     [Tooltip("Kích thước tổng thể của các cụm vị")]
-    public float globalScale = 0.8f;
+    public float globalScale = 1.0f;
 
     [Header("Content Alignment (Căn chỉnh vùng chứa Icon)")]
     [Tooltip("Độ lệch tâm của vùng chứa icon (ví dụ: X > 0 để dịch sang phải tránh Avatar)")]

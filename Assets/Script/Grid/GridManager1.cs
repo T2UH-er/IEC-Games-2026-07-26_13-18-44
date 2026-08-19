@@ -13,6 +13,8 @@ public class GridManager1 : MonoBehaviour
     public static GridManager1 Instance { get; private set; }
     public int width = 4;
     public int height = 4;
+    [HideInInspector] public int playableWidth = 4;
+    [HideInInspector] public int playableHeight = 4;
     public float cellSize = 7.2f;
 
     [Header("Visual Scale Settings")]
@@ -38,12 +40,13 @@ public class GridManager1 : MonoBehaviour
     void Awake()
     {
         if (Instance == null) Instance = this;
-        else { Destroy(gameObject); return; }
+        else Destroy(gameObject);
 
-        if (baseCellSize <= 0f) baseCellSize = cellSize;
-        if (baseWidth <= 0) baseWidth = width > 0 ? width : 4;
-        if (baseHeight <= 0) baseHeight = height > 0 ? height : 4;
-        if (cellSlotPrefab != null) initialCellSlotPrefabScale = cellSlotPrefab.transform.localScale;
+        playableWidth = width;
+        playableHeight = height;
+        int maxDim = Mathf.Max(width, height);
+        width = maxDim;
+        height = maxDim;
 
         cellItems = new ItemData1[width, height];
         cellVisuals = new GameObject[width, height];
@@ -55,6 +58,17 @@ public class GridManager1 : MonoBehaviour
     public void SetBlockedCells(List<Vector2Int> blockedList)
     {
         isBlocked = new bool[width, height];
+
+        // Tự động lấp đầy các ô thừa bên ngoài phạm vi chơi thành ô bị chặn
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                if (x >= playableWidth || y >= playableHeight)
+                    isBlocked[x, y] = true;
+            }
+        }
+
         if (blockedList != null)
         {
             foreach (var pos in blockedList)
@@ -95,6 +109,7 @@ public class GridManager1 : MonoBehaviour
 
     /// <summary>
     /// Resize Grid sang kich thuoc moi (5x5, 6x6...), tu dong scale cellSize va cac o vuong vua khit khung ban co.
+    /// Tu dong lap day cac o thua ngoai pham vi choi thanh o bi chan (Blocked Cells).
     /// </summary>
     public void ResizeGrid(int newWidth, int newHeight)
     {
@@ -104,17 +119,31 @@ public class GridManager1 : MonoBehaviour
         if (cellSlotPrefab != null && initialCellSlotPrefabScale == Vector3.one)
             initialCellSlotPrefabScale = cellSlotPrefab.transform.localScale;
 
-        width = newWidth > 0 ? newWidth : 4;
-        height = newHeight > 0 ? newHeight : 4;
+        playableWidth = newWidth > 0 ? newWidth : 4;
+        playableHeight = newHeight > 0 ? newHeight : 4;
+
+        int maxDim = Mathf.Max(playableWidth, playableHeight);
+        width = maxDim;
+        height = maxDim;
 
         // Tong chieu rong ban co goc = baseWidth * baseCellSize (vd: 4 * 7.2 = 28.8)
         float totalBaseGridSize = baseWidth * baseCellSize;
-        cellSize = totalBaseGridSize / Mathf.Max(width, height);
+        cellSize = totalBaseGridSize / maxDim;
 
         // Reset data arrays
         cellItems = new ItemData1[width, height];
         cellVisuals = new GameObject[width, height];
         isBlocked = new bool[width, height];
+
+        // Tu dong chan cac o thua ben ngoai
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                if (x >= playableWidth || y >= playableHeight)
+                    isBlocked[x, y] = true;
+            }
+        }
 
         RebuildVisualGrid();
     }

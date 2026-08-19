@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ItemData1
   itemId: banh_mi
   displayName: banh_mi-2
-  icon: {fileID: 8753487674240091142, guid: ca6daac5d72e2cc4ea02b4a6b8d5317d, type: 3}
+  icon: {fileID: 21300000, guid: ca6daac5d72e2cc4ea02b4a6b8d5317d, type: 3}
   flavorCounts:
   - flavorName: sour
     count: 0

@@ -168,7 +168,8 @@ public class Customer1 : MonoBehaviour
 
     public int GetRequirementCount(string flavorName)
     {
-        int index = requirement.FindIndex(f => f.flavorName == flavorName);
+        if (requirement == null) return 0;
+        int index = requirement.FindIndex(f => string.Equals(f.flavorName?.Trim(), flavorName?.Trim(), System.StringComparison.OrdinalIgnoreCase));
         return index != -1 ? requirement[index].count : 0;
     }
 
@@ -244,18 +245,16 @@ public class Customer1 : MonoBehaviour
                 {
                     foreach (var flavor in info.itemPerCell[0].flavorCounts ?? new List<FlavorData>())
                     {
-                        if (requirement.Exists(f => f.flavorName == flavor.flavorName))
+                        if (string.IsNullOrEmpty(flavor.flavorName)) continue;
+                        switch (flavor.flavorName.Trim().ToLower())
                         {
-                            switch (flavor.flavorName)
-                            {
-                                case "sour": sour += flavor.count; break;
-                                case "spicy": spicy += flavor.count; break;
-                                case "salty": salty += flavor.count; break;
-                                case "sweet": sweet += flavor.count; break;
-                                case "bitter": bitter += flavor.count; break;
-                                case "umami": umami += flavor.count; break;
-                                case "buttery": buttery += flavor.count; break;
-                            }
+                            case "sour": sour += flavor.count; break;
+                            case "spicy": spicy += flavor.count; break;
+                            case "salty": salty += flavor.count; break;
+                            case "sweet": sweet += flavor.count; break;
+                            case "bitter": bitter += flavor.count; break;
+                            case "umami": umami += flavor.count; break;
+                            case "buttery": buttery += flavor.count; break;
                         }
                     }
                 }
@@ -272,22 +271,14 @@ public class Customer1 : MonoBehaviour
             buttery = gridManager.totalFlavorCounts.ContainsKey("buttery") ? gridManager.totalFlavorCounts["buttery"] : 0;
         }
 
-        if (affectedZone != null && affectedZone.Count > 0)
-            return sour >= GetRequirementCount("sour") &&
-                   spicy >= GetRequirementCount("spicy") &&
-                   salty >= GetRequirementCount("salty") &&
-                   sweet >= GetRequirementCount("sweet") &&
-                   bitter >= GetRequirementCount("bitter") &&
-                   umami >= GetRequirementCount("umami") &&
-                   buttery >= GetRequirementCount("buttery");
-        else 
-            return sour >= ScoringSystem1.Instance.totalFlavorReq["sour"] &&
-                   spicy >= ScoringSystem1.Instance.totalFlavorReq["spicy"] &&
-                   salty >= ScoringSystem1.Instance.totalFlavorReq["salty"] &&
-                   sweet >= ScoringSystem1.Instance.totalFlavorReq["sweet"] &&
-                   bitter >= ScoringSystem1.Instance.totalFlavorReq["bitter"] &&
-                   umami >= ScoringSystem1.Instance.totalFlavorReq["umami"] &&
-                   buttery >= ScoringSystem1.Instance.totalFlavorReq["buttery"];
+        // Từng khách hàng kiểm tra xem yêu cầu của chính mình đã được thỏa mãn chưa
+        return sour >= GetRequirementCount("sour") &&
+               spicy >= GetRequirementCount("spicy") &&
+               salty >= GetRequirementCount("salty") &&
+               sweet >= GetRequirementCount("sweet") &&
+               bitter >= GetRequirementCount("bitter") &&
+               umami >= GetRequirementCount("umami") &&
+               buttery >= GetRequirementCount("buttery");
     }
 
     private void OnMouseDown()

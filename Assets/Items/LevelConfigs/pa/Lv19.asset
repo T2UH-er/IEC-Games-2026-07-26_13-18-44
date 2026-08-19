@@ -1,0 +1,56 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ddc1085d90205e942bb1ded690f9c90f, type: 3}
+  m_Name: Lv19
+  m_EditorClassIdentifier: Assembly-CSharp::LevelConfig
+  levelNumber: 19
+  gridWidth: 4
+  gridHeight: 4
+  customers:
+  - customerSprite: {fileID: -933039256083134843, guid: 31ba3aa0523bc8e449bb1cbdd73310d2, type: 3}
+    requirement:
+    - flavorName: sour
+      count: 2
+    - flavorName: sweet
+      count: 3
+    affectedZone: []
+    zoneColor: {r: 0.18, g: 0.52, b: 1, a: 0.35}
+  trayBlocks:
+  - slotIndex: 0
+    blockConfig: {fileID: 11400000, guid: 131d2bfecf2bf410daa88280d8820248, type: 2}
+    flavorCounts:
+    - flavorName: sour
+      count: 1
+    - flavorName: sweet
+      count: 1
+  - slotIndex: 1
+    blockConfig: {fileID: 11400000, guid: 116f73838326e8a48b4379db4d0a8ed8, type: 2}
+    flavorCounts:
+    - flavorName: sweet
+      count: 1
+  - slotIndex: 2
+    blockConfig: {fileID: 11400000, guid: d127fef5cd5f24726add9e7259816751, type: 2}
+    flavorCounts:
+    - flavorName: sour
+      count: 1
+  - slotIndex: 3
+    blockConfig: {fileID: 11400000, guid: cba05e41c1c404c969a77c0a86f89669, type: 2}
+    flavorCounts:
+    - flavorName: sweet
+      count: 1
+  blockedCells:
+  - {x: 2, y: 2}
+  - {x: 1, y: 1}
+  - {x: 3, y: 0}
+  blockConfig: {fileID: 0}
+  flavorCounts: []
+  slotIndex: 0

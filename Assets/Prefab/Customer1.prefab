@@ -167,7 +167,7 @@ MonoBehaviour:
   bubbleObject: {fileID: 1000000000000002}
   padding: 0.15
   flavorNumberGap: 0.28
-  globalScale: 0.7
+  globalScale: 1
   contentOffset: {x: 1.1, y: 0}
   contentWidthRatio: 0.55
   fourSprites: []
