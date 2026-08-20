@@ -7249,7 +7249,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -170}
+  m_AnchoredPosition: {x: 0, y: -170.00006}
   m_SizeDelta: {x: -200, y: -640}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1856103336
@@ -7553,6 +7553,7 @@ GameObject:
   - component: {fileID: 1960224436}
   - component: {fileID: 1960224435}
   - component: {fileID: 1960224438}
+  - component: {fileID: 1960224439}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -7603,7 +7604,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 36
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -7678,6 +7679,22 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
+--- !u!114 &1960224439
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1960224434}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc008d413f712d54c917d6e926322f97, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ResolutionAdapter
+  targetWidth: 1080
+  targetHeight: 1920
+  targetOrthographicSize: 36
+  canvasScaler: {fileID: 819860552}
 --- !u!1 &1979038383
 GameObject:
   m_ObjectHideFlags: 0

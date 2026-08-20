@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes, viewport-fit=cover">
+    <title>Fuzzle</title>
+    <link rel="shortcut icon" href="TemplateData/favicon.ico">
+    <link rel="stylesheet" href="TemplateData/style.css">
+  </head>
+  <body>
+    <div id="unity-container">
+      <canvas id="unity-canvas" width=1080 height=1920 tabindex="-1"></canvas>
+      <div id="unity-loading-bar">
+        <div id="unity-logo"></div>
+        <div id="unity-progress-bar-empty">
+          <div id="unity-progress-bar-full"></div>
+        </div>
+      </div>
+      <div id="unity-warning"></div>
+    </div>
+    <script>
+      var container = document.querySelector("#unity-container");
+      var canvas = document.querySelector("#unity-canvas");
+      var loadingBar = document.querySelector("#unity-loading-bar");
+      var progressBarFull = document.querySelector("#unity-progress-bar-full");
+      var warningBanner = document.querySelector("#unity-warning");
+
+      function unityShowBanner(msg, type) {
+        var div = document.createElement('div');
+        div.innerHTML = msg;
+        warningBanner.appendChild(div);
+        if (type == 'error') div.style = 'background: red; padding: 10px; color: white;';
+        else {
+          if (type == 'warning') div.style = 'background: yellow; padding: 10px; color: black;';
+          setTimeout(function() {
+            warningBanner.removeChild(div);
+            updateBannerVisibility();
+          }, 5000);
+        }
+        function updateBannerVisibility() {
+          warningBanner.style.display = warningBanner.children.length ? 'block' : 'none';
+        }
+        updateBannerVisibility();
+      }
+
+      var buildUrl = "Build";
+      var loaderUrl = buildUrl + "/Buid.loader.js";
+      var config = {
+        arguments: [],
+        dataUrl: buildUrl + "/Buid.data",
+        frameworkUrl: buildUrl + "/Buid.framework.js",
+        codeUrl: buildUrl + "/Buid.wasm",
+        streamingAssetsUrl: "StreamingAssets",
+        companyName: "DefaultCompany",
+        productName: "Fuzzle",
+        productVersion: "1.0",
+        showBanner: unityShowBanner,
+      };
+
+      // Tự động căn chỉnh Canvas responsive phù hợp màn hình dọc
+      function resizeCanvas() {
+        var w = window.innerWidth;
+        var h = window.innerHeight;
+        var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        var targetAspect = 9 / 16; // Tỷ lệ chuẩn màn hình dọc (1080x1920)
+
+        if (isMobile) {
+          // Trên điện thoại: Canvas full 100% diện tích hiển thị
+          canvas.style.width = "100%";
+          canvas.style.height = "100%";
+        } else {
+          // Trên PC / Laptop: Tự động scale vừa khít chiều cao và căn giữa
+          var currentAspect = w / h;
+          if (currentAspect > targetAspect) {
+            // Màn hình ngang (Desktop) -> Giới hạn theo chiều cao
+            var canvasH = h;
+            var canvasW = h * targetAspect;
+            canvas.style.width = canvasW + "px";
+            canvas.style.height = canvasH + "px";
+          } else {
+            // Cửa sổ hẹp -> Giới hạn theo chiều rộng
+            canvas.style.width = "100%";
+            canvas.style.height = (w / targetAspect) + "px";
+          }
+        }
+      }
+
+      window.addEventListener('resize', resizeCanvas);
+      window.addEventListener('orientationchange', resizeCanvas);
+      resizeCanvas();
+
+      loadingBar.style.display = "block";
+
+      var script = document.createElement("script");
+      script.src = loaderUrl;
+      script.onload = () => {
+        createUnityInstance(canvas, config, (progress) => {
+          progressBarFull.style.width = 100 * progress + "%";
+        }).then((unityInstance) => {
+          loadingBar.style.display = "none";
+        }).catch((message) => {
+          alert(message);
+        });
+      };
+      document.body.appendChild(script);
+    </script>
+  </body>
+</html>

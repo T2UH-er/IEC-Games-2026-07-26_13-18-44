@@ -1,0 +1,85 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #111111;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  touch-action: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+#unity-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+#unity-canvas {
+  background: #231F20;
+  display: block;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.7);
+}
+
+#unity-loading-bar {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: none;
+  text-align: center;
+  z-index: 10;
+}
+
+#unity-logo {
+  width: 154px;
+  height: 130px;
+  background: url('unity-logo-dark.png') no-repeat center;
+  background-size: contain;
+  margin: 0 auto;
+}
+
+#unity-progress-bar-empty {
+  width: 160px;
+  height: 12px;
+  margin: 15px auto 0;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+#unity-progress-bar-full {
+  width: 0%;
+  height: 100%;
+  background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+  border-radius: 6px;
+  transition: width 0.2s ease-out;
+}
+
+#unity-warning {
+  position: absolute;
+  left: 50%;
+  top: 5%;
+  transform: translate(-50%);
+  background: rgba(255, 255, 255, 0.95);
+  padding: 12px 20px;
+  display: none;
+  border-radius: 8px;
+  font-size: 14px;
+  z-index: 99;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}

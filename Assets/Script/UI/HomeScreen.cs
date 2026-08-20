@@ -19,6 +19,7 @@ public class HomeScreen : MonoBehaviour
         {
             AudioManager.Instance.PlayAudio("next");
             Time.timeScale = 1f;
+            GameManager1.selectedLevelIndex = PlayerDataManager.GetHighestUnlockedLevel();
             SceneManager.LoadScene("test");
         });
 

@@ -59,9 +59,11 @@ public class TutorialManager1 : MonoBehaviour
     /// </summary>
     public void CheckAndStartLevelTutorial(int targetLevel)
     {
+        // Dừng tất cả coroutine cũ (đặc biệt là DismissRoutine hẹn giờ tắt UI từ level trước)
+        StopAllCoroutines();
+        handAnimCoroutine = null;
         activeTutorialLevel = targetLevel;
-
-        if (handAnimCoroutine != null) StopCoroutine(handAnimCoroutine);
+        currentStep = 0;
 
         switch (activeTutorialLevel)
         {
@@ -85,8 +87,12 @@ public class TutorialManager1 : MonoBehaviour
 
     public void DisableTutorialUI()
     {
-        if (tutorialCanvas != null) tutorialCanvas.gameObject.SetActive(false);
+        StopAllCoroutines();
+        handAnimCoroutine = null;
+        if (dialogueBox != null) dialogueBox.SetActive(false);
+        if (darkOverlay != null) darkOverlay.gameObject.SetActive(false);
         if (handPointer != null) handPointer.gameObject.SetActive(false);
+        if (tutorialCanvas != null) tutorialCanvas.gameObject.SetActive(false);
     }
 
     private void InitUI()
@@ -100,10 +106,20 @@ public class TutorialManager1 : MonoBehaviour
     {
         if (handSprite == null)
         {
-            // Thử load trực tiếp từ thư mục Resources trước
+            // 1. Thử load Single Sprite từ Resources
             handSprite = Resources.Load<Sprite>("hand");
 
-            // Nếu không có trong Resources, dùng cách tìm kiếm cũ nhưng không phân biệt hoa/thường
+            // 2. Nếu Texture ở chế độ Multiple Sprite (sprite sheet), load qua LoadAll
+            if (handSprite == null)
+            {
+                Sprite[] allHandSprites = Resources.LoadAll<Sprite>("hand");
+                if (allHandSprites != null && allHandSprites.Length > 0)
+                {
+                    handSprite = allHandSprites[0];
+                }
+            }
+
+            // 3. Fallback tìm theo tên trong các đối tượng đã load
             if (handSprite == null)
             {
                 Sprite[] allUi = Resources.FindObjectsOfTypeAll<Sprite>();
@@ -116,24 +132,35 @@ public class TutorialManager1 : MonoBehaviour
                     }
                 }
             }
+
+            if (handSprite == null)
+            {
+                Debug.LogWarning("[TutorialManager1] Không tìm thấy Sprite 'hand' trong Resources/!");
+            }
         }
 
         if (dialogueBoxSprite == null)
         {
-            Sprite[] allUi = Resources.FindObjectsOfTypeAll<Sprite>();
-            foreach (var s in allUi)
-            {
-                if (s != null && (s.name.Contains("DialougeBox_1_1") || s.name == "DialougeBox_1_1"))
-                {
-                    dialogueBoxSprite = s;
-                    break;
-                }
-            }
+            // 1. Thử load Single Sprite từ Resources
+            dialogueBoxSprite = Resources.Load<Sprite>("DialougeBox_1_1");
+
+            // 2. Nếu Texture ở chế độ Multiple Sprite, load qua LoadAll
             if (dialogueBoxSprite == null)
             {
+                Sprite[] allBoxSprites = Resources.LoadAll<Sprite>("DialougeBox_1_1");
+                if (allBoxSprites != null && allBoxSprites.Length > 0)
+                {
+                    dialogueBoxSprite = allBoxSprites[0];
+                }
+            }
+
+            // 3. Fallback
+            if (dialogueBoxSprite == null)
+            {
+                Sprite[] allUi = Resources.FindObjectsOfTypeAll<Sprite>();
                 foreach (var s in allUi)
                 {
-                    if (s != null && s.name.Contains("DialougeBox_1_1"))
+                    if (s != null && (s.name.Contains("DialougeBox_1_1") || s.name == "DialougeBox_1_1"))
                     {
                         dialogueBoxSprite = s;
                         break;
@@ -144,10 +171,16 @@ public class TutorialManager1 : MonoBehaviour
 
         if (fontAsset == null)
         {
-            TMP_FontAsset[] allFonts = Resources.FindObjectsOfTypeAll<TMP_FontAsset>();
-            if (allFonts != null && allFonts.Length > 0)
+            // Load Font TMP mặc định từ Resources
+            fontAsset = Resources.Load<TMP_FontAsset>("Fonts & Materials/LiberationSans SDF");
+
+            if (fontAsset == null)
             {
-                fontAsset = allFonts[0];
+                TMP_FontAsset[] allFonts = Resources.FindObjectsOfTypeAll<TMP_FontAsset>();
+                if (allFonts != null && allFonts.Length > 0)
+                {
+                    fontAsset = allFonts[0];
+                }
             }
         }
     }
@@ -254,7 +287,11 @@ public class TutorialManager1 : MonoBehaviour
         {
             dialogueBoxRt = dialogueBox.GetComponent<RectTransform>();
             Image boxImg = dialogueBox.GetComponent<Image>();
-            if (boxImg != null) boxImg.raycastTarget = false;
+            if (boxImg != null)
+            {
+                if (dialogueBoxSprite != null) boxImg.sprite = dialogueBoxSprite;
+                boxImg.raycastTarget = false;
+            }
 
             if (dialogueText != null)
             {
@@ -278,7 +315,18 @@ public class TutorialManager1 : MonoBehaviour
 
             Image handImg = handObj.GetComponent<Image>();
             if (handSprite != null) handImg.sprite = handSprite;
+            handImg.color = Color.white;
             handImg.raycastTarget = false;
+        }
+        else
+        {
+            Image handImg = handPointer.GetComponent<Image>();
+            if (handImg != null)
+            {
+                if (handSprite != null) handImg.sprite = handSprite;
+                handImg.color = Color.white;
+                handImg.raycastTarget = false;
+            }
         }
 
         handPointer.gameObject.SetActive(false);

@@ -1,4 +1,4 @@
-﻿using System.IO;
+using System.IO;
 using UnityEngine;
 using Newtonsoft.Json;
 
@@ -42,10 +42,16 @@ public class AudioManager : MonoBehaviour
         LoadAudioConfig();
     }
 
-    // Đọc hệ số âm lượng mặc định từ file .json ngoài
+    private const string KEY_MASTER_VOLUME = "MasterVolume";
+
+    // Đọc hệ số âm lượng từ PlayerPrefs hoặc file .json ngoài
     private void LoadAudioConfig()
     {
-        if (File.Exists(configPath))
+        if (PlayerPrefs.HasKey(KEY_MASTER_VOLUME))
+        {
+            masterVolume = Mathf.Clamp01(PlayerPrefs.GetFloat(KEY_MASTER_VOLUME, 1f));
+        }
+        else if (File.Exists(configPath))
         {
             try
             {
@@ -54,17 +60,13 @@ public class AudioManager : MonoBehaviour
 
                 if (config != null)
                 {
-                    masterVolume = config.volume;
+                    masterVolume = Mathf.Clamp01(config.volume);
                 }
             }
             catch (System.Exception e)
             {
                 Debug.LogError($"Lỗi khi đọc file AudioConfig.json: {e.Message}");
             }
-        }
-        else
-        {
-            Debug.LogWarning("Không tìm thấy file AudioConfig.json tại StreamingAssets. Dùng giá trị mặc định.");
         }
     }
 
@@ -144,9 +146,14 @@ public class AudioManager : MonoBehaviour
         SaveAudioConfig();
     }
 
-    // Hàm ghi dữ liệu xuống file .json
+    // Hàm ghi dữ liệu xuống PlayerPrefs và file .json
     public void SaveAudioConfig()
     {
+        // Luôn lưu vào PlayerPrefs (Hỗ trợ 100% WebGL, Android, iOS, PC)
+        PlayerPrefs.SetFloat(KEY_MASTER_VOLUME, masterVolume);
+        PlayerPrefs.Save();
+
+#if !UNITY_WEBGL
         try
         {
             AudioConfigData config = new AudioConfigData { volume = masterVolume };
@@ -154,7 +161,7 @@ public class AudioManager : MonoBehaviour
 
             // Tạo thư mục nếu chưa tồn tại
             string directory = Path.GetDirectoryName(configPath);
-            if (!Directory.Exists(directory))
+            if (!string.IsNullOrEmpty(directory) && !Directory.Exists(directory))
             {
                 Directory.CreateDirectory(directory);
             }
@@ -165,6 +172,7 @@ public class AudioManager : MonoBehaviour
         {
             Debug.LogError($"Lỗi khi lưu file AudioConfig.json: {e.Message}");
         }
+#endif
     }
 
     #endregion

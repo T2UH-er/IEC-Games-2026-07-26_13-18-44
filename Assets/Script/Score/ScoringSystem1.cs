@@ -177,6 +177,12 @@ public class ScoringSystem1 : MonoBehaviour
             resultText.text = "You Win!";
             WinResult.SetActive(true);
             Time.timeScale = 0f;
+
+            if (GameManager1.Instance != null)
+            {
+                PlayerDataManager.SaveHighestUnlockedLevel(GameManager1.Instance.currentLevelIndex);
+            }
+
             return 1;
         }
         else if (numOfFinished < customers.Count && availableMoves <= 0)

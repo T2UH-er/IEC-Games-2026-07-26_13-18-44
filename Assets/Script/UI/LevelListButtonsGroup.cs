@@ -28,7 +28,9 @@ public class LevelListButtonsGroup : MonoBehaviour
                 }
             });
 
-        // Gán sự kiện onClick cho các nút level được tạo ra
+        int highestUnlocked = PlayerDataManager.GetHighestUnlockedLevel();
+
+        // Gán sự kiện onClick và trạng thái mở khóa cho các nút level được tạo ra
         Button[] allButtons = FindObjectsOfType<Button>();
         foreach (Button btn in allButtons)
         {
@@ -36,14 +38,26 @@ public class LevelListButtonsGroup : MonoBehaviour
             {
                 if (int.TryParse(btn.name.Substring(7), out int index))
                 {
-                    btn.onClick.AddListener(() =>
+                    bool isUnlocked = index <= highestUnlocked;
+                    btn.interactable = isUnlocked;
+
+                    Image btnImg = btn.GetComponent<Image>();
+                    if (btnImg != null && !isUnlocked)
                     {
-                        AudioManager.Instance.PlayAudio("next");
-                        Time.timeScale = 1f;
-                        Debug.Log($"[LevelListButtonsGroup] Chọn Level {index}");
-                        GameManager1.selectedLevelIndex = index;
-                        SceneManager.LoadScene("test");
-                    });
+                        btnImg.color = new Color(0.6f, 0.6f, 0.6f, 0.6f);
+                    }
+
+                    if (isUnlocked)
+                    {
+                        btn.onClick.AddListener(() =>
+                        {
+                            AudioManager.Instance.PlayAudio("next");
+                            Time.timeScale = 1f;
+                            Debug.Log($"[LevelListButtonsGroup] Chọn Level {index}");
+                            GameManager1.selectedLevelIndex = index;
+                            SceneManager.LoadScene("test");
+                        });
+                    }
                 }
             }
         }
