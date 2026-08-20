@@ -30,12 +30,24 @@ public class LevelListButtonsGroup : MonoBehaviour
 
         // Gán sự kiện onClick cho các nút level được tạo ra
         Button[] allButtons = FindObjectsOfType<Button>();
+        int completedLevel = PlayerPrefs.GetInt("CompletedLevel", 0);
+        int nearestUncompleted = completedLevel + 1;
+
         foreach (Button btn in allButtons)
         {
             if (btn.name.StartsWith("Button_"))
             {
                 if (int.TryParse(btn.name.Substring(7), out int index))
                 {
+                    if (index > nearestUncompleted)
+                    {
+                        btn.interactable = false;
+                    }
+                    else
+                    {
+                        btn.interactable = true;
+                    }
+
                     btn.onClick.AddListener(() =>
                     {
                         AudioManager.Instance.PlayAudio("next");

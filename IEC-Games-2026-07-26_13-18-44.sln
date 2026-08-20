@@ -387,7 +387,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.Services.Core.Analyti
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.AI.Navigation", "Unity.AI.Navigation.Player.csproj", "{F6386B9B-92A8-8E1E-65C3-593A430683B2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.Purchasing.SecurityStub", "Unity.Purchasing.SecurityStub.Player.csproj", "{26FC9323-66BC-FFB4-3418-A00FE3F19A04}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.Purchasing.Security", "Unity.Purchasing.Security.Player.csproj", "{1245F336-4B30-1706-ABB5-BB14A6FA99F7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.Services.Core", "Unity.Services.Core.Player.csproj", "{4202CC3A-4E3B-EEB1-560A-C9F92D81F623}"
 EndProject
@@ -1209,10 +1209,10 @@ Global
 		{F6386B9B-92A8-8E1E-65C3-593A430683B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F6386B9B-92A8-8E1E-65C3-593A430683B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F6386B9B-92A8-8E1E-65C3-593A430683B2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{26FC9323-66BC-FFB4-3418-A00FE3F19A04}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{26FC9323-66BC-FFB4-3418-A00FE3F19A04}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{26FC9323-66BC-FFB4-3418-A00FE3F19A04}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{26FC9323-66BC-FFB4-3418-A00FE3F19A04}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1245F336-4B30-1706-ABB5-BB14A6FA99F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1245F336-4B30-1706-ABB5-BB14A6FA99F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1245F336-4B30-1706-ABB5-BB14A6FA99F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1245F336-4B30-1706-ABB5-BB14A6FA99F7}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4202CC3A-4E3B-EEB1-560A-C9F92D81F623}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4202CC3A-4E3B-EEB1-560A-C9F92D81F623}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4202CC3A-4E3B-EEB1-560A-C9F92D81F623}.Release|Any CPU.ActiveCfg = Release|Any CPU

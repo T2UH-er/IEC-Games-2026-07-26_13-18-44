@@ -248,7 +248,11 @@ public class GameManager1 : MonoBehaviour
             Destroy(HeldPiece.gameObject);
 
             // Kiểm tra win/lose sau khi đặt khối
-            if (ScoringSystem1.Instance != null) ScoringSystem1.Instance.NotifyGridChanged();
+            if (ScoringSystem1.Instance != null) 
+            {
+                ScoringSystem1.Instance.NotifyGridChanged();
+                CheckAndUpdateCompletedLevel();
+            }
         }
         else if (isFromGrid && releaseWorldPos.y < -2.0f)
         {
@@ -262,7 +266,11 @@ public class GameManager1 : MonoBehaviour
                 if (ScoringSystem1.Instance != null)
                     ScoringSystem1.Instance.availableMoves--;
                 // Grid đã thay đổi (bỏ khối đi): kiểm tra lại
-                if (ScoringSystem1.Instance != null) ScoringSystem1.Instance.NotifyGridChanged();
+                if (ScoringSystem1.Instance != null) 
+                {
+                    ScoringSystem1.Instance.NotifyGridChanged();
+                    CheckAndUpdateCompletedLevel();
+                }
             }
             else
             {
@@ -270,7 +278,11 @@ public class GameManager1 : MonoBehaviour
                 GridManager1.Instance.PlaceBlock(
                     HeldPiece.shapeData, originalOriginCell, originalItems, HeldPiece.cellIconPrefab, HeldPiece.currentRotationAngle);
                 Destroy(HeldPiece.gameObject);
-                if (ScoringSystem1.Instance != null) ScoringSystem1.Instance.NotifyGridChanged();
+                if (ScoringSystem1.Instance != null) 
+                {
+                    ScoringSystem1.Instance.NotifyGridChanged();
+                    CheckAndUpdateCompletedLevel();
+                }
             }
         }
         else if (isFromGrid)
@@ -279,7 +291,11 @@ public class GameManager1 : MonoBehaviour
             GridManager1.Instance.PlaceBlock(
                 HeldPiece.shapeData, originalOriginCell, originalItems, HeldPiece.cellIconPrefab, HeldPiece.currentRotationAngle);
             Destroy(HeldPiece.gameObject);
-            if (ScoringSystem1.Instance != null) ScoringSystem1.Instance.NotifyGridChanged();
+            if (ScoringSystem1.Instance != null) 
+            {
+                ScoringSystem1.Instance.NotifyGridChanged();
+                CheckAndUpdateCompletedLevel();
+            }
         }
         else
         {
@@ -292,6 +308,19 @@ public class GameManager1 : MonoBehaviour
 
         HeldPiece = null;
         isFromGrid = false;
+    }
+
+    private void CheckAndUpdateCompletedLevel()
+    {
+        if (ScoringSystem1.Instance != null && ScoringSystem1.Instance.WinResult != null && ScoringSystem1.Instance.WinResult.activeSelf)
+        {
+            int completedLevel = PlayerPrefs.GetInt("CompletedLevel", 0);
+            if (currentLevelIndex > completedLevel)
+            {
+                PlayerPrefs.SetInt("CompletedLevel", currentLevelIndex);
+                PlayerPrefs.Save();
+            }
+        }
     }
 
     // ─── Bubble Helpers (dùng chung cho Spawner, Customer) ───────────────
