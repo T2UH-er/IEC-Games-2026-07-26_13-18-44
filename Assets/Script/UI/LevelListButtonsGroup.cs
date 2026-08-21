@@ -39,6 +39,7 @@ public class LevelListButtonsGroup : MonoBehaviour
                 if (int.TryParse(btn.name.Substring(7), out int index))
                 {
                     bool isUnlocked = index <= highestUnlocked;
+
                     btn.interactable = isUnlocked;
 
                     Image btnImg = btn.GetComponent<Image>();

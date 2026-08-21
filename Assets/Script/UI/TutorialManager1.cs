@@ -79,6 +79,10 @@ public class TutorialManager1 : MonoBehaviour
                 InitUI();
                 StartCoroutine(StartLevel8ZonesTutorialRoutine());
                 break;
+            case 4:
+                InitUI();
+                StartCoroutine(StartLevel4TutorialRoutine());
+                break;
             default:
                 DisableTutorialUI();
                 break;
@@ -343,6 +347,10 @@ public class TutorialManager1 : MonoBehaviour
         else if (activeTutorialLevel == 8 && currentStep == 1)
         {
             GoToLevel8_Step2_FocusZones();
+        }
+        else if (activeTutorialLevel == 4 && currentStep == 1)
+        {
+            DisableTutorialUI();
         }
     }
 
@@ -734,5 +742,120 @@ public class TutorialManager1 : MonoBehaviour
 
         RectTransformUtility.ScreenPointToLocalPointInRectangle(canvasRect, screenPos, tutorialCanvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : mainCam, out Vector2 localPoint);
         return localPoint;
+    }
+    // ══════════════════════════════════════════════════════════════════════
+    // LEVEL 4: SWIPE TRAY (Lướt khay sang 2 bên)
+    // ══════════════════════════════════════════════════════════════════════
+
+    private IEnumerator StartLevel4TutorialRoutine()
+    {
+        yield return new WaitForSeconds(0.25f);
+        currentStep = 1;
+
+        if (darkOverlay != null)
+        {
+            darkOverlay.gameObject.SetActive(true);
+            darkOverlay.color = new Color(0f, 0f, 0f, 0.65f);
+            darkOverlay.raycastTarget = true; // Block raycasts to game until tapped or 5s
+        }
+
+        if (dialogueBox != null)
+        {
+            dialogueBox.SetActive(true);
+            if (dialogueBoxRt != null) dialogueBoxRt.anchoredPosition = new Vector2(0f, 480f);
+        }
+
+        if (dialogueText != null)
+        {
+            dialogueText.text = "<b>Hãy lướt sang hai bên để xem tất cả món ăn</b>";
+        }
+
+        if (tapToContinueText != null) tapToContinueText.gameObject.SetActive(true);
+
+        if (handAnimCoroutine != null) StopCoroutine(handAnimCoroutine);
+        handAnimCoroutine = StartCoroutine(SwipeTrayGuideRoutine());
+
+        // Dismiss sau 5s nếu người chơi không chạm màn hình
+        StartCoroutine(DismissRoutine(5.0f));
+    }
+
+    private IEnumerator SwipeTrayGuideRoutine()
+    {
+        if (handPointer == null) yield break;
+        handPointer.gameObject.SetActive(true);
+        handPointer.localRotation = Quaternion.identity;
+
+        CanvasGroup cg = handPointer.GetComponent<CanvasGroup>();
+        if (cg == null) cg = handPointer.gameObject.AddComponent<CanvasGroup>();
+
+        while (activeTutorialLevel == 4 && currentStep == 1)
+        {
+            Vector3 centerPosWorld = new Vector3(0f, -6f, 0f);
+            if (BlockSpawner1.Instance != null && BlockSpawner1.Instance.trayContainer != null)
+            {
+                centerPosWorld.y = BlockSpawner1.Instance.trayContainer.position.y;
+            }
+
+            Vector3 rightPosWorld = centerPosWorld + new Vector3(2.5f, 0f, 0f);
+            Vector3 leftPosWorld = centerPosWorld + new Vector3(-2.5f, 0f, 0f);
+
+            Vector2 rightCanvas = WorldToCanvasPos(rightPosWorld);
+            Vector2 leftCanvas = WorldToCanvasPos(leftPosWorld);
+
+            // 1. Fade in
+            handPointer.anchoredPosition = rightCanvas;
+            handPointer.localScale = Vector3.one * 1.15f;
+            cg.alpha = 0f;
+
+            float fadeElapsed = 0f;
+            while (fadeElapsed < 0.2f)
+            {
+                fadeElapsed += Time.unscaledDeltaTime;
+                cg.alpha = Mathf.Clamp01(fadeElapsed / 0.2f);
+                yield return null;
+            }
+
+            // 2. Press down
+            float pressElapsed = 0f;
+            while (pressElapsed < 0.2f)
+            {
+                pressElapsed += Time.unscaledDeltaTime;
+                handPointer.localScale = Vector3.Lerp(Vector3.one * 1.15f, Vector3.one * 0.9f, pressElapsed / 0.2f);
+                yield return null;
+            }
+
+            // 3. Swipe Left
+            float dragDuration = 1.0f;
+            float dragElapsed = 0f;
+            while (dragElapsed < dragDuration)
+            {
+                dragElapsed += Time.unscaledDeltaTime;
+                float t = Mathf.Clamp01(dragElapsed / dragDuration);
+                float smoothT = Mathf.SmoothStep(0f, 1f, t);
+                handPointer.anchoredPosition = Vector2.Lerp(rightCanvas, leftCanvas, smoothT);
+                yield return null;
+            }
+
+            // 4. Release
+            float releaseElapsed = 0f;
+            while (releaseElapsed < 0.2f)
+            {
+                releaseElapsed += Time.unscaledDeltaTime;
+                float t = releaseElapsed / 0.2f;
+                handPointer.localScale = Vector3.Lerp(Vector3.one * 0.9f, Vector3.one * 1.15f, t);
+                yield return null;
+            }
+
+            // 5. Fade out
+            float fadeOutElapsed = 0f;
+            while (fadeOutElapsed < 0.2f)
+            {
+                fadeOutElapsed += Time.unscaledDeltaTime;
+                cg.alpha = 1f - (fadeOutElapsed / 0.2f);
+                yield return null;
+            }
+
+            yield return new WaitForSeconds(0.3f);
+        }
     }
 }

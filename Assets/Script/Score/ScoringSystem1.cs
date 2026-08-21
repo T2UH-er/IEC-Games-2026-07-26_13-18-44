@@ -183,6 +183,26 @@ public class ScoringSystem1 : MonoBehaviour
                 PlayerDataManager.SaveHighestUnlockedLevel(GameManager1.Instance.currentLevelIndex);
             }
 
+            if (GameManager1.Instance != null && GameManager1.Instance.currentLevelIndex == 30)
+            {
+                UnityEngine.UI.Button[] buttons = WinResult.GetComponentsInChildren<UnityEngine.UI.Button>(true);
+                foreach (UnityEngine.UI.Button btn in buttons)
+                {
+                    if (btn.name.ToLower().Contains("next"))
+                    {
+                        btn.gameObject.SetActive(false);
+                    }
+                    else
+                    {
+                        TMPro.TextMeshProUGUI tmp = btn.GetComponentInChildren<TMPro.TextMeshProUGUI>();
+                        if (tmp != null && tmp.text.ToLower().Contains("next"))
+                        {
+                            btn.gameObject.SetActive(false);
+                        }
+                    }
+                }
+            }
+
             return 1;
         }
         else if (numOfFinished < customers.Count && availableMoves <= 0)

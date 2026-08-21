@@ -25,7 +25,6 @@ MonoBehaviour:
     affectedZone:
     - {x: 1, y: 1}
     - {x: 2, y: 1}
-    - {x: 4, y: 1}
     - {x: 2, y: 2}
     - {x: 3, y: 2}
     - {x: 4, y: 2}
@@ -47,6 +46,7 @@ MonoBehaviour:
     - {x: 4, y: 3}
     - {x: 2, y: 4}
     - {x: 3, y: 4}
+    - {x: 4, y: 1}
     zoneColor: {r: 1, g: 0.2, b: 0.2, a: 0.35}
   - customerSprite: {fileID: -8244782522586300649, guid: 31ba3aa0523bc8e449bb1cbdd73310d2, type: 3}
     requirement:
