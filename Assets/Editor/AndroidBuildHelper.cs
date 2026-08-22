@@ -91,7 +91,7 @@ public class GameBuildHelper
                 }
 
                 Debug.Log($"[BuildHelper] Đang nén thư mục WebGL thành file zip: {zipPath}...");
-                ZipFile.CreateFromDirectory(webGlPath, zipPath, CompressionLevel.Optimal, false);
+                ZipFile.CreateFromDirectory(webGlPath, zipPath, System.IO.Compression.CompressionLevel.Optimal, false);
                 Debug.Log($"<color=green>[BuildHelper] Nén file zip WebGL THÀNH CÔNG!</color> File: {zipPath}");
                 EditorUtility.RevealInFinder(zipPath);
             }
@@ -195,7 +195,7 @@ public class GameBuildHelper
             }
 
             Debug.Log($"[BuildHelper] Đang nén thư mục: {targetDir}...");
-            ZipFile.CreateFromDirectory(targetDir, zipPath, CompressionLevel.Optimal, false);
+            ZipFile.CreateFromDirectory(targetDir, zipPath, System.IO.Compression.CompressionLevel.Optimal, false);
             Debug.Log($"<color=green>[BuildHelper] Nén Zip THÀNH CÔNG!</color> File: {zipPath}");
             EditorUtility.RevealInFinder(zipPath);
         }
