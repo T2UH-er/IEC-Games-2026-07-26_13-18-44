@@ -144,30 +144,35 @@ public class LevelSolver : MonoBehaviour
     {
         foreach (var customer in level.customers)
         {
-            // Calculate flavors for this customer
             Dictionary<string, int> currentFlavors = new Dictionary<string, int>();
+            HashSet<BlockConfig> processedBlocks = new HashSet<BlockConfig>();
 
             foreach (var zone in customer.affectedZone)
             {
                 if (grid.TryGetValue(zone, out CellInfo cellInfo))
                 {
-                    if (cellInfo.item != null)
+                    if (cellInfo.block != null && !processedBlocks.Contains(cellInfo.block))
                     {
-                        foreach (var fv in cellInfo.item.flavorCounts)
+                        processedBlocks.Add(cellInfo.block);
+                        var tb = level.trayBlocks.FirstOrDefault(b => b.blockConfig == cellInfo.block);
+                        if (tb != null && tb.flavorCounts != null)
                         {
-                            if (!currentFlavors.ContainsKey(fv.flavorName))
-                                currentFlavors[fv.flavorName] = 0;
-                            currentFlavors[fv.flavorName] += fv.count;
+                            foreach (var fv in tb.flavorCounts)
+                            {
+                                if (!currentFlavors.ContainsKey(fv.flavorName))
+                                    currentFlavors[fv.flavorName] = 0;
+                                currentFlavors[fv.flavorName] += fv.count;
+                            }
                         }
                     }
                 }
             }
 
-            // Check against requirement
+            // Check against requirement (>= requirement count)
             foreach (var req in customer.requirement)
             {
                 int currentFlv = currentFlavors.ContainsKey(req.flavorName) ? currentFlavors[req.flavorName] : 0;
-                if (currentFlv != req.count)
+                if (currentFlv < req.count)
                 {
                     return false;
                 }

@@ -1028,7 +1028,7 @@ Camera:
   far clip plane: 1000
   field of view: 34
   orthographic: 1
-  orthographic size: 36
+  orthographic size: 43.875
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -1429,7 +1429,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09b63101c89fd2d4fb81a7836a15be59, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BlockSpawner1
-  levelNumber: 1
+  levelNumber: 9
   blockPiecePrefab: {fileID: 9044055775875225234, guid: 138cbe3a863dc1c47a172e1395f8130e, type: 3}
   spawnSlots:
   - {fileID: 717660159}
@@ -4240,6 +4240,8 @@ MonoBehaviour:
   customerPrefab: {fileID: 1000000000000001, guid: 651e4ac8e710d024cbefdb3a93f0df94, type: 3}
   customerRowAnchor: {fileID: 1950727024}
   customerContainer: {fileID: 1950727024}
+  verticalRowSpacing: 7.4
+  horizontalColumnSpacing: 10.6
   levelConfigs: []
   currentCustomers: []
 --- !u!4 &1950727024
@@ -4677,7 +4679,7 @@ MonoBehaviour:
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 1080, y: 1920}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0.5
+  m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96

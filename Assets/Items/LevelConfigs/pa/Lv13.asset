@@ -19,9 +19,9 @@ MonoBehaviour:
   - customerSprite: {fileID: -933039256083134843, guid: 31ba3aa0523bc8e449bb1cbdd73310d2, type: 3}
     requirement:
     - flavorName: salty
-      count: 4
-    - flavorName: sweet
       count: 3
+    - flavorName: sweet
+      count: 2
     affectedZone:
     - {x: 1, y: 1}
     - {x: 2, y: 1}
@@ -51,9 +51,9 @@ MonoBehaviour:
   - customerSprite: {fileID: -8244782522586300649, guid: 31ba3aa0523bc8e449bb1cbdd73310d2, type: 3}
     requirement:
     - flavorName: salty
-      count: 3
+      count: 2
     - flavorName: sweet
-      count: 4
+      count: 3
     affectedZone:
     - {x: 0, y: 0}
     - {x: 1, y: 0}

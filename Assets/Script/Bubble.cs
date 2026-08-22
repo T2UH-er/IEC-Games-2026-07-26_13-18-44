@@ -91,7 +91,6 @@ public class Bubble : MonoBehaviour
                 if (flavorNumberPrefab != null)
                 {
                     GameObject pairObj = Instantiate(flavorNumberPrefab, bubbleObject.transform);
-                    pairObj.transform.localPosition = new Vector3(pairCenterX, pairCenterY, 0f);
 
                     // Tìm các SpriteRenderer bên trong Prefab
                     Transform sourceT = pairObj.transform.Find("source");
@@ -127,8 +126,21 @@ public class Bubble : MonoBehaviour
                     }
 
                     // Tự động scale cụm prefab vừa vặn với kích thước khung thoại
-                    float fitScale = Mathf.Min(stepWidth / 3.8f, innerHeight / 3.6f) * globalScale;
+                    float fitScale;
+                    if (pairCount == 1)
+                    {
+                        fitScale = Mathf.Min(innerWidth * 0.65f / 3.8f, innerHeight / 3.8f) * globalScale;
+                    }
+                    else
+                    {
+                        fitScale = Mathf.Min(stepWidth / 3.8f, innerHeight / 3.6f) * globalScale;
+                    }
                     pairObj.transform.localScale = new Vector3(fitScale, fitScale, 1f);
+
+                    // Bù trừ offset nội bộ của Prefab "source and number" để căn giữa hoàn hảo tại (pairCenterX, pairCenterY)
+                    Vector3 sourceLocalOffset = sourceT != null ? sourceT.localPosition : Vector3.zero;
+                    Vector3 comboVisualCenter = sourceLocalOffset + new Vector3(0.35f, 0.55f, 0f);
+                    pairObj.transform.localPosition = new Vector3(pairCenterX, pairCenterY, 0f) - comboVisualCenter * fitScale;
                 }
                 // ─── CÁCH 2: FALLBACK SINH TỰ ĐỘNG NẾU CHƯA GÁN PREFAB ───
                 else

@@ -48,8 +48,6 @@ MonoBehaviour:
     - flavorName: sweet
       count: 1
   blockedCells:
-  - {x: 2, y: 2}
-  - {x: 1, y: 1}
   - {x: 3, y: 0}
   blockConfig: {fileID: 0}
   flavorCounts: []

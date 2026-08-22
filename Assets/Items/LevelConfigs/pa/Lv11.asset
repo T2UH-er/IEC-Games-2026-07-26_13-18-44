@@ -13,82 +13,73 @@ MonoBehaviour:
   m_Name: Lv11
   m_EditorClassIdentifier: Assembly-CSharp::LevelConfig
   levelNumber: 11
-  gridWidth: 7
-  gridHeight: 9
+  gridWidth: 5
+  gridHeight: 5
   customers:
   - customerSprite: {fileID: -933039256083134843, guid: 31ba3aa0523bc8e449bb1cbdd73310d2, type: 3}
     requirement:
-    - flavorName: sweet
-      count: 2
+    - flavorName: salty
+      count: 5
+    - flavorName: sour
+      count: 5
     affectedZone:
-    - {x: 3, y: 6}
-    - {x: 5, y: 6}
+    - {x: 0, y: 0}
+    - {x: 3, y: 0}
+    - {x: 4, y: 0}
+    - {x: 4, y: 1}
+    - {x: 0, y: 3}
+    - {x: 0, y: 4}
+    - {x: 1, y: 4}
+    - {x: 4, y: 4}
     zoneColor: {r: 0.18, g: 0.52, b: 1, a: 0.35}
   - customerSprite: {fileID: -8109498011733750753, guid: 31ba3aa0523bc8e449bb1cbdd73310d2, type: 3}
     requirement:
     - flavorName: salty
       count: 2
-    - flavorName: spicy
+    - flavorName: sour
       count: 1
     affectedZone:
-    - {x: 1, y: 0}
-    - {x: 2, y: 0}
-    - {x: 3, y: 0}
-    - {x: 4, y: 0}
-    - {x: 5, y: 0}
-    - {x: 6, y: 0}
-    - {x: 0, y: 1}
     - {x: 1, y: 1}
-    - {x: 3, y: 1}
-    - {x: 4, y: 1}
-    - {x: 5, y: 1}
-    - {x: 6, y: 1}
-    - {x: 0, y: 2}
+    - {x: 2, y: 1}
+    - {x: 1, y: 2}
     - {x: 3, y: 2}
-    - {x: 4, y: 2}
-    - {x: 5, y: 2}
-    - {x: 6, y: 2}
-    - {x: 0, y: 3}
-    - {x: 1, y: 3}
+    - {x: 2, y: 3}
     - {x: 3, y: 3}
-    - {x: 4, y: 3}
-    - {x: 5, y: 3}
-    - {x: 3, y: 4}
-    - {x: 4, y: 4}
-    - {x: 5, y: 4}
-    - {x: 2, y: 5}
-    - {x: 3, y: 5}
-    - {x: 4, y: 5}
-    - {x: 5, y: 5}
-    - {x: 6, y: 5}
-    - {x: 2, y: 6}
-    - {x: 4, y: 6}
-    - {x: 6, y: 6}
-    - {x: 3, y: 7}
-    - {x: 4, y: 7}
-    - {x: 5, y: 7}
-    - {x: 3, y: 8}
-    - {x: 5, y: 8}
     zoneColor: {r: 1, g: 0.2, b: 0.2, a: 0.35}
   trayBlocks:
   - slotIndex: 0
-    blockConfig: {fileID: 11400000, guid: ab9a97966b944614096558c5fff90e42, type: 2}
+    blockConfig: {fileID: 11400000, guid: d127fef5cd5f24726add9e7259816751, type: 2}
     flavorCounts:
-    - flavorName: sweet
-      count: 1
+    - flavorName: salty
+      count: 4
+    - flavorName: sour
+      count: 4
   - slotIndex: 1
     blockConfig: {fileID: 11400000, guid: ab9a97966b944614096558c5fff90e42, type: 2}
     flavorCounts:
-    - flavorName: sweet
+    - flavorName: salty
+      count: 1
+    - flavorName: sour
       count: 1
   - slotIndex: 2
-    blockConfig: {fileID: 11400000, guid: 321607b1cc1d6481683c19f2d2d439a2, type: 2}
+    blockConfig: {fileID: 11400000, guid: 5bd8a9c21d546654ca13c6b54deb89c8, type: 2}
     flavorCounts:
     - flavorName: salty
-      count: 2
-    - flavorName: spicy
       count: 1
-  blockedCells: []
+    - flavorName: sour
+      count: 1
+  blockedCells:
+  - {x: 1, y: 0}
+  - {x: 2, y: 0}
+  - {x: 0, y: 1}
+  - {x: 3, y: 1}
+  - {x: 0, y: 2}
+  - {x: 2, y: 2}
+  - {x: 4, y: 2}
+  - {x: 1, y: 3}
+  - {x: 4, y: 3}
+  - {x: 2, y: 4}
+  - {x: 3, y: 4}
   blockConfig: {fileID: 0}
   flavorCounts: []
   slotIndex: 0

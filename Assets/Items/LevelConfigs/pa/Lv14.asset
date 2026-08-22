@@ -16,24 +16,13 @@ MonoBehaviour:
   gridWidth: 4
   gridHeight: 4
   customers:
-  - customerSprite: {fileID: -8244782522586300649, guid: 31ba3aa0523bc8e449bb1cbdd73310d2, type: 3}
-    requirement:
-    - flavorName: sour
-      count: 1
-    - flavorName: spicy
-      count: 1
-    - flavorName: salty
-      count: 1
-    affectedZone:
-    - {x: 1, y: 3}
-    - {x: 2, y: 3}
-    - {x: 2, y: 2}
-    zoneColor: {r: 0.18, g: 0.52, b: 1, a: 0.35}
   - customerSprite: {fileID: -2369648649729677281, guid: 31ba3aa0523bc8e449bb1cbdd73310d2, type: 3}
     requirement:
     - flavorName: sour
       count: 1
     affectedZone:
+    - {x: 2, y: 3}
+    - {x: 2, y: 2}
     - {x: 3, y: 2}
     - {x: 2, y: 1}
     - {x: 3, y: 1}
@@ -47,6 +36,7 @@ MonoBehaviour:
     - flavorName: spicy
       count: 2
     affectedZone:
+    - {x: 1, y: 3}
     - {x: 0, y: 2}
     - {x: 1, y: 2}
     - {x: 0, y: 1}

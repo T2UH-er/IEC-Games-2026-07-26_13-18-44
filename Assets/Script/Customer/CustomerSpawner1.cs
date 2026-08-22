@@ -22,6 +22,13 @@ public class CustomerSpawner1 : MonoBehaviour
     [Tooltip("Container chứa các Khách hàng sinh ra (để null sẽ lấy transform này)")]
     public Transform customerContainer;
 
+    [Header("Layout Multi-Row (Grid 2x2)")]
+    [Tooltip("Khoảng cách theo trục dọc giữa các hàng khi có từ 4 khách trở lên")]
+    public float verticalRowSpacing = 2.4f;
+
+    [Tooltip("Khoảng cách theo trục ngang giữa các cột khi ở dạng Grid 2x2. Nếu > 0 sẽ áp dụng khoảng cách này; nếu = 0 sẽ tự động chia theo độ rộng bàn cờ.")]
+    public float horizontalColumnSpacing = 4.2f;
+
     [Header("Cấu Hình Level (Chứa Khách Hàng)")]
     public LevelConfig[] levelConfigs;
 
@@ -52,6 +59,8 @@ public class CustomerSpawner1 : MonoBehaviour
 
     /// <summary>
     /// Sinh và dàn đều các khách hàng theo cấu hình LevelConfig.
+    /// Nếu có <= 3 khách: Dàn trên 1 hàng ngang.
+    /// Nếu có 4 khách trở lên: Tự động chia thành lưới 2x2 (2 hàng x 2 cột).
     /// </summary>
     public void SpawnCustomersForLevel(int targetLevel)
     {
@@ -96,6 +105,7 @@ public class CustomerSpawner1 : MonoBehaviour
         GridManager1 grid = GridManager1.Instance;
         float totalWidth = 6f;
         float startX = 0f;
+        float centerX = 0f;
 
         if (grid != null)
         {
@@ -107,10 +117,12 @@ public class CustomerSpawner1 : MonoBehaviour
 
             totalWidth = maxX - minX;
             startX = minX;
+            centerX = (leftCellPos.x + rightCellPos.x) * 0.5f;
         }
         else if (customerRowAnchor != null)
         {
             startX = customerRowAnchor.position.x - (totalWidth / 2f);
+            centerX = customerRowAnchor.position.x;
         }
 
         // 3. Xác định tọa độ Y từ customerRowAnchor
@@ -125,13 +137,60 @@ public class CustomerSpawner1 : MonoBehaviour
             posY = topCellPos.y + grid.cellSize + 1.5f;
         }
 
-        // 4. Dàn đều N khách hàng trên hàng ngang: mỗi khách chiếm 1/N chiều rộng
-        float stepWidth = totalWidth / customerCount;
+        // 4. Xác định cấu trúc hàng và cột (Grid Layout)
+        int cols;
+        int rows;
+        if (customerCount <= 3)
+        {
+            cols = customerCount;
+            rows = 1;
+        }
+        else if (customerCount == 4)
+        {
+            // 4 khách: Hiển thị dạng Grid 2x2 (Khách 1,2 ở hàng trên; Khách 3,4 ở hàng dưới)
+            cols = 2;
+            rows = 2;
+        }
+        else
+        {
+            // Từ 5 khách trở lên: Tự động chia thành 2 hàng
+            cols = Mathf.CeilToInt(customerCount / 2f);
+            rows = 2;
+        }
+
+        float stepWidth = totalWidth / cols;
 
         for (int i = 0; i < customerCount; i++)
         {
-            float posX = startX + (i + 0.5f) * stepWidth;
-            Vector3 spawnPos = new Vector3(posX, posY, 0f);
+            int rowIndex = i / cols; // 0 = Hàng trên, 1 = Hàng dưới
+            int colIndex = i % cols; // 0 = Cột trái, 1 = Cột phải
+
+            int itemsInThisRow = (rowIndex == rows - 1) ? (customerCount - rowIndex * cols) : cols;
+
+            // Tính tọa độ X: Dùng horizontalColumnSpacing nếu được cấu hình > 0, ngược lại chia đều theo bàn cờ
+            float posX;
+            if (rows > 1 && horizontalColumnSpacing > 0f)
+            {
+                posX = centerX + (colIndex - (itemsInThisRow - 1) * 0.5f) * horizontalColumnSpacing;
+            }
+            else
+            {
+                float rowStartX = startX;
+                if (itemsInThisRow < cols)
+                {
+                    rowStartX = startX + (cols - itemsInThisRow) * 0.5f * stepWidth;
+                }
+                posX = rowStartX + (colIndex + 0.5f) * stepWidth;
+            }
+
+            // Tọa độ Y: Hàng 0 ở trên, Hàng 1 ở dưới
+            float currentPosY = posY;
+            if (rows > 1)
+            {
+                currentPosY = posY + ((rows - 1) * 0.5f - rowIndex) * verticalRowSpacing;
+            }
+
+            Vector3 spawnPos = new Vector3(posX, currentPosY, 0f);
 
             GameObject customerObj = Instantiate(customerPrefab, spawnPos, Quaternion.identity, customerContainer);
             Customer1 customer = customerObj.GetComponent<Customer1>();

@@ -52,7 +52,6 @@ MonoBehaviour:
     - flavorName: spicy
       count: 1
   blockedCells:
-  - {x: 2, y: 1}
   - {x: 1, y: 0}
   - {x: 2, y: 0}
   blockConfig: {fileID: 0}
