@@ -1429,7 +1429,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09b63101c89fd2d4fb81a7836a15be59, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BlockSpawner1
-  levelNumber: 9
+  levelNumber: 30
   blockPiecePrefab: {fileID: 9044055775875225234, guid: 138cbe3a863dc1c47a172e1395f8130e, type: 3}
   spawnSlots:
   - {fileID: 717660159}
