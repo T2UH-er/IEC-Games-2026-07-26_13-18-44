@@ -1,6 +1,7 @@
 #if UNITY_EDITOR
 using System;
 using System.IO;
+using System.IO.Compression;
 using System.Diagnostics;
 using UnityEditor;
 using UnityEditor.Build.Reporting;
@@ -52,7 +53,7 @@ public class GameBuildHelper
         }
     }
 
-    [MenuItem("Tools/Build/2. Build WebGL (Tự động xuất Web HTML5)", false, 11)]
+    [MenuItem("Tools/Build/2. Build WebGL (Tự động xuất Web HTML5 & Nén Zip)", false, 11)]
     public static void BuildWebGl()
     {
         string buildFolder = Path.Combine(Directory.GetCurrentDirectory(), "Builds/WebGL");
@@ -63,6 +64,7 @@ public class GameBuildHelper
 
         string timeStamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
         string webGlPath = Path.Combine(buildFolder, $"WebGL_{timeStamp}");
+        string zipPath = Path.Combine(buildFolder, $"WebGL_{timeStamp}.zip");
 
         Debug.Log($"[BuildHelper] Bắt đầu quá trình Build WebGL tới: {webGlPath}");
 
@@ -80,7 +82,24 @@ public class GameBuildHelper
         if (summary.result == BuildResult.Succeeded)
         {
             Debug.Log($"<color=green>[BuildHelper] Build WebGL THÀNH CÔNG!</color> Thư mục: {webGlPath}");
-            EditorUtility.RevealInFinder(webGlPath);
+
+            try
+            {
+                if (File.Exists(zipPath))
+                {
+                    File.Delete(zipPath);
+                }
+
+                Debug.Log($"[BuildHelper] Đang nén thư mục WebGL thành file zip: {zipPath}...");
+                ZipFile.CreateFromDirectory(webGlPath, zipPath, CompressionLevel.Optimal, false);
+                Debug.Log($"<color=green>[BuildHelper] Nén file zip WebGL THÀNH CÔNG!</color> File: {zipPath}");
+                EditorUtility.RevealInFinder(zipPath);
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"[BuildHelper] Lỗi khi nén file zip WebGL: {ex.Message}");
+                EditorUtility.RevealInFinder(webGlPath);
+            }
         }
         else if (summary.result == BuildResult.Failed)
         {
@@ -134,6 +153,55 @@ public class GameBuildHelper
         catch (Exception e)
         {
             Debug.LogError($"[BuildHelper] Lỗi khi khởi động Server: {e.Message}");
+        }
+    }
+
+    [MenuItem("Tools/Build/4. Nén bản build WebGL gần nhất thành file Zip", false, 13)]
+    public static void ZipLatestWebGl()
+    {
+        string baseFolder = Path.Combine(Directory.GetCurrentDirectory(), "Builds/WebGL");
+        if (!Directory.Exists(baseFolder))
+        {
+            Debug.LogError("[BuildHelper] Chưa tìm thấy thư mục Builds/WebGL!");
+            return;
+        }
+
+        string[] subDirs = Directory.GetDirectories(baseFolder);
+        Array.Sort(subDirs);
+        Array.Reverse(subDirs);
+
+        string targetDir = null;
+        foreach (string dir in subDirs)
+        {
+            if (File.Exists(Path.Combine(dir, "index.html")))
+            {
+                targetDir = dir;
+                break;
+            }
+        }
+
+        if (targetDir == null)
+        {
+            Debug.LogError("[BuildHelper] Không tìm thấy bản build WebGL có file index.html nào để nén!");
+            return;
+        }
+
+        string zipPath = targetDir + ".zip";
+        try
+        {
+            if (File.Exists(zipPath))
+            {
+                File.Delete(zipPath);
+            }
+
+            Debug.Log($"[BuildHelper] Đang nén thư mục: {targetDir}...");
+            ZipFile.CreateFromDirectory(targetDir, zipPath, CompressionLevel.Optimal, false);
+            Debug.Log($"<color=green>[BuildHelper] Nén Zip THÀNH CÔNG!</color> File: {zipPath}");
+            EditorUtility.RevealInFinder(zipPath);
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"[BuildHelper] Lỗi khi nén file zip: {ex.Message}");
         }
     }
 
