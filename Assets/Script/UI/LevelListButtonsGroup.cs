@@ -10,6 +10,11 @@ public class LevelListButtonsGroup : MonoBehaviour
     [SerializeField] GameObject audioBanner;
     void Start()
     {
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.PlayAudio("bgm");
+        }
+
         homeBtn.onClick.AddListener(
             () => {
                 AudioManager.Instance.PlayAudio("back");

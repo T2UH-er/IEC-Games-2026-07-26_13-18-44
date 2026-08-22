@@ -68,6 +68,11 @@ public class AudioManager : MonoBehaviour
                 Debug.LogError($"Lỗi khi đọc file AudioConfig.json: {e.Message}");
             }
         }
+
+        if (bgmSource != null)
+        {
+            bgmSource.volume = masterVolume;
+        }
     }
 
     #region Play Methods
@@ -75,7 +80,7 @@ public class AudioManager : MonoBehaviour
     // Overload 1: Không có tham số đi kèm -> Phát theo âm lượng mặc định trong ScriptableObject
     public void PlayAudio(string audioName)
     {
-        AudioData data = audioDatabase.GetAudio(audioName);
+        AudioData data = audioDatabase != null ? audioDatabase.GetAudio(audioName) : null;
         if (data == null)
         {
             Debug.LogWarning($"Không tìm thấy audio: {audioName}");
@@ -88,7 +93,7 @@ public class AudioManager : MonoBehaviour
     // Overload 2: Có tham số đi kèm -> Phát theo âm lượng của tham số truyền vào
     public void PlayAudio(string audioName, float customVolume)
     {
-        AudioData data = audioDatabase.GetAudio(audioName);
+        AudioData data = audioDatabase != null ? audioDatabase.GetAudio(audioName) : null;
         if (data == null)
         {
             Debug.LogWarning($"Không tìm thấy audio: {audioName}");
@@ -101,10 +106,22 @@ public class AudioManager : MonoBehaviour
     // Tính toán âm lượng thực tế = [Âm lượng chỉ định/mặc định] x masterVolume
     private void PlayAudioInternal(AudioData data, float inputVolume)
     {
+        if (data == null || data.clip == null)
+        {
+            Debug.LogWarning($"[AudioManager] AudioClip cho '{data?.audioName}' bị null hoặc chưa được gán!");
+            return;
+        }
+
         float finalVolume = inputVolume * masterVolume;
 
         if (data.audioType == AudioType.BGM)
         {
+            if (bgmSource.clip == data.clip && bgmSource.isPlaying)
+            {
+                bgmSource.volume = finalVolume;
+                return;
+            }
+
             bgmSource.clip = data.clip;
             bgmSource.volume = finalVolume;
             bgmSource.Play();
@@ -122,7 +139,7 @@ public class AudioManager : MonoBehaviour
     // Dừng phát âm thanh theo tên
     public void StopAudio(string audioName)
     {
-        AudioData data = audioDatabase.GetAudio(audioName);
+        AudioData data = audioDatabase != null ? audioDatabase.GetAudio(audioName) : null;
         if (data == null) return;
 
         if (data.audioType == AudioType.BGM && bgmSource.clip == data.clip)
@@ -143,6 +160,10 @@ public class AudioManager : MonoBehaviour
     public void SetMasterVolume(float value)
     {
         masterVolume = Mathf.Clamp01(value); // Đảm bảo giá trị nằm trong khoảng [0, 1]
+        if (bgmSource != null)
+        {
+            bgmSource.volume = masterVolume;
+        }
         SaveAudioConfig();
     }
 

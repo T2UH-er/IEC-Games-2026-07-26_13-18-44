@@ -13,6 +13,11 @@ public class HomeScreen : MonoBehaviour
     [SerializeField] GameObject audioBanner;
     void Start()
     {
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.PlayAudio("bgm");
+        }
+
         in4Banner.SetActive(false);
 
         playBtn.onClick.AddListener(() =>
